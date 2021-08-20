@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>conde-b1g_inventory V1</title>
+    <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/ui.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+</head>
+
+<body style="overflow: hidden;">
+    <script src="js/config.js"></script>
+    <script src="locales/en.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="js/inventory.js"></script>
+    <script>
+        $(function () {
+            $("#dialog").dialog({
+                autoOpen: false,
+                clickOutside: true
+            });
+        });
+    </script>
+    <div id="notificacao">
+    </div>
+    <div id="playerInventoryHotbar">
+    </div>
+
+
+    <div class="ui">
+       <!-- <div class="inventory">
+            <div class="weight-div"></div>
+
+            <div id="playerInventory"></div>
+    
+            <div id="playerInventoryFastItems"></div>
+            
+            <div class="menu-more" >
+                <img src="./img/cannabis.png" class="image-more">
+                <input type="number" class="control-input" id="count" value="1">
+                <button class="control-more-use">Sử dụng</button>
+                <div class="box-control">
+                    <button class="control-more" id="give">Gửi</button>
+                    <button class="control-more" id="drop">Vứt bỏ</button>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div class="menu-more" style="top: 97px; left: 224px; display: block;">
+            <img src="./img/playersafe.png" class="image-more">
+        <div class="menu-more-input">
+                                
+                                <input type="number" class="control-input" id="count-more" value="1">
+        <button class="control-more-use" onclick="$.post('http://conde-b1g_inventory/UseItem', JSON.stringify(itemData)), $('.menu-more').hide(), closeInventory()">Sử dụng</button>
+        </div>
+                                
+                                <div class="box-control"> 
+                                    <button class="control-more" id="give" onclick="$.post('http://conde-b1g_inventory/GetNearPlayers', JSON.stringify({
+                                                    number: parseInt($('#count-more').val()),
+                                                    item: itemData
+                                                })), $('.menu-more').hide()">Gửi</button>
+                                    <button class="control-more" id="drop" onclick="$.post(&quot;http://conde-b1g_inventory/DropItem&quot;, JSON.stringify({
+        
+                                        item: itemData,
+                                        number: parseInt($(&quot;#count-more&quot;).val())
+                                    })), $(&quot;.menu-more&quot;).hide()">Vứt bỏ</button>
+                                </div></div> -->
+
+    <div id="playerInventoryFastItems">
+        <div class="slotFast">
+            <div class="keybind">1</div>
+            <div class="item-count">3</div>
+            <div id="itemFast-1" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/playersafe.png&quot;);">
+                <div class="item-name-bg"></div>
+            </div>
+            <div class="item-name">Két sắt</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slotFast">
+            <div class="keybind">2</div>
+            <div class="item-count">13</div>
+            <div id="itemFast-2" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/bread.png&quot;);">
+                <div class="item-name-bg"></div>
+            </div>
+            <div class="item-name">Bánh mì</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slotFast">
+            <div class="keybind">4</div>
+            <div class="item-count"><img src="./img/bullet.png" class="ammoIcon"> 218</div>
+            <div id="itemFast-4" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/WEAPON_ASSAULTRIFLE.png&quot;);">
+                <div class="item-name-bg"></div>
+                <div class="weapon-bar" style="height: 0%"></div>
+            </div>
+            <div class="item-name">Assault Rifle</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slotFast">
+            <div class="keybind">5</div>
+            <div class="item-count"></div>
+            <div id="itemFast-5" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/WEAPON_HATCHET.png&quot;);">
+                <div class="item-name-bg"></div>
+                <div class="weapon-bar" style="height: 100%"></div>
+            </div>
+            <div class="item-name">Hatchet</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slotFast">
+            <div class="keybind">6</div>
+            <div class="item-count"></div>
+            <div id="itemFast-6" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/WEAPON_MACHETE.png&quot;);">
+                <div class="item-name-bg"></div>
+                <div class="weapon-bar" style="height: 100%"></div>
+            </div>
+            <div class="item-name">Machete</div>
+            <div class="item-name-bg"></div>
+        </div>
+        
+        <div class="slotFast">
+            <div class="keybind">7</div>
+            <div class="item-count"><img src="./img/bullet.png" class="ammoIcon"> 218</div>
+            <div id="itemFast-7" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/WEAPON_BULLPUPRIFLE.png&quot;);">
+                <div class="item-name-bg"></div>
+                <div class="weapon-bar" style="height: 98.6%"></div>
+            </div>
+            <div class="item-name">Bullpup Rifle</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slotFast">
+            <div class="keybind">8</div>
+            <div class="item-count"></div>
+            <div id="itemFast-8" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/WEAPON_PISTOL.png&quot;);">
+                <div class="item-name-bg"></div>
+                <div class="weapon-bar" style="height: 18.4%"></div>
+            </div>
+            <div class="item-name">Pistol</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slotFast">
+            <div class="keybind">9</div>
+            <div class="item-count"></div>
+            <div id="itemFast-9" class="item ui-droppable ui-draggable ui-draggable-handle" style="background-image: url(&quot;./img/WEAPON_MICROSMG.png&quot;);">
+                <div class="item-name-bg"></div>
+                <div class="weapon-bar" style="height: 92.2%"></div>
+            </div>
+            <div class="item-name">Micro SMG</div>
+            <div class="item-name-bg"></div>
+        </div>
+    </div>
+
+<div class="inventory">
+    <div class="inventory-information">
+        <h2 class="text-animation">
+            inventory
+        </h2>
+
+        <div class="weight-progress">
+            <div class="weight-progress-wrapper">
+                <img style="width: 20px;" src="https://nuocbinh.com/logo-icon-balo-white.png" alt="icon">
+                <span class="weight-progress-text">
+                    6,101/45,000G
+                </span>
+            </div>
+            <div class="weight-progress-bar"></div>
+        </div>
+    </div>
+
+    <div class="weight-div">
+        Trọng lượng: <span style="color: blue;">6,101/45,000G</span> | NGÂN Hàng: <span style="color: green;">$794,643</span> | SAO:⭐<span style="color: yellow;">0</span></div>
+
+    <div id="playerInventory" class="ui-droppable">
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">180,124$</div>
+                <div class="item-count item-weight"></div>
+            </div>
+            <div id="item-0" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/money.png');"></div>
+            <div class="item-name">Tiền mặt</div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">1</div>
+                <div class="item-count item-weight">0.01kg</div>
+            </div>
+            <div id="item-1" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/fishbait.png');"></div>
+            <div class="item-name">Mồi câu cá</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">16</div>
+                <div class="item-count item-weight">0.05kg</div>
+            </div>
+            <div id="item-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png');"></div>
+            <div class="item-name">Nước uống</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">16</div>
+                <div class="item-count item-weight">0.05kg</div>
+            </div>
+            <div id="item-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png');"></div>
+            <div class="item-name">Nước uống</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">16</div>
+                <div class="item-count item-weight">0.05kg</div>
+            </div>
+            <div id="item-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png');"></div>
+            <div class="item-name">Nước uống</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">16</div>
+                <div class="item-count item-weight">0.05kg</div>
+            </div>
+            <div id="item-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png');"></div>
+            <div class="item-name">Nước uống</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count">16</div>
+                <div class="item-count item-weight">0.05kg</div>
+            </div>
+            <div id="item-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png');"></div>
+            <div class="item-name">Nước uống</div>
+            <div class="item-name-bg"></div>
+        </div>
+        
+        <div class="slot has-items">
+            <div class="item-information">
+                <div class="item-count"><img src="./img/bullet.png" class="ammoIcon" /> 220</div>
+                <div class="item-count item-weight">5kg</div>
+            </div>
+            
+            <div id="item-7" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/WEAPON_ASSAULTRIFLE.png');">
+                <div class="weapon-bar" style="height: 0%;"></div>
+            </div>
+            <div class="item-name">Assault Rifle</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information item-weapon-bar">
+                <div class="item-count"><img src="./img/bullet.png" class="ammoIcon" /> 220</div>
+                <div class="item-count item-weight">5kg</div>
+            </div>
+
+            <div id="item-8" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/WEAPON_BULLPUPRIFLE.png');">
+                <div class="weapon-bar" style="height: 98.8%;"></div>
+            </div>
+            <div class="item-name">Bullpup Rifle</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information item-weapon-bar">
+                <div class="item-count"></div>
+                <div class="item-count item-weight">5kg</div>
+            </div>
+            
+            <div id="item-9" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/WEAPON_HATCHET.png');">
+                <div class="weapon-bar" style="height: 100%;"></div>
+            </div>
+            <div class="item-name">Hatchet</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information item-weapon-bar">
+                <div class="item-count"></div>
+                <div class="item-count item-weight">5kg</div>
+            </div>
+
+            <div id="item-10" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/WEAPON_MACHETE.png');">
+                <div class="weapon-bar" style="height: 100%;"></div>
+            </div>
+            <div class="item-name">Machete</div>
+            <div class="item-name-bg"></div>
+        </div>
+
+        <div class="slot has-items">
+            <div class="item-information item-weapon-bar">
+                <div class="item-count"></div>
+                <div class="item-count item-weight">5kg</div>
+            </div>
+
+            <div id="item-11" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/WEAPON_MICROSMG.png');">
+                <div class="weapon-bar" style="height: 92.2%;"></div>
+            </div>
+            <div class="item-name">Micro SMG</div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot has-items">
+            <div class="item-information item-weapon-bar">
+                <div class="item-count"></div>
+                <div class="item-count item-weight">5kg</div>
+            </div>
+            <div id="item-12" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/WEAPON_PISTOL.png');">
+                <div class="weapon-bar" style="height: 18.4%;"></div>
+            </div>
+            <div class="item-name">Pistol</div>
+            <div class="item-name-bg"></div>
+        </div>
+        
+        <div class="slot">
+            <div id="item-1" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-3" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-4" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-5" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-6" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-7" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-8" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-9" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-10" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-11" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-12" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-13" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-14" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-15" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-16" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-17" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-18" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-19" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-20" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-21" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-22" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-23" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-24" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-25" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-26" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-27" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-28" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-29" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-30" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-31" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-32" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-33" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-34" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-35" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-36" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-37" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-38" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-39" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-40" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-41" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-42" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-43" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-44" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-45" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-46" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-47" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-48" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-49" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-50" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-51" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-52" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-53" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-54" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-55" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-56" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-57" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-58" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-59" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-60" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-61" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-62" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-63" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-64" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-65" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-66" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-67" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-68" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-69" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-70" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-71" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-72" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-73" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-74" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-75" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-76" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-77" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-78" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-79" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-80" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-81" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-82" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-83" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-84" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-85" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+        <div class="slot">
+            <div id="item-86" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/blank.png');">
+                <div class="item-count"></div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item-name-bg"></div>
+        </div>
+    </div>
+
+    <div class="menu-more" style="display: none;">
+        <!-- <img src="./img/cannabis.png" class="image-more">
+                <input type="number" class="control-input" id="count" value="1">
+                <button class="control-more-use">Sử dụng</button>
+                <div class="box-control">
+                    <button class="control-more" id="give">Gửi</button>
+                    <button class="control-more" id="drop">Vứt bỏ</button>
+                </div> -->
+    </div>
+</div>
+        
+        <div class="requestNumber">
+            <!-- <h2 class="conf-header">VUI LÒNG NHẬP SỐ LƯỢNG</h2>
+            <input type="number" class="control-input-conf" id="count-conf" value="1">
+            <div class="box-conf">
+                <button class="control-conf" id="no">Hủy</button>
+                <button class="control-conf" id="yes">Xác nhận</button>
+            </div> -->
+        </div>
+        <div id="noSecondInventoryMessage"></div>
+        <div id="dialog" class="dialog">
+            <div id="nearPlayers"></div>
+        </div>
+        
+        <div class="other-inventory-wrapper">
+            <div class="info-div">
+                <div class="weight-progress" style="margin-left: 5px;">
+                <div class="weight-progress-wrapper">
+                    <img style="width: 20px;" src="https://nuocbinh.com/car.png" alt="icon">
+                    <span style="margin-left: 10px;font-size: 16px;">
+                        6,101/45,000G
+                    </span>
+                    </div>
+                    <div class="weight-progress-bar"></div>
+                </div>
+            </div>
+
+            <div id="otherInventory">
+                <div class="slot has-items">
+                    <div class="item-count">10</div>
+                    <div id="itemOther-0" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png')"></div>
+                    <div class="item-name">Nước uống</div>
+                    <div class="item-name-bg"></div>
+                </div>
+    
+                <div class="slot has-items">
+                    <div class="item-information">
+                        <div class="item-count">1</div>
+                        <div class="item-count item-weight">0.01kg</div>
+                    </div>
+                    <div id="itemOther-1" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/fishbait.png');"></div>
+                    <div class="item-name">Mồi câu cá</div>
+                    <div class="item-name-bg"></div>
+                </div>
+    
+                <div class="slot has-items">
+                    <div class="item-information">
+                        <div class="item-count">10</div>
+                        <div class="item-count item-weight">10kg</div>
+                    </div>
+                    <div id="itemOther-2" class="item ui-draggable ui-draggable-handle" style="background-image: url('./img/water.png');"></div>
+                    <div class="item-name">Nước uống</div>
+                    <div class="item-name-bg"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div class="info-div"></div> -->
+
+        <div class="key-bind-box">
+            <div class="key-bind"><a class="key-control">Chuột phải</a> Tùy chọn vật phẩm</div>
+            <div class="key-bind"><a class="key-control">Nhấn đúp chuột trái</a> Sử dụng vật phẩm</div>
+            <div class="key-bind"><a class="key-control">SHIFT + Chuột phải</a> Đặt vào ô dùng nhanh</div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#use").html(invLocale.useItem);
+                $("#give").html(invLocale.giveItem);
+                $("#drop").html(invLocale.dropItem);
+                // $("#noSecondInventoryMessage").html(invLocale.secondInventoryNotAvailable);
+            });
+        </script>
+</body>
+
+</html>
