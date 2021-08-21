@@ -1,5 +1,11 @@
 import { fetchAPI } from "@/utils";
-import { PUT_INTO_TRUNK, TAKE_FROM_TRUNK, USE_ITEM } from "@/utils/constant";
+import {
+  PUT_INTO_FAST,
+  PUT_INTO_TRUNK,
+  TAKE_FROM_FAST,
+  TAKE_FROM_TRUNK,
+  USE_ITEM,
+} from "@/utils/constant";
 import React from "react";
 import { useDrag } from "react-dnd";
 
@@ -35,6 +41,12 @@ const InventoryItem = ({ item, index, quantity }) => {
             break;
           case "useInventory":
             fetchAPI(USE_ITEM, bodyHeader);
+            break;
+          case "putIntoFastInventory":
+            fetchAPI(PUT_INTO_FAST, bodyHeader);
+            break;
+          case "takeFromFastInventory":
+            fetchAPI(TAKE_FROM_FAST, bodyHeader);
             break;
           default:
             break;

@@ -8,6 +8,10 @@ export const inventoryItems = [
     type: "item",
     count: "3",
     weight: "2KG",
+    type: "item_standard",
+    usable: false,
+    rare: false,
+    canRemove: false,
   },
   {
     image: advrepairkit,

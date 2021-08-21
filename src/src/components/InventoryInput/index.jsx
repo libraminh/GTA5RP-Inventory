@@ -3,10 +3,13 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuantity } from "@/store/slices/GlobalSlice";
 import { useDrop } from "react-dnd";
+import { AppContext } from "@/store/appContext";
 
 const InventoryInput = (props) => {
-  const { quantity } = useSelector((state) => state.globalSlice);
-  const dispatch = useDispatch();
+  const context = useContext(AppContext);
+
+  const { quantity } = context.store;
+  const { updateQuantity } = context.actions;
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "inventory_item",
@@ -17,7 +20,7 @@ const InventoryInput = (props) => {
   }));
 
   const handleOnChange = (e) => {
-    dispatch(setQuantity(e.target.value));
+    updateQuantity(parseInt(e.target.value));
   };
 
   return (
@@ -30,8 +33,8 @@ const InventoryInput = (props) => {
       </button>
 
       <input
-        className="w-full text-black text-center"
-        type="text"
+        className="w-full text-black text-center appearance"
+        type="number"
         value={quantity}
         onChange={handleOnChange}
       />

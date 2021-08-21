@@ -1,14 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
-
-import InventoryItem from "../InventoryItem";
 import { inventoryItems } from "@/data/inventory-items";
-
+import { AppContext } from "@/store/appContext";
+import React, { useContext } from "react";
 import { useDrop } from "react-dnd";
-import { useSelector } from "react-redux";
+import InventoryItem from "../InventoryItem";
 
 const InventoryOther = (props) => {
-  const { quantity } = useSelector((state) => state.globalSlice);
+  const context = useContext(AppContext);
+
+  const { quantity } = context.store;
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ["inventory_item"],

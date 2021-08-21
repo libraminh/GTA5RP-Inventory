@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import InventoryPlayer from "../InventoryPlayer";
 import { Tabs } from "antd";
 import InventoryInput from "../InventoryInput";
 import InventoryOther from "../InventoryOther";
 import InventoryFastItems from "../InventoryFastItems";
+import { AppContext } from "@/store/appContext";
 
 const { TabPane } = Tabs;
 
 const InventoryPlayerWrapper = () => {
+  const context = useContext(AppContext);
+  let { isOtherInventoryShow, isFastInventoryShow } = context.store.inventory;
+
   return (
     <div>
       <div className="grid grid-cols-5 gap-10">
@@ -23,15 +27,17 @@ const InventoryPlayerWrapper = () => {
           <InventoryInput />
         </figure>
 
-        <figure className="col-span-2">
-          <h2 className="text-xl mb-5 border-b border-t border-solid border-gta-blue-300 pb-1 pt-0.5 px-5 inline-block">
-            Kho Khác
-          </h2>
-          <InventoryOther />
-        </figure>
+        {isOtherInventoryShow && (
+          <figure className="col-span-2">
+            <h2 className="text-xl mb-5 border-b border-t border-solid border-gta-blue-300 pb-1 pt-0.5 px-5 inline-block">
+              Kho Khác
+            </h2>
+            <InventoryOther />
+          </figure>
+        )}
       </div>
 
-      <InventoryFastItems />
+      {isFastInventoryShow && <InventoryFastItems />}
     </div>
   );
 };

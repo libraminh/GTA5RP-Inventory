@@ -1,25 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "@/store";
-
 // Components
 import App from "./App";
 
 // css
 import "./App.less";
 import "assets/css/main.scss";
-
-const store = configureStore({
-  reducer: rootReducer,
-});
+import StoreWrapper from "./store/appContext";
 
 ReactDOM.render(
-  <Provider store={store}>
+  <StoreWrapper>
     <App />
-  </Provider>,
+  </StoreWrapper>,
   document.getElementById("root")
 );
 
