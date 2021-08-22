@@ -6,14 +6,17 @@ const initStore = {
   quantity: 0,
   inventory: {
     isInventoryShow: true,
-    isOtherInventoryShow: false,
+    isOtherInventoryShow: true,
     isFastInventoryShow: true,
+    isWeightShow: false,
     type: "normal",
     disabled: false,
     disabledFunction: null,
     ownerHouse: null,
     coisas: [],
     itemData: [],
+    inventoryItems: null,
+    otherInventoryItems: null,
   },
 };
 
@@ -23,12 +26,84 @@ const StoreWrapper = ({ children }) => {
     updateQuantity: (inputNumber) => {
       setStore({ ...store, quantity: inputNumber });
     },
-    toggleOtherInventory: () => {
+    showWeightDiv: () => {
       setStore({
         ...store,
         inventory: {
           ...store.inventory,
-          isOtherInventoryShow: !store.inventory.isOtherInventoryShow,
+          isWeightShow: true,
+        },
+      });
+    },
+    hideWeightDiv: () => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          isWeightShow: false,
+        },
+      });
+    },
+    showPlayerInventory: () => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          isInventoryShow: true,
+        },
+      });
+    },
+    hidePlayerInventory: () => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          isInventoryShow: false,
+        },
+      });
+    },
+    showOtherInventory: () => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          isOtherInventoryShow: true,
+        },
+      });
+    },
+    hideOtherInventory: () => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          isOtherInventoryShow: false,
+        },
+      });
+    },
+    toggleWeightDiv: () => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          isWeightShow: !store.inventory.isWeightShow,
+        },
+      });
+    },
+    setInventoryItems: (items) => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          inventoryItems: items,
+        },
+      });
+    },
+    setOtherInventoryItems: (items) => {
+      setStore({
+        ...store,
+        inventory: {
+          ...store.inventory,
+          otherInventoryItems: items,
         },
       });
     },

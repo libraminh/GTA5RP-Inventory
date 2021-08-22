@@ -3,6 +3,7 @@ import { AppContext } from "@/store/appContext";
 import React, { useContext } from "react";
 import { useDrop } from "react-dnd";
 import InventoryItem from "../InventoryItem";
+import InvenotoryProgress from "../InventoryProgress";
 
 const InventoryOther = (props) => {
   const context = useContext(AppContext);
@@ -29,6 +30,8 @@ const InventoryOther = (props) => {
 
   return (
     <div ref={drop} style={{ backgroundColor }}>
+      <InvenotoryProgress />
+
       <div className="flex flex-wrap gap-4 max-h-45vh overflow-y-auto">
         {inventoryItems?.map((item, index) => (
           <InventoryItem
@@ -36,6 +39,7 @@ const InventoryOther = (props) => {
             key={index}
             index={index}
             quantity={quantity}
+            inventoryType="second"
           />
         ))}
       </div>

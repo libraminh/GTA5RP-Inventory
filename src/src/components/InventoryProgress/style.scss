@@ -1,0 +1,23 @@
+.weight-progress {
+  @apply flex items-center justify-center mb-5;
+  @apply rounded-lg relative border border-solid border-gta-blue-300;
+  @apply overflow-hidden;
+
+  width: 150px;
+  height: 35px;
+  background: rgba(0, 0, 0, 0.55);
+  /*   animation: flicker 5.5s infinite alternate; */
+
+  .weight-progress-wrapper {
+    @apply flex items-center;
+    z-index: 2;
+  }
+
+  .weight-progress-bar {
+    @apply absolute top-0 left-0;
+    @apply rounded-lg bg-gta-blue-400;
+    height: 35px;
+    width: 40%;
+    z-index: 1;
+  }
+}

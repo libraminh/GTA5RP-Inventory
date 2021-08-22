@@ -1,4 +1,4 @@
-import { fetchAPI } from "@/utils";
+import { fetchAPI, formatMoney } from "@/utils";
 import {
   PUT_INTO_FAST,
   PUT_INTO_TRUNK,
@@ -6,10 +6,20 @@ import {
   TAKE_FROM_TRUNK,
   USE_ITEM,
 } from "@/utils/constant";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useDrag } from "react-dnd";
 
-const InventoryItem = ({ item, index, quantity }) => {
+import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { AppContext } from "@/store/appContext";
+import bulletIcon from "@/assets/images/bullet.png";
+
+const itemImages = require.context("@/assets/images", true);
+
+const InventoryItem = ({ item, index, quantity, inventoryType }) => {
+  const context = useContext(AppContext);
+
+  let { type } = context.store.inventory;
+
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "inventory_item",
@@ -61,28 +71,65 @@ const InventoryItem = ({ item, index, quantity }) => {
   );
 
   const opacity = isDragging ? 0.4 : 1;
+  const isKeyHouse = item.name.includes("keyhouse");
+
+  const renderCount = (second) => {
+    let count = item.count;
+
+    switch (item.type) {
+      case "item_weapon":
+        return (
+          <React.Fragment>
+            {count !== 0 && (
+              <span>
+                <img src={bulletIcon} />
+                {item.count}
+              </span>
+            )}
+          </React.Fragment>
+        );
+
+      case "item_account":
+      case "item_money":
+        return (
+          <>
+            <span>{formatMoney(item.count)}$</span>
+          </>
+        );
+    }
+
+    return <span>{count}</span>;
+  };
 
   return (
     // has-items
     <div
       ref={drag}
       style={{ opacity }}
-      className="slot border border-solid border-gta-blue-300 relative w-28 space-y-2 rounded-lg"
+      className="inventory_wrapper slot border border-solid border-gta-blue-300 relative w-28 space-y-2 rounded-lg"
     >
       <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
-        <div className="item-count">{item.count}</div>
-        <div className="item-count item-weight">{item.weight}</div>
+        <div className="item-count">{renderCount()}</div>
+
+        {item.type !== "item_money" && item.type !== "item_account" && (
+          <div className="item-count item-weight">{item.weight}</div>
+        )}
       </div>
 
-      <img
-        id={`item-${index}`}
-        className="item w-14 object-contain object-center mx-auto"
-        src={item.image}
-        alt="image"
-      />
+      <div
+        id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+        data-item={JSON.stringify(item)}
+        data-inventory={inventoryType}
+      >
+        <img
+          className="item w-14 object-contain object-center mx-auto"
+          src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
+          alt="image"
+        />
+      </div>
 
       <div className="item-name text-center uppercase text-xs font-semibold border-t border-solid border-gta-blue-300 py-1.5">
-        {item.name}
+        {item.label}
       </div>
       {/* <div className="item-name-bg"></div> */}
     </div>

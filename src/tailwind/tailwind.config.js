@@ -13,6 +13,7 @@ module.exports = {
       },
       colors: {
         "gta-blue-300": "#4dc3f7",
+        "gta-blue-400": "#4d92b1",
       },
       maxHeight: {
         "45vh": "45vh",

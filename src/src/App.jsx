@@ -7,57 +7,72 @@ import InventoryFastItems from "./components/InventoryFastItems";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppContext } from "./store/appContext";
+import { fetchAPI } from "./utils";
 
 const { TabPane } = Tabs;
+
+window.Config = new Object();
+window.Config.closeKeys = [27]; //Array of keys used to close inventory. Default ESC and F2. Check https://keycode.info/ to get your key code
+//LANGUAGE CAN BE CHANGED IN ui.html, SEARCH FOR <script src="locales/en.js"></script> AND CHANGE IT THERE
 
 const App = (props) => {
   const context = useContext(AppContext);
 
-  console.log("context", context);
-
   let { type, disabled, isInventoryShow } = context.store.inventory;
-  let { toggleOtherInventory } = context.actions;
+
+  let {
+    toggleOtherInventory,
+    toggleWeightDiv,
+    hideWeightDiv,
+    hideOtherInventory,
+    showOtherInventory,
+    showWeightDiv,
+    setInventoryItems,
+    setOtherInventoryItems,
+  } = context.actions;
 
   const handleDisplay = (type) => {
     switch (type) {
       case "normal":
-        // doing normal type
-
-        toggleOtherInventory();
-
+        hideWeightDiv();
+        hideOtherInventory();
         break;
       case "trunk":
-        // doing trunk type
+        showOtherInventory();
+        showWeightDiv();
         break;
+
       case "Society":
-        // doing Society type
-        break;
       case "property":
-        // doing property type
+        showOtherInventory();
+        hideWeightDiv();
         break;
+
       case "player":
-        // doing player type
-        break;
       case "shop":
-        // doing shop type
-        break;
       case "motels":
-        // doing motels type
-        break;
       case "motelsbed":
-        // doing motelsbed type
-        break;
       case "glovebox":
-        // doing glovebox type
-        break;
       case "vault":
-        // doing vault type
+        // doing player type
+        showWeightDiv();
+        showOtherInventory();
         break;
+
       default:
         break;
     }
 
     // $(".ui").show("slide", { direction: "left" }, 100);
+  };
+
+  const closeInventory = async () => {
+    await fetch(
+      "http://esx_inventoryhud/NUIFocusOff",
+      JSON.stringify({
+        type: type,
+      })
+    );
   };
 
   useEffect(() => {
@@ -79,11 +94,13 @@ const App = (props) => {
           break;
 
         case "setItems":
+          setInventoryItems(event.data.itemList);
           // doing setItems
           break;
 
         case "setSecondInventoryItems":
           // doing setSecondInventoryItems
+          setOtherInventoryItems(event.data.itemList);
           break;
 
         case "setShopInventoryItems":
@@ -112,6 +129,14 @@ const App = (props) => {
 
         default:
           break;
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    document.querySelector("body").addEventListener("keyup", (key) => {
+      if (window.Config.closeKeys.includes(key.which)) {
+        closeInventory();
       }
     });
   }, []);
