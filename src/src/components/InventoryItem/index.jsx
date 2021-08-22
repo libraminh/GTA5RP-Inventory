@@ -73,43 +73,44 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
   const opacity = isDragging ? 0.4 : 1;
   const isKeyHouse = item.name.includes("keyhouse");
 
-  const renderCount = (second) => {
+  const renderCount = () => {
     let count = item.count;
 
     switch (item.type) {
       case "item_weapon":
         return (
-          <React.Fragment>
+          <>
             {count !== 0 && (
-              <span>
+              <>
                 <img src={bulletIcon} />
-                {item.count}
-              </span>
+                <span>{item.count}</span>
+              </>
             )}
-          </React.Fragment>
+          </>
         );
 
       case "item_account":
       case "item_money":
-        return (
-          <>
-            <span>{formatMoney(item.count)}$</span>
-          </>
-        );
+        return <>{formatMoney(item.count)}$</>;
     }
 
-    return <span>{count}</span>;
+    return <>{count}</>;
   };
 
   return (
     // has-items
     <div
-      ref={drag}
       style={{ opacity }}
       className="inventory_wrapper slot border border-solid border-gta-blue-300 relative w-28 space-y-2 rounded-lg"
     >
       <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
-        <div className="item-count">{renderCount()}</div>
+        <div
+          className={`item-count inline-flex items-center space-x-1 ${
+            item.type === "item_money" && "ml-auto"
+          }`}
+        >
+          {renderCount()}
+        </div>
 
         {item.type !== "item_money" && item.type !== "item_account" && (
           <div className="item-count item-weight">{item.weight}</div>
@@ -122,6 +123,7 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
         data-inventory={inventoryType}
       >
         <img
+          ref={drag}
           className="item w-14 object-contain object-center mx-auto"
           src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
           alt="image"

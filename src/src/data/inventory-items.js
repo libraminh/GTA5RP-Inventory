@@ -30,11 +30,11 @@ export const inventoryItems = [
     price: 500,
   },
   {
-    name: "advrepairkit",
-    type: "item",
+    name: "keyhouse",
+    type: "item_standard",
     weight: "2KG",
-    count: "3",
-    label: "Bim Ngu",
+    count: "1",
+    label: "Key House",
     price: 500,
   },
   {
