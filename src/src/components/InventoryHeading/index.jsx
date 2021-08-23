@@ -2,7 +2,7 @@ import React from "react";
 
 const InventoryHeading = ({ children }) => {
   return (
-    <h2 className="text-xl mb-5 border-b border-t border-solid border-gta-blue-300 pb-1 pt-0.5 px-5 inline-block">
+    <h2 className="text-lg font-bold text-gta-blue-400 mb-2 pb-1 pt-0.5 inline-block">
       {children}
     </h2>
   );

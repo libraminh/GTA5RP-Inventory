@@ -33,7 +33,7 @@ const initStore = {
     inventoryItems: null,
     otherInventoryItems: null,
     infoDivText: "",
-    nearPlayers: [], //nearPlayers
+    nearPlayers: [], // nearPlayers
     dataItem: null,
   },
   notificationData: {},

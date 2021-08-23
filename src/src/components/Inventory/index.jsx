@@ -12,7 +12,7 @@ const { TabPane } = Tabs;
 
 const InventoryPlayerWrapper = () => {
   const context = useContext(AppContext);
-  let { isOtherInventoryShow, isFastInventoryShow } = context.store.inventory;
+  let { isOtherInventoryShow } = context.store.inventory;
 
   return (
     <div>
@@ -33,13 +33,14 @@ const InventoryPlayerWrapper = () => {
           </figure>
         )}
       </div>
-
-      {isFastInventoryShow && <InventoryFastItems />}
     </div>
   );
 };
 
 const Inventory = (props) => {
+  const context = useContext(AppContext);
+  let { isFastInventoryShow } = context.store.inventory;
+
   return (
     <div>
       <Tabs type="card">
@@ -53,6 +54,8 @@ const Inventory = (props) => {
           Content of Tab 3
         </TabPane>
       </Tabs>
+
+      {isFastInventoryShow && <InventoryFastItems />}
     </div>
   );
 };

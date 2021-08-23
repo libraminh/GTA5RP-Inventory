@@ -22,7 +22,7 @@ const Notificacao = () => {
   // set alert time
 
   return (
-    <div id="notificacao">
+    <div id="notificacao" className="hidden">
       <div
         className="slot"
         style={{ backgroundColor: "rgba(255, 166, 0, 0)" }}

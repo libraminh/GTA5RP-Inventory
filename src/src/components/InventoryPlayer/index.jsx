@@ -16,6 +16,7 @@ const InventoryPlayer = (props) => {
       drop: () => ({ name: "playerInventory" }),
       collect: (monitor) => ({
         isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
       }),
     }),
     []
@@ -23,31 +24,37 @@ const InventoryPlayer = (props) => {
 
   const isActive = canDrop && isOver;
 
-  let backgroundColor = "#222";
+  let isDropHover = false;
 
   if (isActive) {
-    backgroundColor = "darkgreen";
+    isDropHover = true;
   } else if (canDrop) {
-    backgroundColor = "darkkhaki";
   }
 
   return (
-    <div ref={drop} style={{ backgroundColor }}>
+    // style={{ backgroundColor }}
+    <div ref={drop}>
+      <div
+        className={`mb-5 p-4 border border-solid border-gray-800 rounded-lg transition-all duration-200 ease-in-out ${
+          isDropHover && "active-drop"
+        }`}
+      >
+        <div className="scrollbar-custom flex flex-wrap gap-4 max-h-45vh overflow-y-auto">
+          {inventoryItems?.map((item, index) => (
+            <InventoryItem
+              item={item}
+              key={index}
+              index={index}
+              quantity={quantity}
+              inventoryType="main"
+            />
+          ))}
+        </div>
+      </div>
+
       <div>
         <div className="info-div">{inventory.infoDivText}</div>
         <InvenotoryProgress />
-      </div>
-
-      <div className="flex flex-wrap gap-4 max-h-45vh overflow-y-auto">
-        {inventoryItems?.map((item, index) => (
-          <InventoryItem
-            item={item}
-            key={index}
-            index={index}
-            quantity={quantity}
-            inventoryType="main"
-          />
-        ))}
       </div>
     </div>
   );

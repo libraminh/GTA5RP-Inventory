@@ -49,9 +49,9 @@ const InventoryFastItem = ({ item, index }) => {
     <div ref={drop} data-type="fast-item">
       <div
         ref={drag}
-        className="inventoryItem slotFast relative w-26 h-26 flex items-center justify-center flex-col border border-solid border-gta-blue-300 rounded-lg"
+        className="inventoryItem slotFast relative w-26 h-26 flex items-center justify-center flex-col border border-solid border-gray-800 rounded-lg"
       >
-        <div className="keybind absolute right-0 -top-6">{index + 1}</div>
+        <div className="keybind absolute right-0.5 -top-6">{index + 1}</div>
         <div className="item-count absolute top-1 left-2">{item.itemCount}</div>
 
         <div className="mb-1">

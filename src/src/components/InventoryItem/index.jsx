@@ -108,7 +108,7 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
     // has-items
     <div
       style={{ opacity }}
-      className="inventory_wrapper slot border border-solid border-gta-blue-300 relative w-28 space-y-2 rounded-lg"
+      className="inventory_wrapper slot border border-solid border-gray-800 relative w-28 space-y-2 rounded-lg"
     >
       <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
         <div
@@ -142,7 +142,7 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
         ></div>
       </div>
 
-      <div className="item-name text-center uppercase text-xs font-semibold border-t border-solid border-gta-blue-300 py-1.5">
+      <div className="item-name text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5">
         {item.label}
       </div>
       {/* <div className="item-name-bg"></div> */}

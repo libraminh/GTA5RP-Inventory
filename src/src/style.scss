@@ -3,3 +3,65 @@
   bottom: 3%;
   left: 16.5%;
 }
+
+.active-drop {
+  box-shadow: 0 0 4px #4d92b1, 0 0 1px #4d92b1, 0 0 9px #4d92b1, 0 0 4px #4d92b1,
+    0 0 4px #4d92b1, 0 0 9px #4d92b1, 0 0 10px #4d92b1, 0 0 10px #4d92b1;
+}
+
+.scrollbar-custom {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-black bg-opacity-40;
+    @apply rounded-full border border-solid border-gray-800;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gta-blue-400 bg-opacity-80;
+  }
+}
+
+.tabs-wrapper {
+  @apply bg-black bg-opacity-90;
+
+  .left-tabs {
+    .ant-tabs-nav {
+      // @apply self-center;
+      min-width: 180px !important;
+    }
+
+    .ant-tabs-nav-list {
+      // @apply space-y-3 #{!important};
+    }
+  }
+}
+
+.ant-tabs.ant-tabs-top.ant-tabs-card {
+  @apply px-3;
+}
+
+.ant-tabs-tab {
+  // animation: flicker 5.5s infinite alternate;
+}
+
+@keyframes flicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    box-shadow: 0 0 4px #4d92b1, 0 0 1px #4d92b1, 0 0 9px #4d92b1,
+      0 0 4px #4d92b1, 0 0 4px #4d92b1, 0 0 9px #4d92b1, 0 0 10px #4d92b1,
+      0 0 150px #4d92b1;
+  }
+  20%,
+  24%,
+  55% {
+    box-shadow: none;
+  }
+}

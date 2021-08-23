@@ -9,6 +9,7 @@ import { InputNumber } from "antd";
 import "./style.scss";
 import { fetchAPI } from "@/utils";
 import { FETCH_URL, GIVE_ITEM } from "@/utils/constant";
+import InventoryButton from "../InventoryButton";
 
 const InventoryInput = (props) => {
   const context = useContext(AppContext);
@@ -16,11 +17,12 @@ const InventoryInput = (props) => {
   const { quantity, inventory } = context.store;
   const { updateQuantity } = context.actions;
 
-  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: "inventory_item",
     drop: () => ({ name: "useInventory" }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
     }),
   }));
 
@@ -40,8 +42,18 @@ const InventoryInput = (props) => {
     fetchAPI(GIVE_ITEM, bodyHeader);
   };
 
+  const isActive = canDrop && isOver;
+
+  let isDropHover = false;
+
+  if (isActive) {
+    isDropHover = true;
+  } else if (canDrop) {
+    // backgroundColor = "red";
+  }
+
   return (
-    <div className="text-lg border border-solid border-gta-blue-300 px-5 py-12 rounded-lg">
+    <div className="w-full text-lg px-5 py-12 rounded-lg max-w-230">
       {inventory.nearPlayers.length !== 0 ? (
         <div id="nearPlayers" className="flex flex-col space-y-5">
           {inventory.nearPlayers?.map((player, index) => (
@@ -56,29 +68,20 @@ const InventoryInput = (props) => {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col space-y-5">
+        <div className="space-y-5">
           <InputNumber
-            className="w-full text-center border-gta-blue-300 rounded-lg"
+            className="w-full text-center border-gta-blue-400 rounded-lg"
             min={1}
             max={10}
             defaultValue={1}
             onChange={handleOnChange}
           />
 
-          <button
-            ref={drop}
-            className="border border-solid border-gta-blue-300 py-2 rounded-lg"
-          >
-            Use
-          </button>
-
-          <button className="border border-solid border-gta-blue-300 py-2 rounded-lg">
-            Give
-          </button>
-
-          <button className="border border-solid border-gta-blue-300 py-2 rounded-lg">
-            Drop
-          </button>
+          <div ref={drop} className="flex flex-col space-y-5">
+            <InventoryButton isDropHover={isDropHover}>Dùng</InventoryButton>
+            <InventoryButton isDropHover={isDropHover}>Gửi</InventoryButton>
+            <InventoryButton isDropHover={isDropHover}>Vứt</InventoryButton>
+          </div>
         </div>
       )}
     </div>

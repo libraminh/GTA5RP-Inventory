@@ -186,9 +186,8 @@ const App = (props) => {
           className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-200 ease-in-out ${
             isInventoryShow ? "block" : "hidden"
           }`}
-          style={{ background: "#1f1d1d" }}
         >
-          <Tabs tabPosition={"left"} type="card">
+          <Tabs className="left-tabs" tabPosition={"left"} type="card">
             <TabPane tab="Inventory" key="1">
               <Inventory />
             </TabPane>
