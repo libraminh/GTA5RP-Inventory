@@ -14,12 +14,13 @@ export const inventoryItems = [
     price: 500,
   },
   {
-    name: "advrepairkit",
+    name: "WEAPON_CARBINERIFLE",
     type: "item_weapon",
     count: "180/260",
     weight: "2KG",
-    label: "Bim Ngu",
+    label: "CARBINERIFLE",
     price: 500,
+    doben: "50",
   },
   {
     name: "playersafe",
@@ -38,12 +39,13 @@ export const inventoryItems = [
     price: 500,
   },
   {
-    name: "playersafe",
-    type: "item",
+    name: "WEAPON_BULLPUPRIFLE",
+    type: "item_weapon",
     weight: "2KG",
     count: "3",
-    label: "Két Sắt",
+    label: "BULLPUPRIFLE",
     price: 500,
+    doben: "80",
   },
   {
     name: "advrepairkit",

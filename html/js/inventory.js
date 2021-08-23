@@ -353,6 +353,7 @@ function inventorySetup(items, fastItems) {
         '<div class="item-count"></div> <div class="item-name"> </div> </div ><div class="item-name-bg"></div></div>'
     );
   }
+
   $("#playerInventoryFastItems").html("");
 
   for (i = 1; i < 10; i++) {

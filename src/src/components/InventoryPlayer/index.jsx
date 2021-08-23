@@ -8,7 +8,7 @@ import InvenotoryProgress from "../InventoryProgress";
 
 const InventoryPlayer = (props) => {
   const context = useContext(AppContext);
-  const { quantity } = context.store;
+  const { quantity, inventory } = context.store;
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
@@ -33,7 +33,10 @@ const InventoryPlayer = (props) => {
 
   return (
     <div ref={drop} style={{ backgroundColor }}>
-      <InvenotoryProgress />
+      <div>
+        <div className="info-div">{inventory.infoDivText}</div>
+        <InvenotoryProgress />
+      </div>
 
       <div className="flex flex-wrap gap-4 max-h-45vh overflow-y-auto">
         {inventoryItems?.map((item, index) => (

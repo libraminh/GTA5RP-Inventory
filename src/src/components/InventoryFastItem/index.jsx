@@ -56,7 +56,8 @@ const InventoryFastItem = ({ item, index }) => {
 
         <div className="mb-1">
           <img
-            className="w-14 object-contain object-center"
+            id={`itemFast-${index}`}
+            className="item w-14 object-contain object-center"
             src={item.image}
             alt="image"
           />

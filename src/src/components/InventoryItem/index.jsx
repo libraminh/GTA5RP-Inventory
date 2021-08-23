@@ -13,6 +13,8 @@ import keyhouseImg from "@/assets/images/KeyHouse.png";
 import { AppContext } from "@/store/appContext";
 import bulletIcon from "@/assets/images/bullet.png";
 
+import "./style.scss";
+
 const itemImages = require.context("@/assets/images", true);
 
 const InventoryItem = ({ item, index, quantity, inventoryType }) => {
@@ -97,6 +99,11 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
     return <>{count}</>;
   };
 
+  var DoBenSung = "";
+  if (item.type == "item_weapon") {
+    DoBenSung = `<div class="weapon-bar" style="height: ${item.doben}%"></div>`;
+  }
+
   return (
     // has-items
     <div
@@ -128,6 +135,11 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
           src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
           alt="image"
         />
+
+        <div
+          className="weapon-bar rounded-lg"
+          style={{ height: `${item.doben}%` }}
+        ></div>
       </div>
 
       <div className="item-name text-center uppercase text-xs font-semibold border-t border-solid border-gta-blue-300 py-1.5">

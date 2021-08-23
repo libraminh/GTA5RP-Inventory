@@ -6,6 +6,7 @@ import InventoryInput from "../InventoryInput";
 import InventoryOther from "../InventoryOther";
 import InventoryFastItems from "../InventoryFastItems";
 import { AppContext } from "@/store/appContext";
+import InventoryHeading from "../InventoryHeading";
 
 const { TabPane } = Tabs;
 
@@ -17,9 +18,7 @@ const InventoryPlayerWrapper = () => {
     <div>
       <div className="grid grid-cols-5 gap-10">
         <figure className="col-span-2">
-          <h2 className="text-xl mb-5 border-b border-t border-solid border-gta-blue-300 pb-1 pt-0.5 px-5 inline-block">
-            Kho Của Bạn
-          </h2>
+          <InventoryHeading>Kho Của Bạn</InventoryHeading>
           <InventoryPlayer />
         </figure>
 
@@ -29,9 +28,7 @@ const InventoryPlayerWrapper = () => {
 
         {isOtherInventoryShow && (
           <figure className="col-span-2">
-            <h2 className="text-xl mb-5 border-b border-t border-solid border-gta-blue-300 pb-1 pt-0.5 px-5 inline-block">
-              Kho Khác
-            </h2>
+            <InventoryHeading>Kho Khác</InventoryHeading>
             <InventoryOther />
           </figure>
         )}

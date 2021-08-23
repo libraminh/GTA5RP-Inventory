@@ -7,11 +7,13 @@ import { AppContext } from "@/store/appContext";
 import { InputNumber } from "antd";
 
 import "./style.scss";
+import { fetchAPI } from "@/utils";
+import { FETCH_URL, GIVE_ITEM } from "@/utils/constant";
 
 const InventoryInput = (props) => {
   const context = useContext(AppContext);
 
-  const { quantity } = context.store;
+  const { quantity, inventory } = context.store;
   const { updateQuantity } = context.actions;
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
@@ -26,30 +28,59 @@ const InventoryInput = (props) => {
     updateQuantity(parseInt(value));
   };
 
+  const handleClickPlayer = (player) => {
+    console.log("player", player);
+
+    const bodyHeader = {
+      item: inventory.dataItem,
+      number: parseInt(quantity),
+      player,
+    };
+
+    fetchAPI(GIVE_ITEM, bodyHeader);
+  };
+
   return (
-    <div className="flex flex-col space-y-5 text-lg border border-solid border-gta-blue-300 px-5 py-12 rounded-lg">
-      <InputNumber
-        className="w-full text-center border-gta-blue-300 rounded-lg"
-        min={1}
-        max={10}
-        defaultValue={1}
-        onChange={handleOnChange}
-      />
+    <div className="text-lg border border-solid border-gta-blue-300 px-5 py-12 rounded-lg">
+      {inventory.nearPlayers.length !== 0 ? (
+        <div id="nearPlayers" className="flex flex-col space-y-5">
+          {inventory.nearPlayers?.map((player, index) => (
+            <button
+              key={player.idcard}
+              className="nearbyPlayerButton border border-solid border-gta-blue-300 py-2 rounded-lg"
+              data-player={player.player}
+              onClick={() => handleClickPlayer(player)}
+            >
+              [{player.idcard}]
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col space-y-5">
+          <InputNumber
+            className="w-full text-center border-gta-blue-300 rounded-lg"
+            min={1}
+            max={10}
+            defaultValue={1}
+            onChange={handleOnChange}
+          />
 
-      <button
-        ref={drop}
-        className="border border-solid border-gta-blue-300 py-2 rounded-lg"
-      >
-        Use
-      </button>
+          <button
+            ref={drop}
+            className="border border-solid border-gta-blue-300 py-2 rounded-lg"
+          >
+            Use
+          </button>
 
-      <button className="border border-solid border-gta-blue-300 py-2 rounded-lg">
-        Give
-      </button>
+          <button className="border border-solid border-gta-blue-300 py-2 rounded-lg">
+            Give
+          </button>
 
-      <button className="border border-solid border-gta-blue-300 py-2 rounded-lg">
-        Drop
-      </button>
+          <button className="border border-solid border-gta-blue-300 py-2 rounded-lg">
+            Drop
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,7 +9,27 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppContext } from "./store/appContext";
 import { fetchAPI } from "./utils";
 
+import "./style.scss";
+import Notificacao from "./components/Notificacao";
+
 const { TabPane } = Tabs;
+
+{
+  /* <div id="nearPlayers">
+  <button class="nearbyPlayerButton" data-player="197">
+    [3]
+  </button>
+  <button class="nearbyPlayerButton" data-player="134">
+    [4225]
+  </button>
+  <button class="nearbyPlayerButton" data-player="257">
+    [4218]
+  </button>
+  <button class="nearbyPlayerButton" data-player="48">
+    [3080]
+  </button>
+</div>; */
+}
 
 window.Config = new Object();
 window.Config.closeKeys = [27]; //Array of keys used to close inventory. Default ESC and F2. Check https://keycode.info/ to get your key code
@@ -29,6 +49,10 @@ const App = (props) => {
     showWeightDiv,
     setInventoryItems,
     setOtherInventoryItems,
+    setInfoDivText,
+    setNearPlayer,
+    setDataItem,
+    setNotification,
   } = context.actions;
 
   const handleDisplay = (type) => {
@@ -54,7 +78,6 @@ const App = (props) => {
       case "motelsbed":
       case "glovebox":
       case "vault":
-        // doing player type
         showWeightDiv();
         showOtherInventory();
         break;
@@ -104,23 +127,38 @@ const App = (props) => {
           break;
 
         case "setShopInventoryItems":
-          // doing setShopInventoryItems
+          setOtherInventoryItems(event.data.itemList);
           break;
 
         case "setInfoText":
-          // doing setInfoText
+          // doing
+          // $(".info-div").html(event.data.text);
+
+          setInfoDivText(event.data.text);
           break;
 
         case "setWeightText":
           // doing setWeightText
+          // $(".weight-div").html(event.data.text);
           break;
 
         case "nearPlayers":
           // doing nearPlayers
+          setDataItem(event.data.item);
+          setNearPlayer(event.data.players);
           break;
 
         case "notification":
           // doing notification
+
+          const notiData = {
+            itemname: event.data.itemname,
+            itemlabel: event.data.itemlabel,
+            itemcount: event.data.itemcount,
+            itemremove: event.data.itemremove,
+          };
+
+          setNotification(notiData);
           break;
 
         case "showhotbar":
@@ -163,6 +201,8 @@ const App = (props) => {
           </Tabs>
         </div>
       </div>
+
+      <Notificacao />
     </DndProvider>
   );
 };
