@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
-import InventoryPlayer from "../InventoryPlayer";
+import { AppContext } from "@/store/appContext";
 import { Tabs } from "antd";
+import React, { useContext } from "react";
+import InventoryFastItems from "../InventoryFastItems";
+import InventoryHeading from "../InventoryHeading";
 import InventoryInput from "../InventoryInput";
 import InventoryOther from "../InventoryOther";
-import InventoryFastItems from "../InventoryFastItems";
-import { AppContext } from "@/store/appContext";
-import InventoryHeading from "../InventoryHeading";
+import InventoryPlayer from "../InventoryPlayer";
 
 const { TabPane } = Tabs;
 

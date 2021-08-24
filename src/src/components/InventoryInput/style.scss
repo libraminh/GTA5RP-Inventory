@@ -2,3 +2,7 @@ input.ant-input-number-input {
   height: 40px;
   @apply text-center appearance-none;
 }
+
+.ant-input-number-handler-wrap {
+  @apply hidden;
+}

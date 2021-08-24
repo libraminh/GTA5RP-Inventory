@@ -1,28 +1,27 @@
 import { ItemTypes } from "@/ItemTypes";
-import { TAKE_FROM_FAST } from "@/utils/constant";
+import { FAST_ITEM, PLAYER_ITEM, TAKE_FROM_FAST } from "@/utils/constant";
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import "./style.scss";
 
-const InventoryFastItem = ({ item, index }) => {
+const InventoryFastItem = ({ item, index, fromItem }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: "inventory_item",
+    accept: [PLAYER_ITEM, FAST_ITEM],
     drop: () => ({ name: "putIntoFastInventory" }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
     }),
   }));
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: ItemTypes.FAST_ITEM,
-      item,
+      type: FAST_ITEM,
+      item: { item, fromItem },
       end: (item, monitor) => {
-        console.log("monitor", monitor);
+        console.log("item >>>", item);
 
         const dropResult = monitor.getDropResult();
-
-        console.log("dropResult", dropResult);
 
         if (!item || !dropResult) return;
 
@@ -45,25 +44,36 @@ const InventoryFastItem = ({ item, index }) => {
     []
   );
 
+  const isActive = canDrop && isOver;
+
+  let isDropHover = false;
+
+  if (isActive) {
+    isDropHover = true;
+  } else if (canDrop) {
+  }
+
   return (
-    <div ref={drop} data-type="fast-item">
+    <div ref={drop} data-type={FAST_ITEM}>
       <div
-        ref={drag}
-        className="inventoryItem slotFast relative w-26 h-26 flex items-center justify-center flex-col border border-solid border-gray-800 rounded-lg"
+        className={`inventoryItem slotFast relative w-28 h-28 flex items-center justify-center flex-col border border-solid border-gray-800 rounded-lg transition-all duration-200 ease-in-out ${
+          isDropHover && "active-drop"
+        }`}
       >
         <div className="keybind absolute right-0.5 -top-6">{index + 1}</div>
         <div className="item-count absolute top-1 left-2">{item.itemCount}</div>
 
         <div className="mb-1">
           <img
+            ref={drag}
             id={`itemFast-${index}`}
             className="item w-14 object-contain object-center"
-            src={item.image}
+            src={item?.image}
             alt="image"
           />
         </div>
 
-        <div className="item-name">{item.itemName}</div>
+        <div className="item-name uppercase">{item.itemName}</div>
         <div className="item-name-bg"></div>
       </div>
     </div>

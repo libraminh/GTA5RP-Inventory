@@ -1,9 +1,22 @@
 import { fetchAPI, formatMoney } from "@/utils";
 import {
+  OTHER_ITEM,
+  PLAYER_ITEM,
   PUT_INTO_FAST,
+  PUT_INTO_GLOVEBOX,
+  PUT_INTO_MOTEL,
+  PUT_INTO_MOTELBED,
+  PUT_INTO_PLAYER,
+  PUT_INTO_PROPERTY,
+  PUT_INTO_SOCIETY,
   PUT_INTO_TRUNK,
+  PUT_INTO_VAULT,
   TAKE_FROM_FAST,
+  TAKE_FROM_PLAYER,
+  TAKE_FROM_PROPERTY,
+  TAKE_FROM_SOCIETY,
   TAKE_FROM_TRUNK,
+  TAKE_FROM_VAULT,
   USE_ITEM,
 } from "@/utils/constant";
 import React, { useContext, useEffect } from "react";
@@ -17,48 +30,55 @@ import "./style.scss";
 
 const itemImages = require.context("@/assets/images", true);
 
-const InventoryItem = ({ item, index, quantity, inventoryType }) => {
+const InventoryItem = ({
+  item,
+  index,
+  quantity,
+  inventoryType,
+  dragType,
+  fromItem,
+}) => {
   const context = useContext(AppContext);
 
   let { type } = context.store.inventory;
 
+  const handleItemApi = (eventApi) => {
+    const bodyHeader = {
+      item: {
+        type: item.type,
+        name: item.name,
+      },
+      number: parseInt(quantity),
+      owner: false,
+    };
+
+    fetchAPI(eventApi, bodyHeader);
+  };
+
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: "inventory_item",
-      item,
+      type: dragType,
+      item: { item, fromItem },
       end: (item, monitor) => {
-        console.log("monitor", monitor);
-
         const dropResult = monitor.getDropResult();
-
-        console.log("dropResult", dropResult);
-
-        const bodyHeader = {
-          item: {
-            type: item.type,
-            name: item.name,
-          },
-          number: parseInt(quantity),
-          owner: false,
-        };
 
         if (!item || !dropResult) return;
 
         switch (dropResult.name) {
           case "playerInventory":
-            fetchAPI(TAKE_FROM_TRUNK, bodyHeader);
+            // fetchAPI(TAKE_FROM_TRUNK, bodyHeader);
             break;
           case "otherInventory":
-            fetchAPI(PUT_INTO_TRUNK, bodyHeader);
+            handleItemApi(PUT_INTO_TRUNK);
             break;
           case "useInventory":
-            fetchAPI(USE_ITEM, bodyHeader);
+            // fetchAPI(USE_ITEM, bodyHeader);
             break;
           case "putIntoFastInventory":
-            fetchAPI(PUT_INTO_FAST, bodyHeader);
+            // fetchAPI(PUT_INTO_FAST, bodyHeader);
             break;
           case "takeFromFastInventory":
-            fetchAPI(TAKE_FROM_FAST, bodyHeader);
+            // fetchAPI(TAKE_FROM_FAST, bodyHeader);
             break;
           default:
             break;
@@ -99,10 +119,44 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
     return <>{count}</>;
   };
 
-  var DoBenSung = "";
-  if (item.type == "item_weapon") {
-    DoBenSung = `<div class="weapon-bar" style="height: ${item.doben}%"></div>`;
-  }
+  const handleItemContext = (e, { item, fromItem }) => {
+    e.preventDefault();
+
+    const isMainInventoryType = inventoryType === "main";
+
+    switch (type) {
+      case "trunk":
+        handleItemApi(isMainInventoryType ? PUT_INTO_TRUNK : TAKE_FROM_TRUNK);
+        break;
+      case "property":
+        handleItemApi(
+          isMainInventoryType ? PUT_INTO_PROPERTY : TAKE_FROM_PROPERTY
+        );
+        break;
+      case "Society":
+        handleItemApi(
+          isMainInventoryType ? PUT_INTO_SOCIETY : TAKE_FROM_SOCIETY
+        );
+        break;
+      case "vault":
+        handleItemApi(isMainInventoryType ? PUT_INTO_VAULT : TAKE_FROM_VAULT);
+        break;
+      case "player":
+        handleItemApi(isMainInventoryType ? PUT_INTO_PLAYER : TAKE_FROM_PLAYER);
+        break;
+      case "motels":
+        handleItemApi(PUT_INTO_MOTEL);
+        break;
+      case "motelsbed":
+        handleItemApi(PUT_INTO_MOTELBED);
+        break;
+      case "glovebox":
+        handleItemApi(PUT_INTO_GLOVEBOX);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     // has-items
@@ -128,6 +182,7 @@ const InventoryItem = ({ item, index, quantity, inventoryType }) => {
         id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
         data-item={JSON.stringify(item)}
         data-inventory={inventoryType}
+        onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
       >
         <img
           ref={drag}

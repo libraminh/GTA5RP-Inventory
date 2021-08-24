@@ -1,5 +1,6 @@
 import { inventoryItems } from "@/data/inventory-items";
 import { AppContext } from "@/store/appContext";
+import { OTHER_ITEM, PLAYER_ITEM } from "@/utils/constant";
 import React, { useContext } from "react";
 import { useDrop } from "react-dnd";
 import InventoryItem from "../InventoryItem";
@@ -11,7 +12,7 @@ const InventoryOther = (props) => {
   const { quantity } = context.store;
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: ["inventory_item"],
+    accept: [PLAYER_ITEM],
     drop: () => ({ name: "otherInventory" }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -44,6 +45,8 @@ const InventoryOther = (props) => {
               key={index}
               index={index}
               quantity={quantity}
+              dragType={OTHER_ITEM}
+              fromItem={OTHER_ITEM}
               inventoryType="second"
             />
           ))}
