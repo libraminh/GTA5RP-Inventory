@@ -37,14 +37,16 @@ const InventoryOther = (props) => {
     <div>
       <div
         ref={drop}
-        className={`mb-5 p-4 border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out min-h-48vh ${
+        className={`mb-5 p-4 border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out ${
           isDropHover ? "active-drop" : ""
-        } ${
-          isOtherInventoryEmpty &&
-          "flex items-center justify-center text-center"
-        }`}
+        } `}
       >
-        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-50vh overflow-y-auto pr-1">
+        <div
+          className={`scrollbar-custom w-full flex flex-wrap gap-2 max-h-50vh min-h-50vh overflow-y-auto pr-1 ${
+            isOtherInventoryEmpty &&
+            "flex items-center justify-center text-center"
+          }`}
+        >
           {isOtherInventoryEmpty ? (
             <h2 className="text-xl">Chưa có vật phẩm!</h2>
           ) : (

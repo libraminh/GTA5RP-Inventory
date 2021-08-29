@@ -1,8 +1,6 @@
 import { inventoryItems } from "@/data/inventory-items";
-import { ItemTypes } from "@/ItemTypes";
-import { AppContext } from "@/store/appContext";
 import { FAST_ITEM, OTHER_ITEM, PLAYER_ITEM } from "@/utils/constant";
-import React, { useContext } from "react";
+import React from "react";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import InventoryItem from "../InventoryItem";
@@ -42,7 +40,7 @@ const InventoryPlayer = (props) => {
           isDropHover && "active-drop"
         }`}
       >
-        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-50vh overflow-y-auto pr-1">
+        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-50vh min-h-50vh overflow-y-auto pr-1">
           {inventoryItems?.map((item, index) => (
             <InventoryItem
               item={item}

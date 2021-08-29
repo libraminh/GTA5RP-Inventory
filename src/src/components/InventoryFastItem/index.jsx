@@ -1,25 +1,23 @@
-import { ItemTypes } from "@/ItemTypes";
+import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { useRenderCount } from "@/hooks/useRenderCount";
+import { removeFastItems } from "@/store/slices/InventorySlice";
 import {
   FAST_ITEM,
   ITEM_ACCOUNT,
   ITEM_MONEY,
-  ITEM_WEAPON,
   PLAYER_ITEM,
   PUT_INTO_FAST,
-  TAKE_FROM_FAST,
 } from "@/utils/constant";
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
-import "./style.scss";
-import keyhouseImg from "@/assets/images/KeyHouse.png";
 import { useDispatch } from "react-redux";
-import { removeFastItems } from "@/store/slices/InventorySlice";
-import { formatMoney } from "@/utils";
+import "./style.scss";
 
 const itemImages = require.context("@/assets/images", true);
 
 const InventoryFastItem = ({ item = {}, index, fromItem }) => {
   const dispatch = useDispatch();
+  const { renderCount } = useRenderCount(item);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [PLAYER_ITEM, FAST_ITEM],
@@ -75,33 +73,6 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
   const handleContextMenu = (e, item) => {
     e.preventDefault();
     dispatch(removeFastItems({ item, index }));
-  };
-
-  const renderCount = () => {
-    let count = item.count;
-
-    switch (item.type) {
-      case ITEM_WEAPON:
-        return (
-          <>
-            {count !== 0 && (
-              <>
-                <img
-                  style={{ width: "10px" }}
-                  src={require("@/assets/images/bullet.png")}
-                />
-                <span>{item.count}</span>
-              </>
-            )}
-          </>
-        );
-
-      case ITEM_ACCOUNT:
-      case ITEM_MONEY:
-        return <>{formatMoney(item.count)}$</>;
-    }
-
-    return <>{count}</>;
   };
 
   return (

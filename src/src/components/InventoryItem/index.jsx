@@ -1,39 +1,21 @@
-import { fetchAPI, formatMoney } from "@/utils";
+import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { useRenderCount } from "@/hooks/useRenderCount";
+import { setFastItems, setOtherItems } from "@/store/slices/InventorySlice";
+import { fetchAPI } from "@/utils";
 import {
   DROP_ITEM,
   GET_NEARS_PLAYERS,
   GIVE_ITEM,
   ITEM_ACCOUNT,
   ITEM_MONEY,
-  ITEM_WEAPON,
-  OTHER_ITEM,
-  PLAYER_ITEM,
   PUT_INTO_FAST,
-  PUT_INTO_GLOVEBOX,
-  PUT_INTO_MOTEL,
-  PUT_INTO_MOTELBED,
-  PUT_INTO_PLAYER,
-  PUT_INTO_PROPERTY,
-  PUT_INTO_SOCIETY,
-  PUT_INTO_TRUNK,
-  PUT_INTO_VAULT,
   TAKE_FROM_FAST,
-  TAKE_FROM_PLAYER,
-  TAKE_FROM_PROPERTY,
-  TAKE_FROM_SOCIETY,
-  TAKE_FROM_TRUNK,
-  TAKE_FROM_VAULT,
   USE_ITEM,
 } from "@/utils/constant";
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { useDrag } from "react-dnd";
-
-import keyhouseImg from "@/assets/images/KeyHouse.png";
-import { AppContext } from "@/store/appContext";
-
-import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { setFastItems, setOtherItems } from "@/store/slices/InventorySlice";
+import "./style.scss";
 
 const itemImages = require.context("@/assets/images", true);
 
@@ -47,6 +29,8 @@ const InventoryItem = ({
 }) => {
   const { type } = useSelector((state) => state.inventorySlice);
   const dispach = useDispatch();
+
+  const { renderCount } = useRenderCount(item);
 
   const handleItemApi = (eventApi) => {
     const bodyHeader = {
@@ -121,33 +105,6 @@ const InventoryItem = ({
   const opacity = isDragging ? 0.4 : 1;
   const isKeyHouse = item.name.includes("keyhouse");
 
-  const renderCount = () => {
-    let count = item.count;
-
-    switch (item.type) {
-      case ITEM_WEAPON:
-        return (
-          <>
-            {count !== 0 && (
-              <>
-                <img
-                  style={{ width: "10px" }}
-                  src={require("@/assets/images/bullet.png")}
-                />
-                <span>{item.count}</span>
-              </>
-            )}
-          </>
-        );
-
-      case ITEM_ACCOUNT:
-      case ITEM_MONEY:
-        return <>{formatMoney(item.count)}$</>;
-    }
-
-    return <>{count}</>;
-  };
-
   const handleItemContext = async (e, { item, fromItem }) => {
     e.preventDefault();
 
@@ -201,7 +158,7 @@ const InventoryItem = ({
     // has-items
     <div
       style={{ opacity }}
-      className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 space-y-2 rounded-lg"
+      className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg"
     >
       <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
         {item.count.length !== 0 && (
