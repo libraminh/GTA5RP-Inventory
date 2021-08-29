@@ -1,7 +1,6 @@
 // import { inventoryItems } from "@/data/inventory-items";
-import { AppContext } from "@/store/appContext";
 import { OTHER_ITEM, PLAYER_ITEM } from "@/utils/constant";
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import InventoryItem from "../InventoryItem";
@@ -14,7 +13,7 @@ const InventoryOther = (props) => {
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [PLAYER_ITEM],
-    drop: () => ({ name: "otherInventory" }),
+    drop: () => ({ name: OTHER_ITEM }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
