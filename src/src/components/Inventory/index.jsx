@@ -1,6 +1,7 @@
 import { AppContext } from "@/store/appContext";
 import { Tabs } from "antd";
 import React, { useContext } from "react";
+import { useSelector } from "react-redux";
 import InventoryFastItems from "../InventoryFastItems";
 import InventoryHeading from "../InventoryHeading";
 import InventoryInput from "../InventoryInput";
@@ -10,23 +11,23 @@ import InventoryPlayer from "../InventoryPlayer";
 const { TabPane } = Tabs;
 
 const InventoryPlayerWrapper = () => {
-  const context = useContext(AppContext);
-  let { isOtherInventoryShow } = context.store.inventory;
+  const { isOtherInventoryShow } = useSelector((state) => state.inventorySlice);
 
   return (
     <div>
-      <div className="grid grid-cols-5 gap-10">
-        <figure className="col-span-2">
+      {/* grid grid-cols-5 gap-10 */}
+      <div className="flex">
+        <figure className="" style={{ width: "35.5vw" }}>
           <InventoryHeading>Kho Của Bạn</InventoryHeading>
           <InventoryPlayer />
         </figure>
 
-        <figure className="col-span-1 flex items-center justify-center">
+        <figure className="flex items-center justify-center">
           <InventoryInput />
         </figure>
 
         {isOtherInventoryShow && (
-          <figure className="col-span-2">
+          <figure className="" style={{ width: "35.5vw" }}>
             <InventoryHeading>Kho Khác</InventoryHeading>
             <InventoryOther />
           </figure>
@@ -37,12 +38,11 @@ const InventoryPlayerWrapper = () => {
 };
 
 const Inventory = (props) => {
-  const context = useContext(AppContext);
-  let { isFastInventoryShow } = context.store.inventory;
+  const { isFastInventoryShow } = useSelector((state) => state.inventorySlice);
 
   return (
     <div>
-      <Tabs type="card">
+      {/* <Tabs type="card">
         <TabPane tab="Kho Đồ" key="1">
           <InventoryPlayerWrapper />
         </TabPane>
@@ -52,7 +52,9 @@ const Inventory = (props) => {
         <TabPane tab="Balo" key="3">
           Content of Tab 3
         </TabPane>
-      </Tabs>
+      </Tabs> */}
+
+      <InventoryPlayerWrapper />
 
       {isFastInventoryShow && <InventoryFastItems />}
     </div>

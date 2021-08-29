@@ -2,6 +2,7 @@ import { AppContext } from "@/store/appContext";
 import React, { useContext } from "react";
 import InventoryItem from "../InventoryItem";
 import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { useSelector } from "react-redux";
 
 const itemImages = require.context("@/assets/images", true);
 
@@ -13,9 +14,7 @@ const itemImages = require.context("@/assets/images", true);
 // };
 
 const Notificacao = () => {
-  const context = useContext(AppContext);
-
-  let { notificationData } = context.store;
+  const { notificationData } = useSelector((state) => state.inventorySlice);
 
   const isKeyHouse = notificationData.itemname?.includes("keyhouse");
 

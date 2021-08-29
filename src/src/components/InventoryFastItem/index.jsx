@@ -1,13 +1,25 @@
 import { ItemTypes } from "@/ItemTypes";
-import { FAST_ITEM, PLAYER_ITEM, TAKE_FROM_FAST } from "@/utils/constant";
+import {
+  FAST_ITEM,
+  PLAYER_ITEM,
+  PUT_INTO_FAST,
+  TAKE_FROM_FAST,
+} from "@/utils/constant";
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import "./style.scss";
+import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { useDispatch } from "react-redux";
+import { removeFastItems } from "@/store/slices/InventorySlice";
 
-const InventoryFastItem = ({ item, index, fromItem }) => {
+const itemImages = require.context("@/assets/images", true);
+
+const InventoryFastItem = ({ item = {}, index, fromItem }) => {
+  const dispatch = useDispatch();
+
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [PLAYER_ITEM, FAST_ITEM],
-    drop: () => ({ name: "putIntoFastInventory" }),
+    drop: () => ({ name: PUT_INTO_FAST, slot: index }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -30,6 +42,7 @@ const InventoryFastItem = ({ item, index, fromItem }) => {
             console.log("123");
             // fetchAPI(TAKE_FROM_FAST, bodyHeader);
             break;
+
           default:
             break;
         }
@@ -53,27 +66,37 @@ const InventoryFastItem = ({ item, index, fromItem }) => {
   } else if (canDrop) {
   }
 
+  const isKeyHouse = item.name?.includes("keyhouse");
+
+  const handleContextMenu = (e, item) => {
+    e.preventDefault();
+    dispatch(removeFastItems({ item, index }));
+  };
+
   return (
     <div ref={drop} data-type={FAST_ITEM}>
       <div
-        className={`inventoryItem slotFast relative w-28 h-28 flex items-center justify-center flex-col border border-solid border-gray-800 rounded-lg transition-all duration-200 ease-in-out ${
+        className={`inventoryItem slotFast relative w-28 h-28 flex items-center justify-center flex-col border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out hover-drop ${
           isDropHover && "active-drop"
         }`}
+        onContextMenu={(e) => handleContextMenu(e, item)}
       >
         <div className="keybind absolute right-0.5 -top-6">{index + 1}</div>
-        <div className="item-count absolute top-1 left-2">{item.itemCount}</div>
+        <div className="item-count absolute top-1 left-2">{item.count}</div>
 
-        <div className="mb-1">
-          <img
-            ref={drag}
-            id={`itemFast-${index}`}
-            className="item w-14 object-contain object-center"
-            src={item?.image}
-            alt="image"
-          />
-        </div>
+        {item?.name && (
+          <div className="mb-1">
+            <img
+              ref={drag}
+              id={`itemFast-${index}`}
+              className="item w-14 object-contain object-center"
+              src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
+              alt="image"
+            />
+          </div>
+        )}
 
-        <div className="item-name uppercase">{item.itemName}</div>
+        <div className="item-name uppercase">{item.label}</div>
         <div className="item-name-bg"></div>
       </div>
     </div>

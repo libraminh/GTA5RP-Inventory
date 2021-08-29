@@ -1,5 +1,9 @@
 import { fetchAPI, formatMoney } from "@/utils";
 import {
+  DROP_ITEM,
+  GET_NEARS_PLAYERS,
+  GIVE_ITEM,
+  ITEM_MONEY,
   OTHER_ITEM,
   PLAYER_ITEM,
   PUT_INTO_FAST,
@@ -27,6 +31,8 @@ import { AppContext } from "@/store/appContext";
 import bulletIcon from "@/assets/images/bullet.png";
 
 import "./style.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { setFastItems, setOtherItems } from "@/store/slices/InventorySlice";
 
 const itemImages = require.context("@/assets/images", true);
 
@@ -38,9 +44,8 @@ const InventoryItem = ({
   dragType,
   fromItem,
 }) => {
-  const context = useContext(AppContext);
-
-  let { type } = context.store.inventory;
+  const { type } = useSelector((state) => state.inventorySlice);
+  const dispach = useDispatch();
 
   const handleItemApi = (eventApi) => {
     const bodyHeader = {
@@ -68,18 +73,38 @@ const InventoryItem = ({
           case "playerInventory":
             // fetchAPI(TAKE_FROM_TRUNK, bodyHeader);
             break;
+
           case "otherInventory":
-            handleItemApi(PUT_INTO_TRUNK);
+            // handleItemApi(PUT_INTO_TRUNK);
+            dispach(setOtherItems(item.item));
             break;
-          case "useInventory":
-            // fetchAPI(USE_ITEM, bodyHeader);
+
+          case PUT_INTO_FAST:
+            dispach(
+              setFastItems({
+                ...item,
+                slot: dropResult.slot,
+              })
+            );
+            handleItemApi(PUT_INTO_FAST);
             break;
-          case "putIntoFastInventory":
-            // fetchAPI(PUT_INTO_FAST, bodyHeader);
+
+          case TAKE_FROM_FAST:
+            handleItemApi(TAKE_FROM_FAST);
             break;
-          case "takeFromFastInventory":
-            // fetchAPI(TAKE_FROM_FAST, bodyHeader);
+
+          case USE_ITEM:
+            handleItemApi(USE_ITEM);
             break;
+
+          case DROP_ITEM:
+            handleItemApi(DROP_ITEM);
+            break;
+
+          case GIVE_ITEM:
+            handleItemApi(GET_NEARS_PLAYERS);
+            break;
+
           default:
             break;
         }
@@ -112,50 +137,61 @@ const InventoryItem = ({
         );
 
       case "item_account":
-      case "item_money":
+      case ITEM_MONEY:
         return <>{formatMoney(item.count)}$</>;
     }
 
     return <>{count}</>;
   };
 
-  const handleItemContext = (e, { item, fromItem }) => {
+  const handleItemContext = async (e, { item, fromItem }) => {
     e.preventDefault();
 
     const isMainInventoryType = inventoryType === "main";
 
-    switch (type) {
-      case "trunk":
-        handleItemApi(isMainInventoryType ? PUT_INTO_TRUNK : TAKE_FROM_TRUNK);
-        break;
-      case "property":
-        handleItemApi(
-          isMainInventoryType ? PUT_INTO_PROPERTY : TAKE_FROM_PROPERTY
-        );
-        break;
-      case "Society":
-        handleItemApi(
-          isMainInventoryType ? PUT_INTO_SOCIETY : TAKE_FROM_SOCIETY
-        );
-        break;
-      case "vault":
-        handleItemApi(isMainInventoryType ? PUT_INTO_VAULT : TAKE_FROM_VAULT);
-        break;
-      case "player":
-        handleItemApi(isMainInventoryType ? PUT_INTO_PLAYER : TAKE_FROM_PLAYER);
-        break;
-      case "motels":
-        handleItemApi(PUT_INTO_MOTEL);
-        break;
-      case "motelsbed":
-        handleItemApi(PUT_INTO_MOTELBED);
-        break;
-      case "glovebox":
-        handleItemApi(PUT_INTO_GLOVEBOX);
-        break;
-      default:
-        break;
-    }
+    const response = await dispach(setFastItems(item));
+    console.log("response", response);
+
+    $.post(
+      "http://conde-b1g_inventory/PutIntoFast",
+      JSON.stringify({
+        item: itemData,
+        slot: i,
+      })
+    );
+
+    // switch (type) {
+    //   case "trunk":
+    //     handleItemApi(isMainInventoryType ? PUT_INTO_TRUNK : TAKE_FROM_TRUNK);
+    //     break;
+    //   case "property":
+    //     handleItemApi(
+    //       isMainInventoryType ? PUT_INTO_PROPERTY : TAKE_FROM_PROPERTY
+    //     );
+    //     break;
+    //   case "Society":
+    //     handleItemApi(
+    //       isMainInventoryType ? PUT_INTO_SOCIETY : TAKE_FROM_SOCIETY
+    //     );
+    //     break;
+    //   case "vault":
+    //     handleItemApi(isMainInventoryType ? PUT_INTO_VAULT : TAKE_FROM_VAULT);
+    //     break;
+    //   case "player":
+    //     handleItemApi(isMainInventoryType ? PUT_INTO_PLAYER : TAKE_FROM_PLAYER);
+    //     break;
+    //   case "motels":
+    //     handleItemApi(PUT_INTO_MOTEL);
+    //     break;
+    //   case "motelsbed":
+    //     handleItemApi(PUT_INTO_MOTELBED);
+    //     break;
+    //   case "glovebox":
+    //     handleItemApi(PUT_INTO_GLOVEBOX);
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
 
   return (
@@ -167,13 +203,13 @@ const InventoryItem = ({
       <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
         <div
           className={`item-count inline-flex items-center space-x-1 ${
-            item.type === "item_money" && "ml-auto"
+            item.type === ITEM_MONEY && "ml-auto"
           }`}
         >
           {renderCount()}
         </div>
 
-        {item.type !== "item_money" && item.type !== "item_account" && (
+        {item.type !== ITEM_MONEY && item.type !== "item_account" && (
           <div className="item-count item-weight">{item.weight}</div>
         )}
       </div>

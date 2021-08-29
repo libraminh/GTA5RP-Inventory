@@ -36,12 +36,19 @@ const initStore = {
     nearPlayers: [], // nearPlayers
     dataItem: null,
   },
+  otherInventory: [],
   notificationData: {},
 };
 
 const StoreWrapper = ({ children }) => {
   const [store, setStore] = useState(initStore);
   const [actions, setActions] = useState({
+    setOtherItems: (item) => {
+      setStore({
+        ...store,
+        otherInventory: [...store.otherInventory, item],
+      });
+    },
     setNotification: (notiData) => {
       setStore({
         ...store,

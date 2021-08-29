@@ -1,6 +1,6 @@
 // components
 import { Tabs } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import Inventory from "./components/Inventory";
 import InventoryFastItems from "./components/InventoryFastItems";
 
@@ -11,6 +11,19 @@ import { fetchAPI } from "./utils";
 
 import "./style.scss";
 import Notificacao from "./components/Notificacao";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  hideOtherInventory,
+  hideWeightDiv,
+  setDataItem,
+  setInfoDivText,
+  setInventoryItems,
+  setNearPlayer,
+  setNotification,
+  setOtherInventoryItems,
+  showOtherInventory,
+  showWeightDiv,
+} from "./store/slices/InventorySlice";
 
 const { TabPane } = Tabs;
 
@@ -36,40 +49,46 @@ window.Config.closeKeys = [27]; //Array of keys used to close inventory. Default
 //LANGUAGE CAN BE CHANGED IN ui.html, SEARCH FOR <script src="locales/en.js"></script> AND CHANGE IT THERE
 
 const App = (props) => {
-  const context = useContext(AppContext);
+  // const context = useContext(AppContext);
 
-  let { type, disabled, isInventoryShow } = context.store.inventory;
+  const { otherInventory, type, disabled, isInventoryShow } = useSelector(
+    (state) => state.inventorySlice
+  );
+  const dispatch = useDispatch();
 
-  let {
-    toggleOtherInventory,
-    toggleWeightDiv,
-    hideWeightDiv,
-    hideOtherInventory,
-    showOtherInventory,
-    showWeightDiv,
-    setInventoryItems,
-    setOtherInventoryItems,
-    setInfoDivText,
-    setNearPlayer,
-    setDataItem,
-    setNotification,
-  } = context.actions;
+  // let { type, disabled, isInventoryShow } = context.store.inventory;
+
+  // let {
+  //   toggleOtherInventory,
+  //   toggleWeightDiv,
+  //   hideWeightDiv,
+  //   hideOtherInventory,
+  //   showOtherInventory,
+  //   showWeightDiv,
+  //   setInventoryItems,
+  //   setOtherInventoryItems,
+  //   setInfoDivText,
+  //   setNearPlayer,
+  //   setDataItem,
+  //   setNotification,
+  // } = context.actions;
 
   const handleDisplay = (type) => {
     switch (type) {
       case "normal":
-        hideWeightDiv();
-        hideOtherInventory();
+        dispatch(hideWeightDiv());
+        dispatch(hideOtherInventory());
+
         break;
       case "trunk":
-        showOtherInventory();
-        showWeightDiv();
+        dispatch(showOtherInventory());
+        dispatch(showWeightDiv());
         break;
 
       case "Society":
       case "property":
-        showOtherInventory();
-        hideWeightDiv();
+        dispatch(showOtherInventory());
+        dispatch(hideWeightDiv());
         break;
 
       case "player":
@@ -78,8 +97,8 @@ const App = (props) => {
       case "motelsbed":
       case "glovebox":
       case "vault":
-        showWeightDiv();
-        showOtherInventory();
+        dispatch(showWeightDiv());
+        dispatch(showOtherInventory());
         break;
 
       default:
@@ -117,24 +136,24 @@ const App = (props) => {
           break;
 
         case "setItems":
-          setInventoryItems(event.data.itemList);
+          dispatch(setInventoryItems(event.data.itemList));
           // doing setItems
           break;
 
         case "setSecondInventoryItems":
           // doing setSecondInventoryItems
-          setOtherInventoryItems(event.data.itemList);
+          dispatch(setOtherInventoryItems(event.data.itemList));
           break;
 
         case "setShopInventoryItems":
-          setOtherInventoryItems(event.data.itemList);
+          dispatch(setOtherInventoryItems(event.data.itemList));
           break;
 
         case "setInfoText":
           // doing
           // $(".info-div").html(event.data.text);
 
-          setInfoDivText(event.data.text);
+          dispatch(setInfoDivText(event.data.text));
           break;
 
         case "setWeightText":
@@ -144,8 +163,8 @@ const App = (props) => {
 
         case "nearPlayers":
           // doing nearPlayers
-          setDataItem(event.data.item);
-          setNearPlayer(event.data.players);
+          dispatch(setDataItem(event.data.item));
+          dispatch(setNearPlayer(event.data.players));
           break;
 
         case "notification":
@@ -158,7 +177,7 @@ const App = (props) => {
             itemremove: event.data.itemremove,
           };
 
-          setNotification(notiData);
+          dispatch(setNotification(notiData));
           break;
 
         case "showhotbar":
@@ -183,7 +202,7 @@ const App = (props) => {
     <DndProvider backend={HTML5Backend}>
       <div className="app-wrapper z-10">
         <div
-          className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-200 ease-in-out ${
+          className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
             isInventoryShow ? "block" : "hidden"
           }`}
         >

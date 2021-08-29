@@ -1,5 +1,6 @@
 import playersafe from "@/assets/images/playersafe.png";
 import advrepairkit from "@/assets/images/advrepairkit.png";
+import { ITEM_MONEY } from "@/utils/constant";
 
 export const inventoryItems = [
   {
@@ -24,7 +25,7 @@ export const inventoryItems = [
   },
   {
     name: "playersafe",
-    type: "item_money",
+    type: ITEM_MONEY,
     count: "150000",
     weight: "2KG",
     label: "Két Sắt",

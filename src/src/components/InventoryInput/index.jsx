@@ -1,40 +1,29 @@
-import React, { useContext, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { setQuantity } from "@/store/slices/GlobalSlice";
-import { useDrop } from "react-dnd";
-import { AppContext } from "@/store/appContext";
-import { InputNumber } from "antd";
-
-import "./style.scss";
+import { updateQuantity } from "@/store/slices/InventorySlice";
 import { fetchAPI } from "@/utils";
-import { FETCH_URL, GIVE_ITEM } from "@/utils/constant";
+import { DROP_ITEM, GIVE_ITEM, PLAYER_ITEM, USE_ITEM } from "@/utils/constant";
+import { InputNumber } from "antd";
+import React from "react";
+import { useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
 import InventoryButton from "../InventoryButton";
+import "./style.scss";
 
 const InventoryInput = (props) => {
-  const context = useContext(AppContext);
+  const { quantity, dataItem, nearPlayers } = useSelector(
+    (state) => state.inventorySlice
+  );
 
-  const { quantity, inventory } = context.store;
-  const { updateQuantity } = context.actions;
-
-  const [{ isOver, canDrop }, drop] = useDrop(() => ({
-    accept: "inventory_item",
-    drop: () => ({ name: "useInventory" }),
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  }));
+  const dispatch = useDispatch();
 
   const handleOnChange = (value) => {
-    updateQuantity(parseInt(value));
+    dispatch(updateQuantity(parseInt(value)));
   };
 
   const handleClickPlayer = (player) => {
     console.log("player", player);
 
     const bodyHeader = {
-      item: inventory.dataItem,
+      item: dataItem,
       number: parseInt(quantity),
       player,
     };
@@ -42,21 +31,11 @@ const InventoryInput = (props) => {
     fetchAPI(GIVE_ITEM, bodyHeader);
   };
 
-  const isActive = canDrop && isOver;
-
-  let isDropHover = false;
-
-  if (isActive) {
-    isDropHover = true;
-  } else if (canDrop) {
-    // backgroundColor = "red";
-  }
-
   return (
     <div className="w-full text-lg px-5 py-12 rounded-lg max-w-230">
-      {inventory.nearPlayers.length !== 0 ? (
+      {nearPlayers.length !== 0 ? (
         <div id="nearPlayers" className="flex flex-col space-y-5">
-          {inventory.nearPlayers?.map((player, index) => (
+          {nearPlayers?.map((player, index) => (
             <button
               key={player.idcard}
               className="nearbyPlayerButton border border-solid border-gta-blue-300 py-2 rounded-lg"
@@ -72,15 +51,14 @@ const InventoryInput = (props) => {
           <InputNumber
             className="w-full text-center border-gta-blue-400 rounded-lg"
             min={1}
-            max={10}
             defaultValue={1}
             onChange={handleOnChange}
           />
 
-          <div ref={drop} className="flex flex-col space-y-5">
-            <InventoryButton isDropHover={isDropHover}>Dùng</InventoryButton>
-            <InventoryButton isDropHover={isDropHover}>Gửi</InventoryButton>
-            <InventoryButton isDropHover={isDropHover}>Vứt</InventoryButton>
+          <div className="flex flex-col space-y-5">
+            <InventoryButton dropName={USE_ITEM}>Dùng</InventoryButton>
+            <InventoryButton dropName={GIVE_ITEM}>Gửi</InventoryButton>
+            <InventoryButton dropName={DROP_ITEM}>Vứt</InventoryButton>
           </div>
         </div>
       )}
