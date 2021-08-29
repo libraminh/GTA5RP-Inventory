@@ -43,8 +43,9 @@ const InventoryOther = (props) => {
       >
         <div
           className={`scrollbar-custom w-full flex flex-wrap gap-2 max-h-50vh min-h-50vh overflow-y-auto pr-1 ${
-            isOtherInventoryEmpty &&
-            "flex items-center justify-center text-center"
+            isOtherInventoryEmpty
+              ? "flex items-center justify-center text-center"
+              : ""
           }`}
         >
           {isOtherInventoryEmpty ? (
