@@ -8,6 +8,7 @@ import {
   GIVE_ITEM,
   ITEM_ACCOUNT,
   ITEM_MONEY,
+  OTHER_ITEM,
   PUT_INTO_FAST,
   TAKE_FROM_FAST,
   USE_ITEM,
@@ -27,7 +28,7 @@ const InventoryItem = ({
   dragType,
   fromItem,
 }) => {
-  const { type } = useSelector((state) => state.inventorySlice);
+  const { type, fastItems } = useSelector((state) => state.inventorySlice);
   const dispach = useDispatch();
 
   const { renderCount } = useRenderCount(item);
@@ -45,7 +46,7 @@ const InventoryItem = ({
     fetchAPI(eventApi, bodyHeader);
   };
 
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: dragType,
       item: { item, fromItem },
@@ -59,7 +60,7 @@ const InventoryItem = ({
             // fetchAPI(TAKE_FROM_TRUNK, bodyHeader);
             break;
 
-          case "otherInventory":
+          case OTHER_ITEM:
             // handleItemApi(PUT_INTO_TRUNK);
             dispach(setOtherItems(item.item));
             break;
@@ -108,17 +109,32 @@ const InventoryItem = ({
   const handleItemContext = async (e, { item, fromItem }) => {
     e.preventDefault();
 
-    const isMainInventoryType = inventoryType === "main";
+    if (item.type === ITEM_MONEY) return;
 
-    const response = await dispach(setFastItems(item));
+    // const isMainInventoryType = inventoryType === "main";
 
-    // $.post(
-    //   "http://conde-b1g_inventory/PutIntoFast",
-    //   JSON.stringify({
-    //     item: itemData,
-    //     slot: i,
-    //   })
-    // );
+    let currentSlot = null;
+    let stopLoop = false;
+
+    fastItems.forEach((item, index) => {
+      if (stopLoop) return;
+      const isEmpty =
+        Object.keys(item).length === 0 && item.constructor === Object;
+
+      if (!isEmpty) return;
+      currentSlot = index;
+      stopLoop = true;
+    });
+
+    dispach(setFastItems(item));
+
+    fetchAPI(PUT_INTO_FAST, {
+      item: {
+        ...item,
+        slot: index + 1,
+      },
+      slot: currentSlot + 1,
+    });
 
     // switch (type) {
     //   case "trunk":
@@ -156,50 +172,52 @@ const InventoryItem = ({
 
   return (
     // has-items
-    <div
-      style={{ opacity }}
-      className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg"
-    >
-      <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
-        {item.count.length !== 0 && (
-          <div
-            className={`item-count inline-flex items-center space-x-1 ${
-              item.type === ITEM_MONEY ? "ml-auto" : ""
-            }`}
-          >
-            {renderCount()}
-          </div>
-        )}
-
-        {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
-          <div className="item-count item-weight ml-auto">{item.weight}</div>
-        )}
-      </div>
-
+    <>
       <div
-        id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
-        data-item={JSON.stringify(item)}
-        data-inventory={inventoryType}
+        style={{ opacity }}
+        className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out"
         onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
+        ref={drag}
       >
-        <img
-          ref={drag}
-          className="item w-14 object-contain object-center mx-auto"
-          src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
-          alt="image"
-        />
+        <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
+          {item.count.length !== 0 && (
+            <div
+              className={`item-count inline-flex items-center space-x-1 ${
+                item.type === ITEM_MONEY ? "ml-auto" : ""
+              }`}
+            >
+              {renderCount()}
+            </div>
+          )}
+
+          {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
+            <div className="item-count item-weight ml-auto">{item.weight}</div>
+          )}
+        </div>
 
         <div
-          className="weapon-bar rounded-lg"
-          style={{ height: `${item.doben}%` }}
-        ></div>
-      </div>
+          id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+          data-item={JSON.stringify(item)}
+          data-inventory={inventoryType}
+        >
+          <img
+            className="item w-14 object-contain object-center mx-auto"
+            src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
+            alt="image"
+          />
 
-      <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
-        {item.label}
+          <div
+            className="weapon-bar rounded-lg"
+            style={{ height: `${item.doben}%` }}
+          ></div>
+        </div>
+
+        <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
+          {item.label}
+        </div>
+        {/* <div className="item-name-bg"></div> */}
       </div>
-      {/* <div className="item-name-bg"></div> */}
-    </div>
+    </>
   );
 };
 

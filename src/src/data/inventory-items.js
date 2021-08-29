@@ -79,7 +79,7 @@ export const inventoryItems = [
     weight: "20KG",
     count: "3",
     price: 500,
-    label: "Gõ",
+    label: "Gỗ",
   },
   {
     name: "wool",

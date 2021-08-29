@@ -1,6 +1,7 @@
 import keyhouseImg from "@/assets/images/KeyHouse.png";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { removeFastItems } from "@/store/slices/InventorySlice";
+import { fetchAPI } from "@/utils";
 import {
   FAST_ITEM,
   ITEM_ACCOUNT,
@@ -20,7 +21,7 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
   const { renderCount } = useRenderCount(item);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: [PLAYER_ITEM, FAST_ITEM],
+    accept: [PLAYER_ITEM, FAST_ITEM, PUT_INTO_FAST],
     drop: () => ({ name: PUT_INTO_FAST, slot: index }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -33,16 +34,19 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
       type: FAST_ITEM,
       item: { item, fromItem },
       end: (item, monitor) => {
-        console.log("item >>>", item);
-
         const dropResult = monitor.getDropResult();
 
         if (!item || !dropResult) return;
 
         switch (dropResult.name) {
-          case "takeFromFastInventory":
-            console.log("123");
-            // fetchAPI(TAKE_FROM_FAST, bodyHeader);
+          case PUT_INTO_FAST:
+            fetchAPI(PUT_INTO_FAST, {
+              item: {
+                ...item,
+                slot: index + 1,
+              },
+              slot: dropResult.slot + 1,
+            });
             break;
 
           default:
@@ -105,11 +109,8 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
               )}
             </div>
 
-            {/* <div className="item-count absolute top-1 left-2">{item.count}</div> */}
-
-            <div className="mb-1" id={`itemFast-${index}`}>
+            <div className="w-full mb-1" id={`itemFast-${index}`} ref={drag}>
               <img
-                ref={drag}
                 className="item w-14 object-contain object-center mx-auto"
                 src={
                   isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)

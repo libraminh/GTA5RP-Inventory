@@ -36,16 +36,16 @@ const InventoryPlayer = (props) => {
     // style={{ backgroundColor }}
     <div ref={drop}>
       <div
-        className={`mb-5 p-4 border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out ${
+        className={`mb-5 border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out ${
           isDropHover && "active-drop"
         }`}
       >
-        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-50vh min-h-50vh overflow-y-auto pr-1">
+        <div className="scrollbar-custom flex flex-wrap content-start gap-3 max-h-50vh overflow-y-auto p-4 pr-1">
           {inventoryItems?.map((item, index) => (
             <InventoryItem
               item={item}
-              key={index}
-              index={item.name}
+              key={item.name}
+              index={index}
               quantity={quantity}
               dragType={PLAYER_ITEM}
               fromItem={PLAYER_ITEM}
