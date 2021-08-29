@@ -3,7 +3,9 @@ import {
   DROP_ITEM,
   GET_NEARS_PLAYERS,
   GIVE_ITEM,
+  ITEM_ACCOUNT,
   ITEM_MONEY,
+  ITEM_WEAPON,
   OTHER_ITEM,
   PLAYER_ITEM,
   PUT_INTO_FAST,
@@ -28,7 +30,6 @@ import { useDrag } from "react-dnd";
 
 import keyhouseImg from "@/assets/images/KeyHouse.png";
 import { AppContext } from "@/store/appContext";
-import bulletIcon from "@/assets/images/bullet.png";
 
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -124,19 +125,22 @@ const InventoryItem = ({
     let count = item.count;
 
     switch (item.type) {
-      case "item_weapon":
+      case ITEM_WEAPON:
         return (
           <>
             {count !== 0 && (
               <>
-                <img src={bulletIcon} />
+                <img
+                  style={{ width: "10px" }}
+                  src={require("@/assets/images/bullet.png")}
+                />
                 <span>{item.count}</span>
               </>
             )}
           </>
         );
 
-      case "item_account":
+      case ITEM_ACCOUNT:
       case ITEM_MONEY:
         return <>{formatMoney(item.count)}$</>;
     }
@@ -150,15 +154,14 @@ const InventoryItem = ({
     const isMainInventoryType = inventoryType === "main";
 
     const response = await dispach(setFastItems(item));
-    console.log("response", response);
 
-    $.post(
-      "http://conde-b1g_inventory/PutIntoFast",
-      JSON.stringify({
-        item: itemData,
-        slot: i,
-      })
-    );
+    // $.post(
+    //   "http://conde-b1g_inventory/PutIntoFast",
+    //   JSON.stringify({
+    //     item: itemData,
+    //     slot: i,
+    //   })
+    // );
 
     // switch (type) {
     //   case "trunk":
@@ -198,19 +201,21 @@ const InventoryItem = ({
     // has-items
     <div
       style={{ opacity }}
-      className="inventory_wrapper slot border border-solid border-gray-800 relative w-28 space-y-2 rounded-lg"
+      className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 space-y-2 rounded-lg"
     >
       <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
-        <div
-          className={`item-count inline-flex items-center space-x-1 ${
-            item.type === ITEM_MONEY && "ml-auto"
-          }`}
-        >
-          {renderCount()}
-        </div>
+        {item.count.length !== 0 && (
+          <div
+            className={`item-count inline-flex items-center space-x-1 ${
+              item.type === ITEM_MONEY ? "ml-auto" : ""
+            }`}
+          >
+            {renderCount()}
+          </div>
+        )}
 
-        {item.type !== ITEM_MONEY && item.type !== "item_account" && (
-          <div className="item-count item-weight">{item.weight}</div>
+        {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
+          <div className="item-count item-weight ml-auto">{item.weight}</div>
         )}
       </div>
 
@@ -233,7 +238,7 @@ const InventoryItem = ({
         ></div>
       </div>
 
-      <div className="item-name text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5">
+      <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
         {item.label}
       </div>
       {/* <div className="item-name-bg"></div> */}

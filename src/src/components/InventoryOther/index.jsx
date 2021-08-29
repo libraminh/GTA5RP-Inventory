@@ -38,20 +38,20 @@ const InventoryOther = (props) => {
       <div
         ref={drop}
         className={`mb-5 p-4 border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out min-h-48vh ${
-          isDropHover && "active-drop"
+          isDropHover ? "active-drop" : ""
         } ${
           isOtherInventoryEmpty &&
           "flex items-center justify-center text-center"
         }`}
       >
-        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-45vh overflow-y-auto pr-1">
+        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-50vh overflow-y-auto pr-1">
           {isOtherInventoryEmpty ? (
             <h2 className="text-xl">Chưa có vật phẩm!</h2>
           ) : (
             otherInventory?.map((item, index) => (
               <InventoryItem
                 item={item}
-                key={index}
+                key={item.name}
                 index={index}
                 quantity={quantity}
                 dragType={OTHER_ITEM}

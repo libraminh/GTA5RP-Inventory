@@ -42,12 +42,12 @@ const InventoryPlayer = (props) => {
           isDropHover && "active-drop"
         }`}
       >
-        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-45vh overflow-y-auto pr-1">
+        <div className="scrollbar-custom flex flex-wrap gap-2 max-h-50vh overflow-y-auto pr-1">
           {inventoryItems?.map((item, index) => (
             <InventoryItem
               item={item}
               key={index}
-              index={index}
+              index={item.name}
               quantity={quantity}
               dragType={PLAYER_ITEM}
               fromItem={PLAYER_ITEM}

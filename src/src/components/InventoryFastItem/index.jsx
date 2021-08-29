@@ -1,6 +1,9 @@
 import { ItemTypes } from "@/ItemTypes";
 import {
   FAST_ITEM,
+  ITEM_ACCOUNT,
+  ITEM_MONEY,
+  ITEM_WEAPON,
   PLAYER_ITEM,
   PUT_INTO_FAST,
   TAKE_FROM_FAST,
@@ -11,6 +14,7 @@ import "./style.scss";
 import keyhouseImg from "@/assets/images/KeyHouse.png";
 import { useDispatch } from "react-redux";
 import { removeFastItems } from "@/store/slices/InventorySlice";
+import { formatMoney } from "@/utils";
 
 const itemImages = require.context("@/assets/images", true);
 
@@ -73,31 +77,87 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
     dispatch(removeFastItems({ item, index }));
   };
 
+  const renderCount = () => {
+    let count = item.count;
+
+    switch (item.type) {
+      case ITEM_WEAPON:
+        return (
+          <>
+            {count !== 0 && (
+              <>
+                <img
+                  style={{ width: "10px" }}
+                  src={require("@/assets/images/bullet.png")}
+                />
+                <span>{item.count}</span>
+              </>
+            )}
+          </>
+        );
+
+      case ITEM_ACCOUNT:
+      case ITEM_MONEY:
+        return <>{formatMoney(item.count)}$</>;
+    }
+
+    return <>{count}</>;
+  };
+
   return (
     <div ref={drop} data-type={FAST_ITEM}>
       <div
-        className={`inventoryItem slotFast relative w-28 h-28 flex items-center justify-center flex-col border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out hover-drop ${
-          isDropHover && "active-drop"
+        className={`inventoryItem slotFast relative w-28 h-32 flex items-center justify-between flex-col border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out hover-drop ${
+          isDropHover ? "active-drop" : ""
         }`}
         onContextMenu={(e) => handleContextMenu(e, item)}
       >
         <div className="keybind absolute right-0.5 -top-6">{index + 1}</div>
-        <div className="item-count absolute top-1 left-2">{item.count}</div>
 
-        {item?.name && (
-          <div className="mb-1">
-            <img
-              ref={drag}
-              id={`itemFast-${index}`}
-              className="item w-14 object-contain object-center"
-              src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
-              alt="image"
-            />
-          </div>
+        {item.name && (
+          <React.Fragment>
+            <div className="item-information w-full flex items-center justify-between text-xs px-2 pt-1">
+              {item.count.length !== 0 && (
+                <div
+                  className={`item-count inline-flex items-center space-x-1 ${
+                    item.type === ITEM_MONEY ? "ml-auto" : ""
+                  }`}
+                >
+                  {renderCount()}
+                </div>
+              )}
+
+              {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
+                <div className="item-count item-weight ml-auto">
+                  {item.weight}
+                </div>
+              )}
+            </div>
+
+            {/* <div className="item-count absolute top-1 left-2">{item.count}</div> */}
+
+            <div className="mb-1" id={`itemFast-${index}`}>
+              <img
+                ref={drag}
+                className="item w-14 object-contain object-center mx-auto"
+                src={
+                  isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)
+                }
+                alt="image"
+              />
+
+              <div
+                className="weapon-bar rounded-lg"
+                style={{ height: `${item.doben}%` }}
+              ></div>
+            </div>
+
+            <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
+              {item.label}
+            </div>
+            {/* <div className="item-name-bg"></div> */}
+          </React.Fragment>
         )}
-
-        <div className="item-name uppercase">{item.label}</div>
-        <div className="item-name-bg"></div>
       </div>
     </div>
   );
@@ -115,4 +175,25 @@ export default InventoryFastItem;
 >
   <div className="item-name-bg"></div>
 </div> */
+}
+
+{
+  /* <div
+          id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+          data-item={JSON.stringify(item)}
+          data-inventory={inventoryType}
+          onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
+        >
+          <img
+            ref={drag}
+            className="item w-14 object-contain object-center mx-auto"
+            src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
+            alt="image"
+          />
+
+          <div
+            className="weapon-bar rounded-lg"
+            style={{ height: `${item.doben}%` }}
+          ></div>
+        </div> */
 }

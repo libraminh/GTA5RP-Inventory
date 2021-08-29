@@ -7,11 +7,11 @@ const InventoryFastItems = () => {
   const { fastItems } = useSelector((state) => state.inventorySlice);
 
   return (
-    <div className="flex space-x-4 absolute left-1/2 bottom-14 transform-gpu -translate-x-1/2">
+    <div className="flex space-x-2.5 absolute left-1/2 bottom-14 transform-gpu -translate-x-1/2">
       {fastItems?.map((item, index) => (
         <InventoryFastItem
           fromItem={FAST_ITEM}
-          key={index}
+          key={item.name || index}
           item={fastItems[index]}
           index={index}
         />

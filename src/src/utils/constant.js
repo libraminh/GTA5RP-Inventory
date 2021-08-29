@@ -22,4 +22,5 @@ export const OTHER_ITEM = "other_item";
 export const FAST_ITEM = "fast-item";
 export const ITEM_MONEY = "item_money";
 export const ITEM_ACCOUNT = "item_account";
+export const ITEM_WEAPON = "item_weapon";
 export const FETCH_URL = `http://conde-b1g_inventory`;
