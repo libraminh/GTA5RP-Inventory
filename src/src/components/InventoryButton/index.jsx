@@ -20,14 +20,14 @@ const InventoryButton = ({ dropName, children }) => {
   }
 
   return (
-    <button
+    <div
       ref={drop}
-      className={`text-base border-2 border-solid border-gray-800 py-2 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 ${
+      className={`inline-flex items-center justify-center text-base border-2 border-solid border-gray-800 py-2 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 cursor-pointer ${
         isOver ? "bg-opacity-100" : "bg-opacity-50"
       }`}
     >
       {children}
-    </button>
+    </div>
   );
 };
 

@@ -1,15 +1,24 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import "./style.scss";
 
-let bagIcon = "https://nuocbinh.com/logo-icon-balo-white.png";
+let bagIcon = require("@/assets/images/bagIcon.png");
+let carIcon = require("@/assets/images/carBag.png");
 
-const InvenotoryProgress = () => {
+const InvenotoryProgress = ({ typeIcon }) => {
+  const { type } = useSelector((state) => state.inventorySlice);
+
   return (
     <div className="weight-div weight-progress">
       <div className="weight-progress-wrapper">
-        <img style={{ width: "20px" }} src={bagIcon} alt="icon" />
-        <span className="weight-progress-text ml-2">6,101/45,000G</span>
+        <img
+          style={{ width: "20px" }}
+          // src={typeIcon === "bagIcon" ? bagIcon : carIcon}
+          src={require("@/assets/images/KetSat2.png")}
+          alt="icon"
+        />
+        <span className="weight-progress-text ml-2">6/45KG</span>
       </div>
       <div className="weight-progress-bar"></div>
     </div>

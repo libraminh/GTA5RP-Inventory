@@ -68,7 +68,7 @@ const InventoryOther = (props) => {
       </div>
 
       <div>
-        <InvenotoryProgress />
+        <InvenotoryProgress typeIcon="carIcon" />
       </div>
     </div>
   );

@@ -1,5 +1,40 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 
+const nearPlayers = [
+  {
+    player: 197,
+    idcard: 3,
+  },
+  {
+    player: 1927,
+    idcard: 2,
+  },
+  {
+    player: 17,
+    idcard: 1,
+  },
+  {
+    player: 1,
+    idcard: 3908,
+  },
+  {
+    player: 197,
+    idcard: 3,
+  },
+  {
+    player: 1927,
+    idcard: 2,
+  },
+  {
+    player: 17,
+    idcard: 1,
+  },
+  {
+    player: 1,
+    idcard: 3908,
+  },
+];
+
 let initState = {
   isInventoryShow: true,
   isOtherInventoryShow: true,
@@ -13,20 +48,29 @@ let initState = {
   itemData: [],
   inventoryItems: null,
   otherInventoryItems: null,
-  infoDivText: "",
-  nearPlayers: [], // nearPlayers
+  infoDivText: "Kho Khác",
+  nearPlayers, // nearPlayers
   dataItem: null,
+  isNearPlayersShow: false,
 
   otherInventory: [],
   fastItems: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
   quantity: 0,
-  notificationData: {},
+  notificationData: {
+    itemname: "bread",
+    itemlabel: "Bánh Mì",
+    itemcount: 3,
+    itemremove: true,
+  },
 };
 
 const InventorySlice = createSlice({
   name: "inventory",
   initialState: initState,
   reducers: {
+    toggleNearPlayers: (state, action) => {
+      state.isNearPlayersShow = !state.isNearPlayersShow;
+    },
     setOtherItems: (state, action) => {
       state.otherInventory = [...state.otherInventory, action.payload];
     },
@@ -70,22 +114,10 @@ const InventorySlice = createSlice({
       // });
     },
     setNearPlayer: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     nearPlayers: players,
-      //   },
-      // });
+      state.nearPlayers = action.payload;
     },
     setInfoDivText: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     infoDivText: text,
-      //   },
-      // });
+      state.infoDivText = action.payload;
     },
     updateQuantity: (state, action) => {
       // setStore({ ...state, quantity: inputNumber });
@@ -196,6 +228,7 @@ export const {
   setOtherItems,
   setFastItems,
   removeFastItems,
+  toggleNearPlayers,
 } = InventorySlice.actions;
 
 export default InventorySlice.reducer;

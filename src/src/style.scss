@@ -1,13 +1,66 @@
-#notificacao {
-  position: absolute;
-  bottom: 3%;
-  left: 16.5%;
+// #notificacao {
+//   position: absolute;
+//   bottom: 3%;
+//   left: 16.5%;
+// }
+
+.app-wrapper {
+  .ant-notification-notice-close {
+    @apply hidden;
+  }
+
+  .ant-tabs-tab {
+    @apply rounded-none bg-transparent transition-all duration-100 ease-in-out #{!important};
+    @apply border-0 border-b border-solid border-gta-blue-300 border-opacity-20 font-bold uppercase #{!important};
+
+    &:not(:first-child) {
+      margin-top: 5px !important;
+    }
+
+    &:hover,
+    &.ant-tabs-tab-active {
+      @apply border-gta-blue-300 #{!important};
+
+      .ant-tabs-tab-btn {
+        @apply glow-text text-white;
+      }
+    }
+  }
+
+  .ant-tabs-card.ant-tabs-left > .ant-tabs-nav .ant-tabs-tab-active,
+  .ant-tabs-card.ant-tabs-left > div > .ant-tabs-nav .ant-tabs-tab-active {
+    border-left-color: rgba(31, 41, 55, 1) !important;
+  }
+
+  .ant-tabs-left > .ant-tabs-content-holder,
+  .ant-tabs-left > div > .ant-tabs-content-holder {
+    border-left-color: rgba(31, 41, 55, 1) !important;
+  }
+
+  .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active,
+  .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab-active {
+    @apply bg-transparent #{!important};
+  }
 }
 
 .active-drop,
 .hover-drop:hover {
   box-shadow: 0 0 4px #4d92b1, 0 0 1px #4d92b1, 0 0 9px #4d92b1, 0 0 4px #4d92b1,
     0 0 4px #4d92b1, 0 0 9px #4d92b1, 0 0 10px #4d92b1, 0 0 10px #4d92b1;
+}
+
+.hide-scrollbar {
+  &::-webkit-scrollbar {
+    @apply hidden;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply hidden;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply hidden;
+  }
 }
 
 .scrollbar-custom {
@@ -30,6 +83,7 @@
 
   .left-tabs {
     .ant-tabs-nav {
+      @apply pr-3;
       // @apply self-center;
       min-width: 180px !important;
     }
@@ -65,4 +119,10 @@
   55% {
     box-shadow: none;
   }
+}
+
+.glow-text {
+  text-shadow: 0 0 2px #4dc3f7, 0 0 110px #4dc3f7, 0 0 1px #4dc3f7,
+    0 0 22px #4dc3f7, 0 0 22px #4dc3f7, 0 0 2px #4dc3f7, 0 0 2px #4dc3f7,
+    0 0 5px #4dc3f7;
 }

@@ -8,6 +8,7 @@ import {
   ITEM_MONEY,
   PLAYER_ITEM,
   PUT_INTO_FAST,
+  TAKE_FROM_FAST,
 } from "@/utils/constant";
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
@@ -42,10 +43,20 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
           case PUT_INTO_FAST:
             fetchAPI(PUT_INTO_FAST, {
               item: {
-                ...item,
+                ...item.item,
                 slot: index + 1,
               },
               slot: dropResult.slot + 1,
+            });
+            break;
+
+          case PLAYER_ITEM:
+            if (fromItem !== FAST_ITEM) return;
+            fetchAPI(TAKE_FROM_FAST, {
+              item: {
+                ...item.item,
+                slot: index + 1,
+              },
             });
             break;
 
@@ -76,6 +87,12 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
 
   const handleContextMenu = (e, item) => {
     e.preventDefault();
+    fetchAPI(TAKE_FROM_FAST, {
+      item: {
+        ...item,
+        slot: index + 1,
+      },
+    });
     dispatch(removeFastItems({ item, index }));
   };
 
@@ -138,34 +155,3 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
 InventoryFastItem.propTypes = {};
 
 export default InventoryFastItem;
-
-{
-  /* <div
-  id={`itemFast-${index}`}
-  className="item bg-no-repeat bg-contain w-20 h-20" // ui-droppable ui-draggable ui-draggable-handle
-  style={{ backgroundImage: `url(${playersafe})` }}
->
-  <div className="item-name-bg"></div>
-</div> */
-}
-
-{
-  /* <div
-          id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
-          data-item={JSON.stringify(item)}
-          data-inventory={inventoryType}
-          onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
-        >
-          <img
-            ref={drag}
-            className="item w-14 object-contain object-center mx-auto"
-            src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
-            alt="image"
-          />
-
-          <div
-            className="weapon-bar rounded-lg"
-            style={{ height: `${item.doben}%` }}
-          ></div>
-        </div> */
-}

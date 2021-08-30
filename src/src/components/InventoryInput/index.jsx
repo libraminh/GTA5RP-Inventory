@@ -1,15 +1,17 @@
-import { updateQuantity } from "@/store/slices/InventorySlice";
+import {
+  toggleNearPlayers,
+  updateQuantity,
+} from "@/store/slices/InventorySlice";
 import { fetchAPI } from "@/utils";
-import { DROP_ITEM, GIVE_ITEM, PLAYER_ITEM, USE_ITEM } from "@/utils/constant";
+import { DROP_ITEM, GIVE_ITEM, USE_ITEM } from "@/utils/constant";
 import { InputNumber } from "antd";
 import React from "react";
-import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import InventoryButton from "../InventoryButton";
 import "./style.scss";
 
 const InventoryInput = (props) => {
-  const { quantity, dataItem, nearPlayers } = useSelector(
+  const { quantity, dataItem, nearPlayers, isNearPlayersShow } = useSelector(
     (state) => state.inventorySlice
   );
 
@@ -29,21 +31,40 @@ const InventoryInput = (props) => {
     };
 
     fetchAPI(GIVE_ITEM, bodyHeader);
+    dispatch(toggleNearPlayers());
+  };
+
+  const closeNearPlayer = () => {
+    dispatch(toggleNearPlayers());
   };
 
   return (
-    <div className="w-full text-lg px-5 py-12 rounded-lg max-w-230">
-      {nearPlayers.length !== 0 ? (
-        <div id="nearPlayers" className="flex flex-col space-y-5">
+    <div className="w-full text-lg px-5 py-12 rounded-lg max-w-230 max-h-400 overflow-y-auto hide-scrollbar">
+      {isNearPlayersShow ? (
+        <div
+          id="nearPlayers"
+          className={`flex flex-col space-y-5 transition-all duration-100 ease-in-out ${
+            isNearPlayersShow
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <div
+            className="nearbyPlayerButton border border-solid border-gta-blue-400 py-2 rounded-lg inline-flex items-center justify-center cursor-pointer"
+            onClick={closeNearPlayer}
+          >
+            Thoát
+          </div>
+
           {nearPlayers?.map((player, index) => (
-            <button
+            <div
               key={player.idcard}
-              className="nearbyPlayerButton border border-solid border-gta-blue-300 py-2 rounded-lg"
+              className="nearbyPlayerButton inline-flex items-center justify-center text-base border-2 border-solid border-gray-800 py-2 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 bg-opacity-50 hover:bg-opacity-100 cursor-pointer"
               data-player={player.player}
               onClick={() => handleClickPlayer(player)}
             >
               [{player.idcard}]
-            </button>
+            </div>
           ))}
         </div>
       ) : (

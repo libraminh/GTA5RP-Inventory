@@ -1,7 +1,12 @@
 import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { useInventoryContextMenu } from "@/hooks/useInventoryContextMenu";
 import { useInventoryDbClick } from "@/hooks/useInventoryDbClick";
 import { useRenderCount } from "@/hooks/useRenderCount";
-import { setFastItems, setOtherItems } from "@/store/slices/InventorySlice";
+import {
+  setFastItems,
+  setOtherItems,
+  toggleNearPlayers,
+} from "@/store/slices/InventorySlice";
 import { fetchAPI } from "@/utils";
 import {
   DROP_ITEM,
@@ -29,10 +34,12 @@ const InventoryItem = ({
   dragType,
   fromItem,
 }) => {
-  const { type, fastItems } = useSelector((state) => state.inventorySlice);
-  const dispach = useDispatch();
+  const { type } = useSelector((state) => state.inventorySlice);
+  const dispatch = useDispatch();
 
   const { renderCount } = useRenderCount(item);
+  const { handleItemContext } = useInventoryContextMenu();
+  const { handleDoubleClick } = useInventoryDbClick();
 
   const handleItemApi = (eventApi) => {
     const bodyHeader = {
@@ -63,11 +70,11 @@ const InventoryItem = ({
 
           case OTHER_ITEM:
             // handleItemApi(PUT_INTO_TRUNK);
-            dispach(setOtherItems(item.item));
+            dispatch(setOtherItems(item.item));
             break;
 
           case PUT_INTO_FAST:
-            dispach(
+            dispatch(
               setFastItems({
                 ...item,
                 slot: dropResult.slot,
@@ -89,6 +96,7 @@ const InventoryItem = ({
             break;
 
           case GIVE_ITEM:
+            dispatch(toggleNearPlayers());
             handleItemApi(GET_NEARS_PLAYERS);
             break;
 
@@ -107,121 +115,52 @@ const InventoryItem = ({
   const opacity = isDragging ? 0.4 : 1;
   const isKeyHouse = item.name.includes("keyhouse");
 
-  const handleItemContext = async (e, { item, fromItem }) => {
-    e.preventDefault();
-
-    if (item.type === ITEM_MONEY) return;
-
-    // const isMainInventoryType = inventoryType === "main";
-
-    let currentSlot = null;
-    let stopLoop = false;
-
-    fastItems.forEach((item, index) => {
-      if (stopLoop) return;
-      const isEmpty =
-        Object.keys(item).length === 0 && item.constructor === Object;
-
-      if (!isEmpty) return;
-      currentSlot = index;
-      stopLoop = true;
-    });
-
-    dispach(setFastItems(item));
-
-    fetchAPI(PUT_INTO_FAST, {
-      item: {
-        ...item,
-        slot: index + 1,
-      },
-      slot: currentSlot + 1,
-    });
-
-    // switch (type) {
-    //   case "trunk":
-    //     handleItemApi(isMainInventoryType ? PUT_INTO_TRUNK : TAKE_FROM_TRUNK);
-    //     break;
-    //   case "property":
-    //     handleItemApi(
-    //       isMainInventoryType ? PUT_INTO_PROPERTY : TAKE_FROM_PROPERTY
-    //     );
-    //     break;
-    //   case "Society":
-    //     handleItemApi(
-    //       isMainInventoryType ? PUT_INTO_SOCIETY : TAKE_FROM_SOCIETY
-    //     );
-    //     break;
-    //   case "vault":
-    //     handleItemApi(isMainInventoryType ? PUT_INTO_VAULT : TAKE_FROM_VAULT);
-    //     break;
-    //   case "player":
-    //     handleItemApi(isMainInventoryType ? PUT_INTO_PLAYER : TAKE_FROM_PLAYER);
-    //     break;
-    //   case "motels":
-    //     handleItemApi(PUT_INTO_MOTEL);
-    //     break;
-    //   case "motelsbed":
-    //     handleItemApi(PUT_INTO_MOTELBED);
-    //     break;
-    //   case "glovebox":
-    //     handleItemApi(PUT_INTO_GLOVEBOX);
-    //     break;
-    //   default:
-    //     break;
-    // }
-  };
-
-  const { handleDoubleClick } = useInventoryDbClick();
-
   return (
-    // has-items
-    <>
-      <div
-        style={{ opacity }}
-        className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out"
-        onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
-        onDoubleClick={(e) => handleDoubleClick(e, { item, fromItem })}
-        ref={drag}
-      >
-        <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
-          {item.count.length !== 0 && (
-            <div
-              className={`item-count inline-flex items-center space-x-1 ${
-                item.type === ITEM_MONEY ? "ml-auto" : ""
-              }`}
-            >
-              {renderCount()}
-            </div>
-          )}
+    <div
+      style={{ opacity }}
+      className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out"
+      onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
+      onDoubleClick={(e) => handleDoubleClick(e, { item, index, fromItem })}
+      ref={drag}
+    >
+      <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
+        {item.count.length !== 0 && (
+          <div
+            className={`item-count inline-flex items-center space-x-1 ${
+              item.type === ITEM_MONEY ? "ml-auto" : ""
+            }`}
+          >
+            {renderCount()}
+          </div>
+        )}
 
-          {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
-            <div className="item-count item-weight ml-auto">{item.weight}</div>
-          )}
-        </div>
+        {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
+          <div className="item-count item-weight ml-auto">{item.weight}</div>
+        )}
+      </div>
+
+      <div
+        id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+        data-item={JSON.stringify(item)}
+        data-inventory={inventoryType}
+      >
+        <img
+          className="item w-14 object-contain object-center mx-auto"
+          src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
+          alt="image"
+        />
 
         <div
-          id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
-          data-item={JSON.stringify(item)}
-          data-inventory={inventoryType}
-        >
-          <img
-            className="item w-14 object-contain object-center mx-auto"
-            src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
-            alt="image"
-          />
-
-          <div
-            className="weapon-bar rounded-lg"
-            style={{ height: `${item.doben}%` }}
-          ></div>
-        </div>
-
-        <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
-          {item.label}
-        </div>
-        {/* <div className="item-name-bg"></div> */}
+          className="weapon-bar rounded-lg"
+          style={{ height: `${item.doben}%` }}
+        ></div>
       </div>
-    </>
+
+      <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
+        {item.label}
+      </div>
+      {/* <div className="item-name-bg"></div> */}
+    </div>
   );
 };
 

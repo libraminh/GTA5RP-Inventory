@@ -12,7 +12,7 @@ import App from "./App";
 import "./App.less";
 import "assets/css/main.scss";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
 });
 

@@ -56,8 +56,7 @@ const InventoryPlayer = (props) => {
       </div>
 
       <div>
-        <div className="info-div">{infoDivText}</div>
-        <InvenotoryProgress />
+        <InvenotoryProgress typeIcon="bagIcon" />
       </div>
     </div>
   );

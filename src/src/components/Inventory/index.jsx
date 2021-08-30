@@ -11,28 +11,27 @@ import InventoryPlayer from "../InventoryPlayer";
 const { TabPane } = Tabs;
 
 const InventoryPlayerWrapper = () => {
-  const { isOtherInventoryShow } = useSelector((state) => state.inventorySlice);
+  const { isOtherInventoryShow, infoDivText } = useSelector(
+    (state) => state.inventorySlice
+  );
 
   return (
-    <div>
-      {/* grid grid-cols-5 gap-10 */}
-      <div className="flex">
+    <div className="flex">
+      <figure className="" style={{ width: "35.5vw" }}>
+        <InventoryHeading>Kho Của Bạn</InventoryHeading>
+        <InventoryPlayer />
+      </figure>
+
+      <figure className="flex items-center justify-center w-60">
+        <InventoryInput />
+      </figure>
+
+      {isOtherInventoryShow && (
         <figure className="" style={{ width: "35.5vw" }}>
-          <InventoryHeading>Kho Của Bạn</InventoryHeading>
-          <InventoryPlayer />
+          <InventoryHeading>{infoDivText}</InventoryHeading>
+          <InventoryOther />
         </figure>
-
-        <figure className="flex items-center justify-center">
-          <InventoryInput />
-        </figure>
-
-        {isOtherInventoryShow && (
-          <figure className="" style={{ width: "35.5vw" }}>
-            <InventoryHeading>Kho Khác</InventoryHeading>
-            <InventoryOther />
-          </figure>
-        )}
-      </div>
+      )}
     </div>
   );
 };
