@@ -24,6 +24,7 @@ import {
   showOtherInventory,
   showWeightDiv,
 } from "./store/slices/InventorySlice";
+import { useInventoryClose } from "./hooks/useInventoryClose";
 
 const { TabPane } = Tabs;
 
@@ -49,29 +50,12 @@ window.Config.closeKeys = [27]; //Array of keys used to close inventory. Default
 //LANGUAGE CAN BE CHANGED IN ui.html, SEARCH FOR <script src="locales/en.js"></script> AND CHANGE IT THERE
 
 const App = (props) => {
-  // const context = useContext(AppContext);
-
   const { otherInventory, type, disabled, isInventoryShow } = useSelector(
     (state) => state.inventorySlice
   );
   const dispatch = useDispatch();
 
-  // let { type, disabled, isInventoryShow } = context.store.inventory;
-
-  // let {
-  //   toggleOtherInventory,
-  //   toggleWeightDiv,
-  //   hideWeightDiv,
-  //   hideOtherInventory,
-  //   showOtherInventory,
-  //   showWeightDiv,
-  //   setInventoryItems,
-  //   setOtherInventoryItems,
-  //   setInfoDivText,
-  //   setNearPlayer,
-  //   setDataItem,
-  //   setNotification,
-  // } = context.actions;
+  const { closeInventory } = useInventoryClose();
 
   const handleDisplay = (type) => {
     switch (type) {
@@ -106,15 +90,6 @@ const App = (props) => {
     }
 
     // $(".ui").show("slide", { direction: "left" }, 100);
-  };
-
-  const closeInventory = async () => {
-    await fetch(
-      "http://esx_inventoryhud/NUIFocusOff",
-      JSON.stringify({
-        type: type,
-      })
-    );
   };
 
   useEffect(() => {

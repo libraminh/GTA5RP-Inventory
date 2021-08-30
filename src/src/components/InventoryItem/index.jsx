@@ -1,4 +1,5 @@
 import keyhouseImg from "@/assets/images/KeyHouse.png";
+import { useInventoryDbClick } from "@/hooks/useInventoryDbClick";
 import { useRenderCount } from "@/hooks/useRenderCount";
 import { setFastItems, setOtherItems } from "@/store/slices/InventorySlice";
 import { fetchAPI } from "@/utils";
@@ -170,6 +171,8 @@ const InventoryItem = ({
     // }
   };
 
+  const { handleDoubleClick } = useInventoryDbClick();
+
   return (
     // has-items
     <>
@@ -177,6 +180,7 @@ const InventoryItem = ({
         style={{ opacity }}
         className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out"
         onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
+        onDoubleClick={(e) => handleDoubleClick(e, { item, fromItem })}
         ref={drag}
       >
         <div className="item-information flex items-center justify-between text-xs px-2 pt-1">

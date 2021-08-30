@@ -4,6 +4,17 @@ import { ITEM_MONEY } from "@/utils/constant";
 
 export const inventoryItems = [
   {
+    name: "bread",
+    count: "7",
+    weight: "2KG",
+    type: "item_standard",
+    usable: true,
+    rare: false,
+    canRemove: false,
+    label: "Bánh Mì",
+    price: 500,
+  },
+  {
     name: "playersafe",
     count: "7",
     weight: "2KG",
