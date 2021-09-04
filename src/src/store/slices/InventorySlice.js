@@ -36,6 +36,7 @@ const nearPlayers = [
 ];
 
 let initState = {
+  isUIShow: true,
   isInventoryShow: true,
   isOtherInventoryShow: true,
   isFastInventoryShow: true,
@@ -46,7 +47,7 @@ let initState = {
   ownerHouse: null,
   coisas: [],
   itemData: [],
-  inventoryItems: null,
+  inventoryItems: [],
   otherInventoryItems: null,
   infoDivText: "Kho Khác",
   nearPlayers, // nearPlayers
@@ -55,7 +56,7 @@ let initState = {
 
   otherInventory: [],
   fastItems: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-  quantity: 0,
+  quantity: 1,
   notificationData: {
     itemname: "bread",
     itemlabel: "Bánh Mì",
@@ -68,6 +69,18 @@ const InventorySlice = createSlice({
   name: "inventory",
   initialState: initState,
   reducers: {
+    toggleIsUIShow: (state, action) => {
+      console.log("toggleIsUIShow");
+      state.isUIShow = !state.isUIShow;
+    },
+    openUI: (state, action) => {
+      console.log("toggleIsUIShow true");
+      state.isUIShow = true;
+    },
+    hideUI: (state, action) => {
+      console.log("toggleIsUIShow false");
+      state.isUIShow = false;
+    },
     toggleNearPlayers: (state, action) => {
       state.isNearPlayersShow = !state.isNearPlayersShow;
     },
@@ -99,10 +112,7 @@ const InventorySlice = createSlice({
       state.fastItems[action.payload.index] = {};
     },
     setNotification: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   notificationData: notiData,
-      // });
+      state.notificationData = action.payload;
     },
     setDataItem: (state, action) => {
       // setStore({
@@ -120,7 +130,7 @@ const InventorySlice = createSlice({
       state.infoDivText = action.payload;
     },
     updateQuantity: (state, action) => {
-      // setStore({ ...state, quantity: inputNumber });
+      state.quantity = action.payload;
     },
     showWeightDiv: (state, action) => {
       // setStore({
@@ -141,40 +151,16 @@ const InventorySlice = createSlice({
       // });
     },
     showPlayerInventory: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     isInventoryShow: true,
-      //   },
-      // });
+      state.isInventoryShow = true;
     },
     hidePlayerInventory: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     isInventoryShow: false,
-      //   },
-      // });
+      state.isInventoryShow = false;
     },
     showOtherInventory: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     isOtherInventoryShow: true,
-      //   },
-      // });
+      state.isOtherInventoryShow = true;
     },
     hideOtherInventory: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     isOtherInventoryShow: false,
-      //   },
-      // });
+      state.isOtherInventoryShow = false;
     },
     toggleWeightDiv: (state, action) => {
       // setStore({
@@ -186,23 +172,11 @@ const InventorySlice = createSlice({
       // });
     },
     setInventoryItems: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     inventoryItems: items,
-      //   },
-      // });
+      console.log("setInventoryItems", action);
+      state.inventoryItems = action.payload;
     },
     setOtherInventoryItems: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     otherInventoryItems: state,
-      //     action,
-      //   },
-      // });
+      state.otherInventoryItems = action.payload;
     },
   },
   extraReducers: {
@@ -228,7 +202,10 @@ export const {
   setOtherItems,
   setFastItems,
   removeFastItems,
+  toggleIsUIShow,
   toggleNearPlayers,
+  openUI,
+  hideUI,
 } = InventorySlice.actions;
 
 export default InventorySlice.reducer;

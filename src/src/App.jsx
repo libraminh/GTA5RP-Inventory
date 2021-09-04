@@ -5,11 +5,12 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch, useSelector } from "react-redux";
 import Inventory from "./components/Inventory";
-import Notificacao from "./components/Notificacao";
 import { useInventoryClose } from "./hooks/useInventoryClose";
 import {
   hideOtherInventory,
+  hideUI,
   hideWeightDiv,
+  openUI,
   setDataItem,
   setInfoDivText,
   setInventoryItems,
@@ -17,7 +18,9 @@ import {
   setNotification,
   setOtherInventoryItems,
   showOtherInventory,
+  showPlayerInventory,
   showWeightDiv,
+  toggleIsUIShow,
 } from "./store/slices/InventorySlice";
 import "./style.scss";
 
@@ -29,7 +32,7 @@ window.Config.closeKeys = [27];
 //LANGUAGE CAN BE CHANGED IN ui.html, SEARCH FOR <script src="locales/en.js"></script> AND CHANGE IT THERE
 
 const App = (props) => {
-  const { otherInventory, type, disabled, isInventoryShow } = useSelector(
+  const { otherInventory, disabled, isInventoryShow, isUIShow } = useSelector(
     (state) => state.inventorySlice
   );
   const dispatch = useDispatch();
@@ -69,108 +72,148 @@ const App = (props) => {
     }
 
     // $(".ui").show("slide", { direction: "left" }, 100);
+
+    console.log("openUI ne");
+
+    dispatch(openUI());
+    // dispatch(showPlayerInventory());
+  };
+
+  // useEffect(() => {
+  //   if (collapsed) {
+  //     return;
+  //   }
+
+  //   function handleKeyUp(event) {
+  //     switch (event.key) {
+  //       case "Escape":
+  //         setCollapsed(true);
+  //         break;
+  //     }
+  //   }
+
+  //   window.addEventListener("keyup", handleKeyUp);
+  //   return () => window.removeEventListener("keyup", handleKeyUp);
+  // }, [collapsed]);
+
+  const handleMessageEvent = (event) => {
+    console.log("event", event);
+
+    const eventAction = event.data.action;
+
+    switch (eventAction) {
+      case "display":
+        let type = event.data.type;
+        // disabled = false;
+
+        handleDisplay(type);
+        break;
+
+      case "hide":
+        dispatch(hideUI());
+        break;
+
+      case "setItems":
+        dispatch(setInventoryItems(event.data.itemList));
+        break;
+
+      case "setSecondInventoryItems":
+        dispatch(setOtherInventoryItems(event.data.itemList));
+        break;
+
+      case "setShopInventoryItems":
+        dispatch(setOtherInventoryItems(event.data.itemList));
+        break;
+
+      case "setInfoText":
+        dispatch(setInfoDivText(event.data.text));
+        break;
+
+      case "setWeightText":
+        // doing setWeightText
+        // $(".weight-div").html(event.data.text);
+        break;
+
+      case "nearPlayers":
+        // doing nearPlayers
+        // dispatch(setDataItem(event.data.item));
+        dispatch(setNearPlayer(event.data.players));
+        break;
+
+      case "notification":
+        const notiData = {
+          itemname: event.data.itemname,
+          itemlabel: event.data.itemlabel,
+          itemcount: event.data.itemcount,
+          itemremove: event.data.itemremove,
+        };
+
+        dispatch(setNotification(notiData));
+        break;
+
+      case "showhotbar":
+        // doing showhotbar
+        break;
+
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
-    window.addEventListener("message", (event) => {
-      const eventAction = event.data.action;
+    window.addEventListener("message", handleMessageEvent);
 
-      switch (eventAction) {
-        case "display":
-          type = event.data.type;
-          disabled = false;
-
-          handleDisplay();
-          break;
-
-        case "hide":
-          // ("#dialog").dialog("close");
-          // $(".ui").hide("slide", { direction: "right" }, 100);
-          // $(".item").remove();
-          break;
-
-        case "setItems":
-          dispatch(setInventoryItems(event.data.itemList));
-          // doing setItems
-          break;
-
-        case "setSecondInventoryItems":
-          dispatch(setOtherInventoryItems(event.data.itemList));
-          break;
-
-        case "setShopInventoryItems":
-          dispatch(setOtherInventoryItems(event.data.itemList));
-          break;
-
-        case "setInfoText":
-          dispatch(setInfoDivText(event.data.text));
-          break;
-
-        case "setWeightText":
-          // doing setWeightText
-          // $(".weight-div").html(event.data.text);
-          break;
-
-        case "nearPlayers":
-          // doing nearPlayers
-          dispatch(setDataItem(event.data.item));
-          dispatch(setNearPlayer(event.data.players));
-          break;
-
-        case "notification":
-          // doing notification
-
-          const notiData = {
-            itemname: event.data.itemname,
-            itemlabel: event.data.itemlabel,
-            itemcount: event.data.itemcount,
-            itemremove: event.data.itemremove,
-          };
-
-          dispatch(setNotification(notiData));
-          break;
-
-        case "showhotbar":
-          // doing showhotbar
-          break;
-
-        default:
-          break;
-      }
-    });
+    return () => window.removeEventListener("message", handleMessageEvent);
   }, []);
+
+  // useEffect(() => {
+  //   document.querySelector("body").addEventListener("keyup", (key) => {
+  //     console.log("keyup close");
+  //     if (window.Config.closeKeys.includes(key.which)) {
+  //       closeInventory();
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
-    document.querySelector("body").addEventListener("keyup", (key) => {
-      if (window.Config.closeKeys.includes(key.which)) {
-        closeInventory();
-      }
-    });
-  }, []);
+    console.log("isInventoryShow", isInventoryShow);
+  }, [JSON.stringify(isInventoryShow)]);
+
+  useEffect(() => {
+    console.log("isUIShow", isUIShow);
+  }, [JSON.stringify(isUIShow)]);
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="ui app-wrapper z-10">
+      <>
+        <h2>hihihihi</h2>
+
         <div
-          className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
-            isInventoryShow ? "block" : "hidden"
+          className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
+            isUIShow
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
           }`}
         >
-          <Tabs className="left-tabs" tabPosition={"left"} type="card">
-            <TabPane tab="Kho Đồ" key="1">
-              <Inventory />
-            </TabPane>
-            <TabPane tab="Chế Tạo" key="2">
-              Content of Tab 2
-            </TabPane>
-            <TabPane tab="Shop" key="3">
-              Content of Tab 3
-            </TabPane>
-          </Tabs>
+          <div
+            className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
+              isInventoryShow ? "block" : "hidden"
+            }`}
+          >
+            <Tabs className="left-tabs" tabPosition={"left"} type="card">
+              <TabPane tab="Kho Đồ" key="1">
+                <Inventory />
+              </TabPane>
+              <TabPane tab="Chế Tạo" key="2">
+                Content of Tab 2
+              </TabPane>
+              <TabPane tab="Shop" key="3">
+                Content of Tab 3
+              </TabPane>
+            </Tabs>
+          </div>
         </div>
-      </div>
-
-      {/* <Notificacao /> */}
+      </>
     </DndProvider>
   );
 };

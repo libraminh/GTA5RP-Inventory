@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import "./style.scss";
 
 let bagIcon = require("@/assets/images/bagIcon.png");
-let carIcon = require("@/assets/images/carBag.png");
 
 const InvenotoryProgress = ({ typeIcon }) => {
   const { type } = useSelector((state) => state.inventorySlice);
@@ -14,8 +13,8 @@ const InvenotoryProgress = ({ typeIcon }) => {
       <div className="weight-progress-wrapper">
         <img
           style={{ width: "20px" }}
-          // src={typeIcon === "bagIcon" ? bagIcon : carIcon}
-          src={require("@/assets/images/KetSat2.png")}
+          src={typeIcon === "bagIcon" ? bagIcon : typeIcon}
+          // src={require("@/assets/images/KetSat2.png")}
           alt="icon"
         />
         <span className="weight-progress-text ml-2">6/45KG</span>

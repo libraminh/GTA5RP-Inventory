@@ -22,7 +22,25 @@ module.exports = {
       ],
     },
   },
+  babel: {
+    plugins: [
+      [
+        "import",
+        {
+          libraryName: "antd",
+          libraryDirectory: "es",
+          style: "css",
+        },
+      ],
+    ],
+  },
   webpack: {
+    // configure: {
+    //   output: {
+    //     filename: "bundle.js",
+    //     path: path.resolve(__dirname, "build"),
+    //   },
+    // },
     modules: [path.resolve(__dirname, "./src"), "node_modules"],
     extensions: ["*", ".js", ".jsx", ".json"],
     alias: {

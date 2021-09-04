@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 let initState = {
-  quantity: "0",
+  quantity: 1,
 };
 
 const GlobalSlice = createSlice({

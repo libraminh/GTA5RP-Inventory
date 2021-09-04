@@ -16,6 +16,7 @@ import {
   ITEM_MONEY,
   OTHER_ITEM,
   PUT_INTO_FAST,
+  PUT_INTO_TRUNK,
   TAKE_FROM_FAST,
   USE_ITEM,
 } from "@/utils/constant";
@@ -42,6 +43,7 @@ const InventoryItem = ({
   const { handleDoubleClick } = useInventoryDbClick();
 
   const handleItemApi = (eventApi) => {
+    console.log("quantity", quantity);
     const bodyHeader = {
       item: {
         type: item.type,
@@ -63,24 +65,35 @@ const InventoryItem = ({
 
         if (!item || !dropResult) return;
 
+        console.log("dropResult", dropResult);
+
         switch (dropResult.name) {
           case "playerInventory":
             // fetchAPI(TAKE_FROM_TRUNK, bodyHeader);
             break;
 
           case OTHER_ITEM:
-            // handleItemApi(PUT_INTO_TRUNK);
+            handleItemApi(PUT_INTO_TRUNK);
             dispatch(setOtherItems(item.item));
             break;
 
           case PUT_INTO_FAST:
+            if (item.item.type === ITEM_MONEY) return;
+
             dispatch(
               setFastItems({
                 ...item,
                 slot: dropResult.slot,
               })
             );
-            handleItemApi(PUT_INTO_FAST);
+
+            fetchAPI(PUT_INTO_FAST, {
+              item: item.item,
+              slot: dropResult.slot + 1,
+            });
+
+            // handleItemApi(PUT_INTO_FAST);
+
             break;
 
           case TAKE_FROM_FAST:

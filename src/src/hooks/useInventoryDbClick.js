@@ -21,7 +21,7 @@ export const useInventoryDbClick = () => {
     notification.open({
       message: "",
       placement,
-      duration: 10000,
+      duration: 450,
       style: {
         width: "180px",
         background: "transparent",
@@ -30,7 +30,6 @@ export const useInventoryDbClick = () => {
       },
       getContainer: () => document.querySelector(".app-wrapper"),
       description: renderNotificacao(),
-      closeIcon: null,
       onClick: () => {
         console.log("Notification Clicked!");
       },

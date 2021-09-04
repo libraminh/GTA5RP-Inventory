@@ -1,13 +1,12 @@
-import { inventoryItems } from "@/data/inventory-items";
 import { FAST_ITEM, OTHER_ITEM, PLAYER_ITEM } from "@/utils/constant";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import InventoryItem from "../InventoryItem";
 import InvenotoryProgress from "../InventoryProgress";
 
 const InventoryPlayer = (props) => {
-  const { quantity, infoDivText } = useSelector(
+  const { quantity, infoDivText, inventoryItems } = useSelector(
     (state) => state.inventorySlice
   );
 
@@ -31,6 +30,10 @@ const InventoryPlayer = (props) => {
     isDropHover = true;
   } else if (canDrop) {
   }
+
+  useEffect(() => {
+    console.log("inventoryItems rc", inventoryItems);
+  }, [JSON.stringify(inventoryItems)]);
 
   return (
     // style={{ backgroundColor }}

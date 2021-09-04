@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import InventoryItem from "../InventoryItem";
 import InvenotoryProgress from "../InventoryProgress";
 
+import carIcon from "@/assets/images/carBag.png";
+
 const InventoryOther = (props) => {
   const { quantity, otherInventory } = useSelector(
     (state) => state.inventorySlice
@@ -68,7 +70,7 @@ const InventoryOther = (props) => {
       </div>
 
       <div>
-        <InvenotoryProgress typeIcon="carIcon" />
+        <InvenotoryProgress typeIcon={carIcon} />
       </div>
     </div>
   );
