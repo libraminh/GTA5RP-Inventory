@@ -1,11 +1,12 @@
 // components
 import { Tabs } from "antd";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch, useSelector } from "react-redux";
 import Inventory from "./components/Inventory";
 import { useInventoryClose } from "./hooks/useInventoryClose";
+import { AppContext } from "./store/appContext";
 import {
   hideOtherInventory,
   hideUI,
@@ -35,6 +36,9 @@ const App = (props) => {
   const { otherInventory, disabled, isInventoryShow, isUIShow } = useSelector(
     (state) => state.inventorySlice
   );
+
+  const context = useContext(AppContext);
+
   const dispatch = useDispatch();
 
   const { closeInventory } = useInventoryClose();

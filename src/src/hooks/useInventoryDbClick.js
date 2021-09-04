@@ -6,15 +6,16 @@ import { notification } from "antd";
 import Notificacao from "@/components/Notificacao";
 import { Provider } from "react-redux";
 import { store } from "..";
+import StoreWrapper from "@/store/appContext";
 
 const placement = "bottomLeft";
 
 export const useInventoryDbClick = () => {
   const renderNotificacao = () => {
     return (
-      <Provider store={store}>
+      <StoreWrapper>
         <Notificacao />
-      </Provider>
+      </StoreWrapper>
     );
   };
   const openNotification = () => {
