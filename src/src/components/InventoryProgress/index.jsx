@@ -1,13 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import "./style.scss";
 
-let bagIcon = require("@/assets/images/bagIcon.png");
+// let bagIcon = require("@/assets/images/bagIcon.png");
+let bagIcon = "/build/static/media/bagIcon.png";
 
 const InvenotoryProgress = ({ typeIcon }) => {
-  const { type } = useSelector((state) => state.inventorySlice);
-
   return (
     <div className="weight-div weight-progress">
       <div className="weight-progress-wrapper">

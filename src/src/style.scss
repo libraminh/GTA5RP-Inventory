@@ -79,8 +79,8 @@
 }
 
 .tabs-wrapper {
-  @apply bg-black bg-opacity-90;
-  padding-top: 50px;
+  background: rgba(0, 0, 0, 0.85);
+  padding-top: 50px !important;
 
   .left-tabs {
     .ant-tabs-nav {

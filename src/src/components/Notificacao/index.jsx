@@ -1,6 +1,7 @@
 import keyhouseImg from "@/assets/images/KeyHouse.png";
 import React from "react";
 import { useSelector } from "react-redux";
+import ItemLabel from "../ItemLabel";
 
 const itemImages = require.context("@/assets/images", true);
 
@@ -72,9 +73,7 @@ const Notificacao = () => {
           />
         </div>
 
-        <div className="item-name w-full text-center uppercase text-xs font-semibold border-t border-solid border-gray-800 py-1.5 px-1">
-          {notificationData.itemlabel}
-        </div>
+        <ItemLabel>{notificationData.itemlabel}</ItemLabel>
       </div>
     </div>
   );

@@ -3,10 +3,10 @@ import { FETCH_URL } from "./constant";
 export const fetchAPI = async (eventName, body) => {
   await fetch(`${FETCH_URL}/${eventName}`, {
     method: "POST",
-    // headers: {
-    //   Accept: "application/json",
-    //   "Content-Type": "application/json",
-    // },
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(body),
   });
 };
@@ -24,4 +24,8 @@ export const formatMoney = (n, c, d, t) => {
     (j ? i.substr(0, j) + t : "") +
     i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t)
   );
+};
+
+export const convertToKg = (weight) => {
+  return `${weight / 1000}KG`;
 };

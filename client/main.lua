@@ -374,7 +374,7 @@ function openInventory()
         TriggerEvent('esx:setNUI', true)
         isInInventory = true
         SetNuiFocus(true, true)  
-        TriggerScreenblurFadeIn(1000)
+        -- TriggerScreenblurFadeIn(1000)
         loadPlayerInventory()
         SendNUIMessage(
             {
@@ -395,7 +395,7 @@ function closeInventory()
             action = "hide"
         }
     )
-    TriggerScreenblurFadeOut(1000)
+    -- TriggerScreenblurFadeOut(1000)
     SetNuiFocus(false, false)
     TriggerEvent('closeinven')
 end

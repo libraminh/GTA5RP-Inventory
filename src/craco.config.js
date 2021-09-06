@@ -35,12 +35,24 @@ module.exports = {
     ],
   },
   webpack: {
-    // configure: {
-    //   output: {
-    //     filename: "bundle.js",
-    //     path: path.resolve(__dirname, "build"),
-    //   },
-    // },
+    configure: {
+      // output: {
+      //   filename: "bundle.js",
+      //   path: path.resolve(__dirname, "build"),
+      // },
+
+      module: {
+        rules: [
+          {
+            test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
+            loader: "file-loader",
+            options: {
+              name: "static/media/[name].[ext]",
+            },
+          },
+        ],
+      },
+    },
     modules: [path.resolve(__dirname, "./src"), "node_modules"],
     extensions: ["*", ".js", ".jsx", ".json"],
     alias: {

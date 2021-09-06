@@ -4,6 +4,10 @@
 
 /* purgecss end ignore */
 
+html {
+  @apply overflow-y-hidden;
+}
+
 body {
   @apply bg-transparent;
   // background-image: url("https://img.gta5-mods.com/q75/images/fivereborn/9518dd-unknown2%20(1).png");

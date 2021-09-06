@@ -10,31 +10,34 @@ import { store } from "..";
 const placement = "bottomLeft";
 
 export const useInventoryDbClick = () => {
-  const renderNotificacao = () => {
-    return (
-      <Provider store={store}>
-        <Notificacao />
-      </Provider>
-    );
-  };
-  const openNotification = () => {
-    notification.open({
-      message: "",
-      placement,
-      duration: 450,
-      style: {
-        width: "180px",
-        background: "transparent",
-        padding: 0,
-        margin: 0,
-      },
-      getContainer: () => document.querySelector(".app-wrapper"),
-      description: renderNotificacao(),
-      onClick: () => {
-        console.log("Notification Clicked!");
-      },
-    });
-  };
+  // const renderNotificacao = () => {
+  //   return (
+  //     // <Provider store={store}>
+  //     //   <Notificacao />
+  //     // </Provider>
+
+  //     <Notificacao />
+  //   );
+  // };
+
+  // const openNotification = () => {
+  //   notification.open({
+  //     message: "",
+  //     placement,
+  //     duration: 450,
+  //     style: {
+  //       width: "180px",
+  //       background: "transparent",
+  //       padding: 0,
+  //       margin: 0,
+  //     },
+  //     getContainer: () => document.querySelector(".app-wrapper"),
+  //     description: renderNotificacao(),
+  //     onClick: () => {
+  //       console.log("Notification Clicked!");
+  //     },
+  //   });
+  // };
 
   const { closeInventory } = useInventoryClose();
 
@@ -43,10 +46,9 @@ export const useInventoryDbClick = () => {
 
     if (!item.usable || fromItem !== PLAYER_ITEM) return;
 
-    openNotification();
+    // openNotification();
 
     fetchAPI(USE_ITEM, item);
-
     closeInventory();
   };
 

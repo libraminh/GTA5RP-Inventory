@@ -1,10 +1,14 @@
-import { useSelector } from "react-redux";
+import { hideUI } from "@/store/slices/InventorySlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useInventoryClose = () => {
   const { type } = useSelector((state) => state.inventorySlice);
+  const dispatch = useDispatch();
 
-  const closeInventory = async () => {
-    await fetch(`http://esx_inventoryhud/NUIFocusOff`, {
+  const closeInventory = () => {
+    dispatch(hideUI());
+
+    fetch(`http://conde-b1g_inventory/NUIFocusOff`, {
       method: "POST",
       headers: {
         Accept: "application/json",

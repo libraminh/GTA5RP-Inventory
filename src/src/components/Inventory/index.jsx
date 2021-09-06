@@ -1,6 +1,6 @@
-import { AppContext } from "@/store/appContext";
 import { Tabs } from "antd";
 import React, { useContext } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import InventoryFastItems from "../InventoryFastItems";
 import InventoryHeading from "../InventoryHeading";
@@ -28,7 +28,9 @@ const InventoryPlayerWrapper = () => {
 
       {isOtherInventoryShow && (
         <figure className="" style={{ width: "35.5vw" }}>
-          <InventoryHeading>{infoDivText}</InventoryHeading>
+          <InventoryHeading>
+            <span dangerouslySetInnerHTML={{ __html: infoDivText }} />
+          </InventoryHeading>
           <InventoryOther />
         </figure>
       )}

@@ -36,7 +36,7 @@ const nearPlayers = [
 ];
 
 let initState = {
-  isUIShow: true,
+  isUIShow: false,
   isInventoryShow: true,
   isOtherInventoryShow: true,
   isFastInventoryShow: true,
@@ -48,7 +48,7 @@ let initState = {
   coisas: [],
   itemData: [],
   inventoryItems: [],
-  otherInventoryItems: null,
+  otherInventoryItems: [],
   infoDivText: "Kho Khác",
   nearPlayers, // nearPlayers
   dataItem: null,
@@ -69,6 +69,9 @@ const InventorySlice = createSlice({
   name: "inventory",
   initialState: initState,
   reducers: {
+    setType: (state, action) => {
+      state.type = action.payload;
+    },
     toggleIsUIShow: (state, action) => {
       console.log("toggleIsUIShow");
       state.isUIShow = !state.isUIShow;
@@ -206,6 +209,8 @@ export const {
   toggleNearPlayers,
   openUI,
   hideUI,
+  setSampleText,
+  setType,
 } = InventorySlice.actions;
 
 export default InventorySlice.reducer;

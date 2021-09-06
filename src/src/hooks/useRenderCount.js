@@ -13,7 +13,8 @@ export const useRenderCount = (item) => {
           <>
             <img
               style={{ width: "10px" }}
-              src={require("@/assets/images/bullet.png")}
+              // src={require("@/assets/images/bullet.png")}
+              src={`/build/static/media/bullet.png`}
             />
             <span>{item.count}</span>
           </>
