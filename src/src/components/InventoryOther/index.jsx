@@ -1,12 +1,16 @@
 // import { inventoryItems } from "@/data/inventory-items";
 import { OTHER_ITEM, PLAYER_ITEM } from "@/utils/constant";
 import React from "react";
-import { Droppable } from "react-beautiful-dnd";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import InventoryItem from "../InventoryItem";
 import InvenotoryProgress from "../InventoryProgress";
-
+import {
+  Draggable,
+  Droppable,
+  DragComponent,
+  DragState,
+} from "react-dragtastic";
 // import carIcon from "@/assets/images/carBag.png";
 
 const carIcon = `/build/static/media/carBag.png`;
@@ -36,14 +40,24 @@ const InventoryOther = (props) => {
 
   const isOtherInventoryEmpty = otherInventoryItems.length === 0;
 
+  const handleOnDropOther = () => {
+    console.log("handleOnDropOther");
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    console.log("handleDragEnter");
+  };
+
   return (
     //
     // ref={drop}
+    <Droppable accepts={PLAYER_ITEM} onDrop={handleOnDropOther}>
+      {(dragState) => {
+        console.log("isOver", dragState);
 
-    <Droppable droppableId={OTHER_ITEM}>
-      {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
-          <div>
+        return (
+          <div {...dragState.events}>
             {/* ${isDropHover ? "active-drop" : ""} */}
             <div
               className={`mb-5 border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out  `}
@@ -78,9 +92,8 @@ const InventoryOther = (props) => {
               <InvenotoryProgress typeIcon={carIcon} />
             </div>
           </div>
-          {provided.placeholder}
-        </div>
-      )}
+        );
+      }}
     </Droppable>
   );
 };

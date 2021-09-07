@@ -186,33 +186,31 @@ const App = (props) => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <div
+      className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
+        isUIShow
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }`}
+    >
       <div
-        className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
-          isUIShow
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+        className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
+          isInventoryShow ? "block" : "hidden"
         }`}
       >
-        <div
-          className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
-            isInventoryShow ? "block" : "hidden"
-          }`}
-        >
-          <Tabs className="left-tabs" tabPosition={"left"} type="card">
-            <TabPane tab="Kho Đồ" key="1">
-              <Inventory />
-            </TabPane>
-            <TabPane tab="Chế Tạo" key="2">
-              Content of Tab 2
-            </TabPane>
-            <TabPane tab="Shop" key="3">
-              Content of Tab 3
-            </TabPane>
-          </Tabs>
-        </div>
+        <Tabs className="left-tabs" tabPosition={"left"} type="card">
+          <TabPane tab="Kho Đồ" key="1">
+            <Inventory />
+          </TabPane>
+          <TabPane tab="Chế Tạo" key="2">
+            Content of Tab 2
+          </TabPane>
+          <TabPane tab="Shop" key="3">
+            Content of Tab 3
+          </TabPane>
+        </Tabs>
       </div>
-    </DragDropContext>
+    </div>
   );
 };
 

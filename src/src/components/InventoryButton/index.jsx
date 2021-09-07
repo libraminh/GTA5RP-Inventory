@@ -23,19 +23,11 @@ const InventoryButton = ({ dropName, children }) => {
   return (
     // ref={drop}
 
-    <Droppable droppableId={dropName} isDropDisabled={true}>
-      {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
-          {/* ${isOver ? "bg-opacity-100" : "bg-opacity-50"} */}
-          <div
-            className={`inline-flex items-center justify-center text-base border-2 border-solid border-gray-800 py-2 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 cursor-pointer `}
-          >
-            {children}
-          </div>
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
+    <div
+      className={`inline-flex items-center justify-center text-base border-2 border-solid border-gray-800 py-2 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 cursor-pointer `}
+    >
+      {children}
+    </div>
   );
 };
 
