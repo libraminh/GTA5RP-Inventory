@@ -50,6 +50,8 @@
     "react-beautiful-dnd": "^13.1.0",
     "react-dnd": "^14.0.3",
     "react-dnd-html5-backend": "^14.0.1",
+    "react-dnd-mouse-backend": "^1.0.0-rc.2",
+    "react-dnd-preview": "^6.0.2",
     "react-dnd-touch-backend": "^14.1.0",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",

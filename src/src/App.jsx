@@ -1,10 +1,12 @@
 // components
 import { Tabs } from "antd";
 import React, { useContext, useEffect } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import Inventory from "./components/Inventory";
 import { useInventoryClose } from "./hooks/useInventoryClose";
+import MouseBackEnd from "react-dnd-mouse-backend";
+import { usePreview } from "react-dnd-preview";
+import { DndProvider } from "react-dnd";
 
 import {
   hideOtherInventory,
@@ -24,6 +26,8 @@ import {
   toggleIsUIShow,
 } from "./store/slices/InventorySlice";
 import "./style.scss";
+import InventoryItem from "./components/InventoryItem";
+import { PLAYER_ITEM } from "./utils/constant";
 
 const { TabPane } = Tabs;
 
@@ -31,6 +35,30 @@ window.Config = new Object();
 window.Config.closeKeys = [27];
 // Array of keys used to close inventory. Default ESC and F2. Check https://keycode.info/ to get your key code
 //LANGUAGE CAN BE CHANGED IN ui.html, SEARCH FOR <script src="locales/en.js"></script> AND CHANGE IT THERE
+
+const MyPreview = () => {
+  const { display, itemType, item, style } = usePreview();
+
+  console.log("{ display, itemType, item, style }", {
+    display,
+    itemType,
+    item,
+    style,
+  });
+
+  if (!display) {
+    return null;
+  }
+  return (
+    <div className="item-list__item" style={style}>
+      <InventoryItem
+        item={item.item}
+        dragType={PLAYER_ITEM}
+        fromItem={item.item.fromItem}
+      />
+    </div>
+  );
+};
 
 const App = (props) => {
   const { otherInventory, disabled, isInventoryShow, isUIShow } = useSelector(
@@ -186,7 +214,7 @@ const App = (props) => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndProvider backend={MouseBackEnd}>
       <div
         className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
           isUIShow
@@ -212,7 +240,9 @@ const App = (props) => {
           </Tabs>
         </div>
       </div>
-    </DragDropContext>
+
+      <MyPreview />
+    </DndProvider>
   );
 };
 
