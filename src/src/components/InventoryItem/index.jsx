@@ -63,13 +63,14 @@ const InventoryItem = ({
 
         switch (dropResult.name) {
           case PLAYER_ITEM:
-            console.log("dropResult inventoryType >>", fromItem);
+            console.log("dropResult inventoryType >>", inventoryType);
+            console.log("dropResult fromItem >>", fromItem);
 
-            if (fromItem === "trunk") {
+            if (inventoryType === "trunk") {
               handleItemApi(TAKE_FROM_TRUNK);
               return;
             }
-            if (fromItem === "shop") {
+            if (inventoryType === "shop") {
               handleItemApi(TAKE_FROM_SHOP);
               return;
             }
@@ -132,62 +133,60 @@ const InventoryItem = ({
 
   const opacity = isDragging ? 0.4 : 1;
 
-  const { renderCount } = useRenderCount(item, fromItem);
+  const { renderCount } = useRenderCount(item, inventoryType);
   const isKeyHouse = item.name.includes("keyhouse");
 
   return (
-    <>
-      <div
-        ref={drag}
-        style={{ opacity }}
-        className="flex flex-col overflow-hidden justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out cursor-pointer"
-        onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
-        onDoubleClick={(e) => handleDoubleClick(e, { item, index, fromItem })}
-      >
-        <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
-          {item.count.length !== 0 && (
-            <div
-              className={`item-count inline-flex items-center space-x-1 ${
-                item.type === ITEM_MONEY || item.type === ITEM_ACCOUNT
-                  ? "ml-auto"
-                  : ""
-              }`}
-            >
-              {renderCount()}
+    <div
+      ref={drag}
+      style={{ opacity }}
+      className="flex flex-col overflow-hidden justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out cursor-pointer"
+      onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
+      onDoubleClick={(e) => handleDoubleClick(e, { item, index, fromItem })}
+    >
+      <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
+        {item.count.length !== 0 && (
+          <div
+            className={`item-count inline-flex items-center space-x-1 ${
+              item.type === ITEM_MONEY || item.type === ITEM_ACCOUNT
+                ? "ml-auto"
+                : ""
+            }`}
+          >
+            {renderCount()}
+          </div>
+        )}
+
+        {item.type !== ITEM_MONEY &&
+          item.type !== ITEM_ACCOUNT &&
+          inventoryType !== "shop" && (
+            <div className="item-count item-weight ml-auto">
+              {item.weight > 0 ? convertToKg(item) : ""}
             </div>
           )}
+      </div>
 
-          {item.type !== ITEM_MONEY &&
-            item.type !== ITEM_ACCOUNT &&
-            inventoryType !== "shop" && (
-              <div className="item-count item-weight ml-auto">
-                {item.weight > 0 ? convertToKg(item) : ""}
-              </div>
-            )}
-        </div>
+      <div
+        id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+        data-item={JSON.stringify(item)}
+        data-inventory={inventoryType}
+      >
+        <img
+          className="item w-14 object-contain object-center mx-auto"
+          src={
+            isKeyHouse ? keyhouseImg : `/build/static/media/${item.name}.png`
+          }
+          alt="image"
+        />
 
         <div
-          id={`${fromItem === "main" ? "item" : "itemOther"}-${index}`}
-          data-item={JSON.stringify(item)}
-          data-inventory={inventoryType}
-        >
-          <img
-            className="item w-14 object-contain object-center mx-auto"
-            src={
-              isKeyHouse ? keyhouseImg : `/build/static/media/${item.name}.png`
-            }
-            alt="image"
-          />
-
-          <div
-            className="weapon-bar rounded-lg"
-            style={{ height: `${item.doben}%` }}
-          ></div>
-        </div>
-
-        <ItemLabel>{item.label}</ItemLabel>
+          className="weapon-bar rounded-lg"
+          style={{ height: `${item.doben}%` }}
+        ></div>
       </div>
-    </>
+
+      <ItemLabel>{item.label}</ItemLabel>
+    </div>
   );
 };
 

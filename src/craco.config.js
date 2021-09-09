@@ -36,10 +36,10 @@ module.exports = {
   },
   webpack: {
     configure: {
-      // output: {
-      //   filename: "bundle.js",
-      //   path: path.resolve(__dirname, "build"),
-      // },
+      output: {
+        // path: path.resolve(__dirname, "build"),
+        publicPath: "/build",
+      },
 
       module: {
         rules: [

@@ -2,12 +2,12 @@ import React from "react";
 import { formatMoney, setCost } from "@/utils";
 import { ITEM_ACCOUNT, ITEM_MONEY, ITEM_WEAPON } from "@/utils/constant";
 
-export const useRenderCount = (item, fromItem) => {
-  console.log("fromItem", fromItem);
+export const useRenderCount = (item, inventoryType) => {
+  console.log("rendercout/ inventoryType", inventoryType);
 
   const renderCount = () => {
     let cost = "";
-    if (fromItem === "shop") {
+    if (inventoryType === "shop") {
       cost = setCost(item);
     }
     let count = item.count;
@@ -31,7 +31,7 @@ export const useRenderCount = (item, fromItem) => {
         return <>{formatMoney(item.count)}$</>;
     }
 
-    return <>{fromItem === "shop" ? cost : count}</>;
+    return <>{inventoryType === "shop" ? cost : count}</>;
   };
 
   return {

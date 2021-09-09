@@ -17,11 +17,7 @@ export const useInventoryContextMenu = () => {
   const handleItemContext = async (e, { item, index, fromItem }) => {
     e.preventDefault();
 
-    if (
-      item.type === ITEM_MONEY ||
-      item.type === ITEM_ACCOUNT ||
-      fromItem === OTHER_ITEM
-    ) {
+    if (item.type === ITEM_MONEY || item.type === ITEM_ACCOUNT) {
       return;
     }
 
