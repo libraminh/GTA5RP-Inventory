@@ -1,47 +1,12 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 
-const nearPlayers = [
-  {
-    player: 197,
-    idcard: 3,
-  },
-  {
-    player: 1927,
-    idcard: 2,
-  },
-  {
-    player: 17,
-    idcard: 1,
-  },
-  {
-    player: 1,
-    idcard: 3908,
-  },
-  {
-    player: 197,
-    idcard: 3,
-  },
-  {
-    player: 1927,
-    idcard: 2,
-  },
-  {
-    player: 17,
-    idcard: 1,
-  },
-  {
-    player: 1,
-    idcard: 3908,
-  },
-];
-
 let initState = {
   isUIShow: false,
   isInventoryShow: true,
   isOtherInventoryShow: true,
   isFastInventoryShow: true,
   isWeightShow: false,
-  type: "normal",
+  eventType: "normal",
   disabled: false,
   disabledFunction: null,
   ownerHouse: null,
@@ -50,10 +15,18 @@ let initState = {
   inventoryItems: [],
   otherInventoryItems: [],
   infoDivText: "Kho Khác",
-  nearPlayers, // nearPlayers
+  nearPlayers: [], // nearPlayers
   dataItem: null,
   isNearPlayersShow: false,
-
+  playerWeight: {
+    weight: "",
+    maxWeight: "",
+  },
+  trunkWeight: {
+    weight: "",
+    maxWeight: "",
+  },
+  isShowBarWeight: true,
   otherInventory: [],
   fastItems: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
   quantity: 1,
@@ -69,26 +42,35 @@ const InventorySlice = createSlice({
   name: "inventory",
   initialState: initState,
   reducers: {
+    toggleBarWeight: (state, action) => {
+      state.isShowBarWeight = !state.isShowBarWeight;
+    },
+    setPlayerWeight: (state, action) => {
+      state.playerWeight = action.payload;
+    },
+    setTrunkWeight: (state, action) => {
+      state.trunkWeight = action.payload;
+    },
+
     setType: (state, action) => {
-      state.type = action.payload;
+      state.eventType = action.payload;
     },
     toggleIsUIShow: (state, action) => {
-      console.log("toggleIsUIShow");
       state.isUIShow = !state.isUIShow;
     },
     openUI: (state, action) => {
-      console.log("toggleIsUIShow true");
       state.isUIShow = true;
+      state.isNearPlayersShow = false;
+      state.nearPlayers = [];
     },
     hideUI: (state, action) => {
-      console.log("toggleIsUIShow false");
       state.isUIShow = false;
     },
     toggleNearPlayers: (state, action) => {
       state.isNearPlayersShow = !state.isNearPlayersShow;
     },
     setOtherItems: (state, action) => {
-      state.otherInventory = [...state.otherInventory, action.payload];
+      state.otherInventory = action.payload;
     },
     setFastItems: (state, action) => {
       if (action.payload.slot >= 0) {
@@ -111,6 +93,9 @@ const InventorySlice = createSlice({
         });
       }
     },
+    setFastItemsBE: (state, action) => {
+      state.fastItems = action.payload;
+    },
     removeFastItems: (state, action) => {
       state.fastItems[action.payload.index] = {};
     },
@@ -118,15 +103,10 @@ const InventorySlice = createSlice({
       state.notificationData = action.payload;
     },
     setDataItem: (state, action) => {
-      // setStore({
-      //   ...state,
-      //   inventory: {
-      //     ...state.inventory,
-      //     dataItem: item,
-      //   },
-      // });
+      state.dataItem = action.payload;
     },
     setNearPlayer: (state, action) => {
+      console.log("set nearplayer", action);
       state.nearPlayers = action.payload;
     },
     setInfoDivText: (state, action) => {
@@ -204,6 +184,7 @@ export const {
   setNotification,
   setOtherItems,
   setFastItems,
+  setFastItemsBE,
   removeFastItems,
   toggleIsUIShow,
   toggleNearPlayers,
@@ -211,6 +192,9 @@ export const {
   hideUI,
   setSampleText,
   setType,
+  setPlayerWeight,
+  setTrunkWeight,
+  toggleBarWeight,
 } = InventorySlice.actions;
 
 export default InventorySlice.reducer;

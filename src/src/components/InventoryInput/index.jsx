@@ -22,6 +22,7 @@ const InventoryInput = (props) => {
   };
 
   const handleClickPlayer = (player) => {
+    console.log("dataItem ne", dataItem);
     console.log("player", player);
 
     const bodyHeader = {
@@ -63,7 +64,7 @@ const InventoryInput = (props) => {
               data-player={player.player}
               onClick={() => handleClickPlayer(player)}
             >
-              [{player.idcard}]
+              [{player.idcard}] {player.label}
             </div>
           ))}
         </div>
@@ -72,7 +73,7 @@ const InventoryInput = (props) => {
           <InputNumber
             className="w-full text-center border-gta-blue-400 rounded-lg"
             min={1}
-            defaultValue={1}
+            defaultValue={quantity}
             onChange={handleOnChange}
           />
 

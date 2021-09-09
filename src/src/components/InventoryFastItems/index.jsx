@@ -1,5 +1,5 @@
 import { FAST_ITEM } from "@/utils/constant";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import InventoryFastItem from "../InventoryFastItem";
 
@@ -8,11 +8,12 @@ const InventoryFastItems = () => {
 
   return (
     <div className="flex space-x-2.5 absolute left-1/2 bottom-14 transform-gpu -translate-x-1/2">
-      {fastItems?.map((item, index) => (
+      {[...Array(9)]?.map((item, index) => (
         <InventoryFastItem
           fromItem={FAST_ITEM}
-          key={item.name || index}
-          item={fastItems[index]}
+          key={index}
+          // item={fastItems[index]}
+          // item={item}
           index={index}
         />
       ))}

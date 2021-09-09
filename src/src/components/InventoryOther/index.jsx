@@ -11,9 +11,13 @@ import InvenotoryProgress from "../InventoryProgress";
 const carIcon = `/build/static/media/carBag.png`;
 
 const InventoryOther = (props) => {
-  const { quantity, otherInventoryItems } = useSelector(
-    (state) => state.inventorySlice
-  );
+  const {
+    quantity,
+    otherInventoryItems,
+    trunkWeight,
+    isShowBarWeight,
+    eventType,
+  } = useSelector((state) => state.inventorySlice);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [PLAYER_ITEM],
@@ -63,15 +67,18 @@ const InventoryOther = (props) => {
                 quantity={quantity}
                 dragType={OTHER_ITEM}
                 fromItem={OTHER_ITEM}
-                inventoryType="second"
+                inventoryType={eventType}
               />
             ))
           )}
         </div>
       </div>
-      <div>
-        <InvenotoryProgress typeIcon={carIcon} />
-      </div>
+
+      {isShowBarWeight && (
+        <div>
+          <InvenotoryProgress weightInfo={trunkWeight} typeIcon={carIcon} />
+        </div>
+      )}
     </div>
   );
 };

@@ -13,6 +13,7 @@ export const inventoryItems = [
     canRemove: false,
     label: "Bánh Mì",
     price: 500,
+    slot: "3",
   },
   {
     name: "playersafe",
@@ -24,6 +25,7 @@ export const inventoryItems = [
     canRemove: false,
     label: "Két Sắt",
     price: 500,
+    slot: "2",
   },
   {
     name: "WEAPON_CARBINERIFLE",
@@ -33,6 +35,7 @@ export const inventoryItems = [
     label: "CARBINERIFLE",
     price: 500,
     doben: "50",
+    slot: "6",
   },
   {
     name: "money",

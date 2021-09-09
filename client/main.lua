@@ -335,7 +335,8 @@ function loadItems()
                 action = "setItems",
                 itemList = items,
                 fastItems = fastItems,
-                weight = weight
+                weight = weight,
+                maxWeight = maxWeight,
             }
         )
         SendNUIMessage({

@@ -8,9 +8,8 @@ import InvenotoryProgress from "../InventoryProgress";
 
 const InventoryPlayer = (props) => {
   // inventoryItems
-  const { quantity, infoDivText, inventoryItems } = useSelector(
-    (state) => state.inventorySlice
-  );
+  const { quantity, infoDivText, playerWeight, inventoryItems, eventType } =
+    useSelector((state) => state.inventorySlice);
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
@@ -33,10 +32,6 @@ const InventoryPlayer = (props) => {
   } else if (canDrop) {
   }
 
-  useEffect(() => {
-    console.log("inventoryItems rc", inventoryItems);
-  }, [inventoryItems]);
-
   return (
     <div ref={drop}>
       <div
@@ -44,7 +39,7 @@ const InventoryPlayer = (props) => {
           isDropHover && "active-drop"
         }`}
       >
-        <div className="scrollbar-custom flex flex-wrap content-start gap-3 max-h-50vh overflow-y-auto p-4 pr-1">
+        <div className="scrollbar-custom flex flex-wrap content-start gap-3 max-h-50vh min-h-50vh overflow-y-auto p-4 pr-1">
           {inventoryItems?.map((item, index) => (
             <InventoryItem
               item={item}
@@ -53,13 +48,13 @@ const InventoryPlayer = (props) => {
               quantity={quantity}
               dragType={PLAYER_ITEM}
               fromItem={PLAYER_ITEM}
-              inventoryType="main"
+              inventoryType={"main"}
             />
           ))}
         </div>
       </div>
       <div>
-        <InvenotoryProgress typeIcon="bagIcon" />
+        <InvenotoryProgress weightInfo={playerWeight} typeIcon="bagIcon" />
       </div>
     </div>
   );

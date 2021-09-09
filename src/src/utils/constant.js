@@ -14,6 +14,7 @@ export const PUT_INTO_FAST = "PutIntoFast";
 export const TAKE_FROM_FAST = "TakeFromFast";
 export const TAKE_FROM_PROPERTY = "TakeFromProperty";
 export const TAKE_FROM_SOCIETY = "TakeFromSociety";
+export const TAKE_FROM_SHOP = "TakeFromShop";
 export const TAKE_FROM_VAULT = "TakeFromVault";
 export const TAKE_FROM_PLAYER = "TakeFromPlayer";
 export const GET_NEARS_PLAYERS = "GetNearPlayers";

@@ -12,15 +12,17 @@ import {
 } from "@/utils/constant";
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ItemLabel from "../ItemLabel";
 import "./style.scss";
 
 // const itemImages = require.context("@/assets/images", true);
-
-const InventoryFastItem = ({ item = {}, index, fromItem }) => {
+// item = {},
+const InventoryFastItem = ({ index, fromItem }) => {
   const dispatch = useDispatch();
-  const { renderCount } = useRenderCount(item);
+  const { fastItems } = useSelector((state) => state.inventorySlice);
+  const currentItem = fastItems.find((item) => item.slot === index + 1);
+  const { renderCount } = useRenderCount(currentItem);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [PLAYER_ITEM, FAST_ITEM, PUT_INTO_FAST],
@@ -34,17 +36,17 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: FAST_ITEM,
-      item: { item, fromItem },
-      end: (item, monitor) => {
+      item: { item: currentItem, fromItem },
+      end: (currentItem, monitor) => {
         const dropResult = monitor.getDropResult();
 
-        if (!item || !dropResult) return;
+        if (!currentItem || !dropResult) return;
 
         switch (dropResult.name) {
           case PUT_INTO_FAST:
             fetchAPI(PUT_INTO_FAST, {
               item: {
-                ...item.item,
+                ...currentItem.item,
                 slot: index + 1,
               },
               slot: dropResult.slot + 1,
@@ -55,13 +57,10 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
             if (fromItem !== FAST_ITEM) return;
             fetchAPI(TAKE_FROM_FAST, {
               item: {
-                ...item.item,
+                ...currentItem.item,
                 slot: index + 1,
               },
             });
-            break;
-
-          default:
             break;
         }
       },
@@ -72,7 +71,7 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
         };
       },
     }),
-    []
+    [currentItem]
   );
 
   const isActive = canDrop && isOver;
@@ -84,50 +83,48 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
   } else if (canDrop) {
   }
 
-  const isKeyHouse = item.name?.includes("keyhouse");
+  const isKeyHouse = currentItem?.name?.includes("keyhouse");
 
-  const handleContextMenu = (e, item) => {
+  const handleContextMenu = (e, currentItem) => {
     e.preventDefault();
     fetchAPI(TAKE_FROM_FAST, {
       item: {
-        ...item,
+        ...currentItem,
         slot: index + 1,
       },
     });
-    dispatch(removeFastItems({ item, index }));
+    // dispatch(removeFastItems({ item: currentItem, index }));
   };
 
   return (
-    // ref={drop}
-
-    <div data-type={FAST_ITEM}>
-      {/* ${isDropHover ? "active-drop" : ""} */}
+    <div ref={drop} data-type={FAST_ITEM}>
       <div
         className={`inventoryItem slotFast relative w-28 h-32 flex items-center justify-between flex-col border border-solid border-gray-800 rounded-lg transition-all duration-100 ease-in-out hover-drop ${
           isDropHover ? "active-drop" : ""
         }`}
-        onContextMenu={(e) => handleContextMenu(e, item)}
+        onContextMenu={(e) => handleContextMenu(e, currentItem)}
       >
-        <div className="keybind absolute right-0.5 -top-6">{index + 1}</div>
+        <div className="keybind absolute left-0.5 -top-6">{index + 1}</div>
 
-        {item.name && (
+        {currentItem?.name && (
           <React.Fragment>
             <div className="item-information w-full flex items-center justify-between text-xs px-2 pt-1">
-              {item.count.length !== 0 && (
+              {currentItem.count.length !== 0 && (
                 <div
                   className={`item-count inline-flex items-center space-x-1 ${
-                    item.type === ITEM_MONEY ? "ml-auto" : ""
+                    currentItem.type === ITEM_MONEY ? "ml-auto" : ""
                   }`}
                 >
                   {renderCount()}
                 </div>
               )}
 
-              {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
-                <div className="item-count item-weight ml-auto">
-                  {item.weight > 0 ? convertToKg(item.weight) : ""}
-                </div>
-              )}
+              {currentItem.type !== ITEM_MONEY &&
+                currentItem.type !== ITEM_ACCOUNT && (
+                  <div className="item-count item-weight ml-auto">
+                    {currentItem.weight > 0 ? convertToKg(currentItem) : ""}
+                  </div>
+                )}
             </div>
 
             <div ref={drag} className="w-full mb-1" id={`itemFast-${index}`}>
@@ -139,18 +136,18 @@ const InventoryFastItem = ({ item = {}, index, fromItem }) => {
                 src={
                   isKeyHouse
                     ? keyhouseImg
-                    : `/build/static/media/${item.name}.png`
+                    : `/build/static/media/${currentItem?.name}.png`
                 }
                 alt="image"
               />
 
               <div
                 className="weapon-bar rounded-lg"
-                style={{ height: `${item.doben}%` }}
+                style={{ height: `${currentItem?.doben}%` }}
               />
             </div>
 
-            <ItemLabel>{item.label}</ItemLabel>
+            <ItemLabel>{currentItem?.label}</ItemLabel>
             {/* <div className="item-name-bg"></div> */}
           </React.Fragment>
         )}

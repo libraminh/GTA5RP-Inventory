@@ -14,15 +14,20 @@ import {
   hideWeightDiv,
   openUI,
   setDataItem,
+  setFastItems,
+  setFastItemsBE,
   setInfoDivText,
   setInventoryItems,
   setNearPlayer,
   setNotification,
   setOtherInventoryItems,
+  setPlayerWeight,
+  setTrunkWeight,
   setType,
   showOtherInventory,
   showPlayerInventory,
   showWeightDiv,
+  toggleBarWeight,
   toggleIsUIShow,
 } from "./store/slices/InventorySlice";
 import "./style.scss";
@@ -39,12 +44,12 @@ window.Config.closeKeys = [27];
 const MyPreview = () => {
   const { display, itemType, item, style } = usePreview();
 
-  console.log("{ display, itemType, item, style }", {
-    display,
-    itemType,
-    item,
-    style,
-  });
+  // console.log("{ display, itemType, item, style }", {
+  //   display,
+  //   itemType,
+  //   item,
+  //   style,
+  // });
 
   if (!display) {
     return null;
@@ -68,8 +73,8 @@ const App = (props) => {
 
   const { closeInventory } = useInventoryClose();
 
-  const handleDisplay = (type) => {
-    switch (type) {
+  const handleDisplay = (eventType) => {
+    switch (eventType) {
       case "normal":
         dispatch(hideWeightDiv());
         dispatch(hideOtherInventory());
@@ -100,10 +105,6 @@ const App = (props) => {
         break;
     }
 
-    // $(".ui").show("slide", { direction: "left" }, 100);
-
-    console.log("openUI ne");
-
     dispatch(openUI());
     // dispatch(showPlayerInventory());
   };
@@ -116,11 +117,10 @@ const App = (props) => {
 
     switch (eventAction) {
       case "display":
-        let type = event.data.type;
+        let eventType = event.data.type;
         // disabled = false;
 
-        // handleDisplay(type);
-        // dispatch(openUI());
+        handleDisplay(eventType);
         break;
 
       case "hide":
@@ -128,9 +128,14 @@ const App = (props) => {
         break;
 
       case "setItems":
-        console.log("a setItems");
+        dispatch(
+          setPlayerWeight({
+            weight: event.data.weight,
+            maxWeight: event.data.maxWeight,
+          })
+        );
+        dispatch(setFastItemsBE(event.data.fastItems));
         dispatch(setInventoryItems(event.data.itemList));
-        dispatch(openUI());
         break;
 
       case "setSecondInventoryItems":
@@ -138,10 +143,17 @@ const App = (props) => {
         break;
 
       case "setShopInventoryItems":
+        dispatch(toggleBarWeight());
         dispatch(setOtherInventoryItems(event.data.itemList));
         break;
 
       case "setInfoText":
+        dispatch(
+          setTrunkWeight({
+            weight: event.data.trunkWeight,
+            maxWeight: event.data.trunkMaxWeight,
+          })
+        );
         dispatch(setInfoDivText(event.data.text));
         break;
 
@@ -151,8 +163,9 @@ const App = (props) => {
         break;
 
       case "nearPlayers":
+        console.log("nearPlayers");
         // doing nearPlayers
-        // dispatch(setDataItem(event.data.item));
+        dispatch(setDataItem(event.data.item));
         dispatch(setNearPlayer(event.data.players));
         break;
 
@@ -170,26 +183,17 @@ const App = (props) => {
       case "showhotbar":
         // doing showhotbar
         break;
-
-      default:
-        console.log("default");
-        break;
     }
   };
 
   useEffect(() => {
-    console.log("handleMessageEvent");
-
     window.addEventListener("message", handleMessageEvent);
     return () => window.removeEventListener("message", handleMessageEvent);
   }, []);
 
   useEffect(() => {
     document.querySelector("body").addEventListener("keyup", (key) => {
-      console.log("keyup close");
       if (window.Config.closeKeys.includes(key.which)) {
-        console.log("close diii");
-
         closeInventory();
       }
     });
@@ -203,18 +207,9 @@ const App = (props) => {
     console.log("isUIShow", isUIShow);
   }, [isUIShow]);
 
-  function onDragEnd(result) {
-    if (!result.destination) {
-      return;
-    }
-
-    if (result.destination.index === result.source.index) {
-      return;
-    }
-  }
-
   return (
     <DndProvider backend={MouseBackEnd}>
+      {/* } */}
       <div
         className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
           isUIShow
@@ -240,7 +235,6 @@ const App = (props) => {
           </Tabs>
         </div>
       </div>
-
       <MyPreview />
     </DndProvider>
   );

@@ -16,7 +16,8 @@ function setTrunkInventoryData(data, inventory)
     SendNUIMessage(
         {
             action = "setInfoText",
-            text = data.text
+            text = data.text,
+            trunkData = trunkData,
         }
     )
 

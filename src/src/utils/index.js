@@ -26,6 +26,17 @@ export const formatMoney = (n, c, d, t) => {
   );
 };
 
-export const convertToKg = (weight) => {
-  return `${weight / 1000}KG`;
+export const convertToKg = (item) => {
+  return `${(item.weight * item.count) / 1000}KG`;
+};
+
+export const setCost = (item) => {
+  let cost = item?.price;
+  if (item?.price == 0) {
+    cost = item?.price + "$";
+  }
+  if (item?.price > 0) {
+    cost = item?.price + "$";
+  }
+  return cost;
 };

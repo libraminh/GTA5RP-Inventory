@@ -1,11 +1,7 @@
 import { useInventoryContextMenu } from "@/hooks/useInventoryContextMenu";
 import { useInventoryDbClick } from "@/hooks/useInventoryDbClick";
 import { useRenderCount } from "@/hooks/useRenderCount";
-import {
-  setFastItems,
-  setOtherItems,
-  toggleNearPlayers,
-} from "@/store/slices/InventorySlice";
+import { toggleNearPlayers } from "@/store/slices/InventorySlice";
 import { convertToKg, fetchAPI } from "@/utils";
 import {
   DROP_ITEM,
@@ -15,20 +11,22 @@ import {
   ITEM_MONEY,
   keyhouseImg,
   OTHER_ITEM,
+  PLAYER_ITEM,
   PUT_INTO_FAST,
   PUT_INTO_TRUNK,
   TAKE_FROM_FAST,
+  TAKE_FROM_SHOP,
+  TAKE_FROM_TRUNK,
   USE_ITEM,
 } from "@/utils/constant";
 import React from "react";
-import { DragPreviewImage, useDrag } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDrag } from "react-dnd";
+import { useDispatch } from "react-redux";
 import ItemLabel from "../ItemLabel";
-import styled from "@emotion/styled";
-
 import "./style.scss";
 
 // const itemImages = require.context("@/assets/images", true);
+// src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
 
 const InventoryItem = ({
   item,
@@ -42,6 +40,16 @@ const InventoryItem = ({
   const { handleItemContext } = useInventoryContextMenu();
   const { handleDoubleClick } = useInventoryDbClick();
 
+  const handleItemApi = (eventApi) => {
+    const bodyHeader = {
+      item,
+      number: parseInt(quantity),
+      owner: false,
+    };
+
+    fetchAPI(eventApi, bodyHeader);
+  };
+
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: dragType,
@@ -54,31 +62,38 @@ const InventoryItem = ({
         console.log("dropResult", dropResult);
 
         switch (dropResult.name) {
-          case "playerInventory":
-            // fetchAPI(TAKE_FROM_TRUNK, bodyHeader);
+          case PLAYER_ITEM:
+            console.log("dropResult inventoryType >>", fromItem);
+
+            if (fromItem === "trunk") {
+              handleItemApi(TAKE_FROM_TRUNK);
+              return;
+            }
+            if (fromItem === "shop") {
+              handleItemApi(TAKE_FROM_SHOP);
+              return;
+            }
             break;
 
           case OTHER_ITEM:
             handleItemApi(PUT_INTO_TRUNK);
-            dispatch(setOtherItems(item.item));
+            // dispatch(setOtherItems(item));
             break;
 
           case PUT_INTO_FAST:
             if (item.item.type === ITEM_MONEY) return;
 
-            dispatch(
-              setFastItems({
-                ...item,
-                slot: dropResult.slot,
-              })
-            );
+            // dispatch(
+            //   setFastItems({
+            //     ...item,
+            //     slot: dropResult.slot,
+            //   })
+            // );
 
             fetchAPI(PUT_INTO_FAST, {
               item: item.item,
               slot: dropResult.slot + 1,
             });
-
-            // handleItemApi(PUT_INTO_FAST);
 
             break;
 
@@ -87,7 +102,8 @@ const InventoryItem = ({
             break;
 
           case USE_ITEM:
-            handleItemApi(USE_ITEM);
+            // handleItemApi(USE_ITEM);
+            fetchAPI(USE_ITEM, item.item);
             break;
 
           case DROP_ITEM:
@@ -95,8 +111,11 @@ const InventoryItem = ({
             break;
 
           case GIVE_ITEM:
+            fetchAPI(GET_NEARS_PLAYERS, {
+              item: item.item,
+              number: quantity,
+            });
             dispatch(toggleNearPlayers());
-            handleItemApi(GET_NEARS_PLAYERS);
             break;
 
           default:
@@ -113,42 +132,17 @@ const InventoryItem = ({
 
   const opacity = isDragging ? 0.4 : 1;
 
-  const handleItemApi = (eventApi) => {
-    const bodyHeader = {
-      item: {
-        type: item.type,
-        name: item.name,
-      },
-      number: parseInt(quantity),
-      owner: false,
-    };
-
-    fetchAPI(eventApi, bodyHeader);
-  };
-
-  const handleItemClick = () => {
-    console.log("handleItemClick", item);
-  };
-
-  const { renderCount } = useRenderCount(item);
+  const { renderCount } = useRenderCount(item, fromItem);
   const isKeyHouse = item.name.includes("keyhouse");
 
   return (
     <>
-      {/* <DragPreviewImage
-        src={require("@/assets/images/KeyHouse.png")}
-        connect={preview}
-      /> */}
-
-      {/* <DragPreview /> */}
-
       <div
         ref={drag}
         style={{ opacity }}
-        className="flex flex-col overflow-hidden justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out"
+        className="flex flex-col overflow-hidden justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg hover-drop transition-all duration-100 ease-in-out cursor-pointer"
         onContextMenu={(e) => handleItemContext(e, { item, fromItem })}
         onDoubleClick={(e) => handleDoubleClick(e, { item, index, fromItem })}
-        onClick={handleItemClick}
       >
         <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
           {item.count.length !== 0 && (
@@ -163,15 +157,17 @@ const InventoryItem = ({
             </div>
           )}
 
-          {item.type !== ITEM_MONEY && item.type !== ITEM_ACCOUNT && (
-            <div className="item-count item-weight ml-auto">
-              {item.weight > 0 ? convertToKg(item.weight) : ""}
-            </div>
-          )}
+          {item.type !== ITEM_MONEY &&
+            item.type !== ITEM_ACCOUNT &&
+            inventoryType !== "shop" && (
+              <div className="item-count item-weight ml-auto">
+                {item.weight > 0 ? convertToKg(item) : ""}
+              </div>
+            )}
         </div>
 
         <div
-          id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+          id={`${fromItem === "main" ? "item" : "itemOther"}-${index}`}
           data-item={JSON.stringify(item)}
           data-inventory={inventoryType}
         >
@@ -190,7 +186,6 @@ const InventoryItem = ({
         </div>
 
         <ItemLabel>{item.label}</ItemLabel>
-        {/* <div className="item-name-bg"></div> */}
       </div>
     </>
   );
