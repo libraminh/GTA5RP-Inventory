@@ -71,6 +71,7 @@ const InventoryOther = (props) => {
                 dragType={OTHER_ITEM}
                 fromItem={OTHER_ITEM}
                 inventoryType={eventType}
+                itemInventory={eventType}
               />
             ))
           )}

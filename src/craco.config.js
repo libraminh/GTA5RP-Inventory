@@ -37,8 +37,7 @@ module.exports = {
   webpack: {
     configure: {
       output: {
-        // path: path.resolve(__dirname, "build"),
-        publicPath: "/build",
+        publicPath: process.env.NODE_ENV === "development" ? "/" : "/build",
       },
 
       module: {

@@ -13,11 +13,15 @@ import {
   OTHER_ITEM,
   PLAYER_ITEM,
   PUT_INTO_FAST,
+  PUT_INTO_SOCIETY,
   PUT_INTO_TRUNK,
   TAKE_FROM_FAST,
+  TAKE_FROM_PROPERTY,
   TAKE_FROM_SHOP,
+  TAKE_FROM_SOCIETY,
   TAKE_FROM_TRUNK,
   USE_ITEM,
+  PUT_INTO_PROPERTY,
 } from "@/utils/constant";
 import React from "react";
 import { useDrag } from "react-dnd";
@@ -35,6 +39,7 @@ const InventoryItem = ({
   inventoryType,
   dragType,
   fromItem,
+  itemInventory = "",
 }) => {
   const dispatch = useDispatch();
   const { handleItemContext } = useInventoryContextMenu();
@@ -44,7 +49,7 @@ const InventoryItem = ({
     const bodyHeader = {
       item,
       number: parseInt(quantity),
-      owner: false,
+      // owner: false,
     };
 
     fetchAPI(eventApi, bodyHeader);
@@ -63,9 +68,8 @@ const InventoryItem = ({
 
         switch (dropResult.name) {
           case PLAYER_ITEM:
-            console.log("dropResult inventoryType >>", inventoryType);
-            console.log("dropResult fromItem >>", fromItem);
-
+            console.log("PLAYER_ITEM inventoryType >>", inventoryType);
+            console.log("PLAYER_ITEM fromItem >>", fromItem);
             if (inventoryType === "trunk") {
               handleItemApi(TAKE_FROM_TRUNK);
               return;
@@ -74,10 +78,32 @@ const InventoryItem = ({
               handleItemApi(TAKE_FROM_SHOP);
               return;
             }
+            if (inventoryType === "Society") {
+              handleItemApi(TAKE_FROM_SOCIETY);
+              return;
+            }
+            if (inventoryType === "property") {
+              handleItemApi(TAKE_FROM_PROPERTY);
+              return;
+            }
             break;
 
           case OTHER_ITEM:
-            handleItemApi(PUT_INTO_TRUNK);
+            console.log("OTHER_ITEM inventoryType >>", inventoryType);
+            console.log("OTHER_ITEM fromItem >>", fromItem);
+
+            if (inventoryType === "trunk" || inventoryType === "main") {
+              handleItemApi(PUT_INTO_TRUNK);
+              return;
+            }
+            if (inventoryType === "Society") {
+              handleItemApi(PUT_INTO_SOCIETY);
+              return;
+            }
+            if (inventoryType === "property") {
+              handleItemApi(PUT_INTO_PROPERTY);
+              return;
+            }
             // dispatch(setOtherItems(item));
             break;
 
@@ -128,7 +154,7 @@ const InventoryItem = ({
         handlerId: monitor.getHandlerId(),
       }),
     }),
-    [quantity]
+    [item, quantity, inventoryType] //quantity
   );
 
   const opacity = isDragging ? 0.4 : 1;
@@ -159,7 +185,7 @@ const InventoryItem = ({
 
         {item.type !== ITEM_MONEY &&
           item.type !== ITEM_ACCOUNT &&
-          inventoryType !== "shop" && (
+          itemInventory !== "shop" && (
             <div className="item-count item-weight ml-auto">
               {item.weight > 0 ? convertToKg(item) : ""}
             </div>

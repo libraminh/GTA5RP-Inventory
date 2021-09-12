@@ -66,6 +66,7 @@ const MyPreview = () => {
 };
 
 const App = (props) => {
+  console.log("app render >>>>");
   const { otherInventory, disabled, isInventoryShow, isUIShow } = useSelector(
     (state) => state.inventorySlice
   );
@@ -76,20 +77,17 @@ const App = (props) => {
   const handleDisplay = (eventType) => {
     switch (eventType) {
       case "normal":
-        dispatch(setType(eventType));
         dispatch(hideWeightDiv());
         dispatch(hideOtherInventory());
         break;
 
       case "trunk":
-        dispatch(setType(eventType));
         dispatch(showOtherInventory());
         dispatch(showWeightDiv());
         break;
 
       case "Society":
       case "property":
-        dispatch(setType(eventType));
         dispatch(showOtherInventory());
         dispatch(hideWeightDiv());
         break;
@@ -100,18 +98,18 @@ const App = (props) => {
       case "motelsbed":
       case "glovebox":
       case "vault":
-        dispatch(setType(eventType));
         dispatch(showWeightDiv());
         dispatch(showOtherInventory());
         break;
     }
 
+    dispatch(setType(eventType));
     dispatch(openUI());
     // dispatch(showPlayerInventory());
   };
 
   const handleMessageEvent = (event) => {
-    console.log("event", event);
+    console.log("handleMessageEvent", event);
 
     const eventAction = event.data.action;
 
@@ -192,12 +190,20 @@ const App = (props) => {
   }, []);
 
   useEffect(() => {
-    document.querySelector("body").addEventListener("keyup", (key) => {
-      if (window.Config.closeKeys.includes(key.which)) {
-        closeInventory();
-      }
-    });
+    document
+      .querySelector("body")
+      .addEventListener("keyup", (key) => handleKeyUp(key));
+    return () =>
+      document
+        .querySelector("body")
+        .addEventListener("keyup", (key) => handleKeyUp(key));
   }, []);
+
+  const handleKeyUp = (key) => {
+    if (window.Config.closeKeys.includes(key.which)) {
+      closeInventory();
+    }
+  };
 
   return (
     <DndProvider backend={MouseBackEnd}>

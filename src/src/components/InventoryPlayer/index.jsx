@@ -11,6 +11,8 @@ const InventoryPlayer = (props) => {
   const { quantity, infoDivText, playerWeight, inventoryItems, eventType } =
     useSelector((state) => state.inventorySlice);
 
+  console.log("player eventType", eventType);
+
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
       accept: [OTHER_ITEM, FAST_ITEM],
@@ -48,7 +50,8 @@ const InventoryPlayer = (props) => {
               quantity={quantity}
               dragType={PLAYER_ITEM}
               fromItem={PLAYER_ITEM}
-              inventoryType={"main"}
+              inventoryType={eventType}
+              itemInventory={"main"}
             />
           ))}
         </div>
@@ -62,4 +65,4 @@ const InventoryPlayer = (props) => {
 
 InventoryPlayer.propTypes = {};
 
-export default React.memo(InventoryPlayer);
+export default InventoryPlayer;

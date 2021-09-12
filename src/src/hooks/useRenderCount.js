@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { formatMoney, setCost } from "@/utils";
 import { ITEM_ACCOUNT, ITEM_MONEY, ITEM_WEAPON } from "@/utils/constant";
 
 export const useRenderCount = (item, inventoryType) => {
-  console.log("rendercout/ inventoryType", inventoryType);
+  console.log("useRenderCount/ inventoryType", inventoryType);
 
   const renderCount = () => {
     let cost = "";
@@ -19,7 +19,6 @@ export const useRenderCount = (item, inventoryType) => {
           <>
             <img
               style={{ width: "10px" }}
-              // src={require("@/assets/images/bullet.png")}
               src={`/build/static/media/bullet.png`}
             />
             <span>{item.count}</span>

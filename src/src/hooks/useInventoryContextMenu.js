@@ -1,6 +1,7 @@
 // import { setFastItems } from "@/store/slices/InventorySlice";
 import { fetchAPI } from "@/utils";
 import {
+  DROP_ITEM,
   ITEM_ACCOUNT,
   ITEM_MONEY,
   OTHER_ITEM,
@@ -12,7 +13,9 @@ import {
 import { useSelector } from "react-redux";
 
 export const useInventoryContextMenu = () => {
-  const { fastItems, quantity } = useSelector((state) => state.inventorySlice);
+  const { fastItems, quantity, eventType } = useSelector(
+    (state) => state.inventorySlice
+  );
 
   const handleItemContext = async (e, { item, index, fromItem }) => {
     e.preventDefault();
@@ -21,11 +24,18 @@ export const useInventoryContextMenu = () => {
       return;
     }
 
-    // handle shift + right click
-    if (e.shiftKey) {
-      console.log("shiftKey ne >>>");
+    // handle alt + ctrl key + right click
+    if (e.altKey && e.ctrlKey) {
+      fetchAPI(DROP_ITEM, {
+        item,
+        number: parseInt(quantity),
+      });
+      return;
+    }
 
-      if (fromItem === PLAYER_ITEM) {
+    // handle alt + right click
+    if (e.altKey) {
+      if (fromItem === PLAYER_ITEM && eventType === "trunk") {
         fetchAPI(PUT_INTO_TRUNK, {
           item,
           number: quantity,
