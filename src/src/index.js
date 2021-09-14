@@ -4,8 +4,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "@/store";
-// import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
 
 // Components
 import App from "./App";
@@ -13,6 +11,7 @@ import App from "./App";
 // css
 import "./App.less";
 import "assets/css/main.scss";
+require.context("@/assets/images", true);
 
 export const store = configureStore({
   reducer: rootReducer,

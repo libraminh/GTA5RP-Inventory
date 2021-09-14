@@ -10,7 +10,7 @@ import InventoryPlayer from "../InventoryPlayer";
 const { TabPane } = Tabs;
 
 const InventoryPlayerWrapper = () => {
-  const { isOtherInventoryShow, infoDivText } = useSelector(
+  const { isOtherInventoryShow, infoDivText, eventType } = useSelector(
     (state) => state.inventorySlice
   );
 
@@ -28,7 +28,12 @@ const InventoryPlayerWrapper = () => {
       {isOtherInventoryShow && (
         <figure className="" style={{ width: "35.5vw" }}>
           <InventoryHeading>
-            <span dangerouslySetInnerHTML={{ __html: infoDivText }} />
+            <span
+              className="text-gta-blue-400"
+              dangerouslySetInnerHTML={{
+                __html: eventType === "trunk" ? infoDivText : "Kho Khác",
+              }}
+            />
           </InventoryHeading>
 
           <InventoryOther />

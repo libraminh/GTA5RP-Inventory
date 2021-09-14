@@ -29,7 +29,6 @@ import { useDispatch } from "react-redux";
 import ItemLabel from "../ItemLabel";
 import "./style.scss";
 
-// const itemImages = require.context("@/assets/images", true);
 // src={isKeyHouse ? keyhouseImg : itemImages(`./${item.name}.png`)}
 
 const InventoryItem = ({
@@ -39,11 +38,12 @@ const InventoryItem = ({
   inventoryType,
   dragType,
   fromItem,
-  itemInventory = "",
+  itemInventory,
 }) => {
   const dispatch = useDispatch();
   const { handleItemContext } = useInventoryContextMenu();
   const { handleDoubleClick } = useInventoryDbClick();
+  const { renderCount } = useRenderCount(item, itemInventory);
 
   const handleItemApi = (eventApi) => {
     const bodyHeader = {
@@ -64,12 +64,8 @@ const InventoryItem = ({
 
         if (!item || !dropResult) return;
 
-        console.log("dropResult", dropResult);
-
         switch (dropResult.name) {
           case PLAYER_ITEM:
-            console.log("PLAYER_ITEM inventoryType >>", inventoryType);
-            console.log("PLAYER_ITEM fromItem >>", fromItem);
             if (inventoryType === "trunk") {
               handleItemApi(TAKE_FROM_TRUNK);
               return;
@@ -89,10 +85,7 @@ const InventoryItem = ({
             break;
 
           case OTHER_ITEM:
-            console.log("OTHER_ITEM inventoryType >>", inventoryType);
-            console.log("OTHER_ITEM fromItem >>", fromItem);
-
-            if (inventoryType === "trunk" || inventoryType === "main") {
+            if (inventoryType === "trunk") {
               handleItemApi(PUT_INTO_TRUNK);
               return;
             }
@@ -110,18 +103,10 @@ const InventoryItem = ({
           case PUT_INTO_FAST:
             if (item.item.type === ITEM_MONEY) return;
 
-            // dispatch(
-            //   setFastItems({
-            //     ...item,
-            //     slot: dropResult.slot,
-            //   })
-            // );
-
             fetchAPI(PUT_INTO_FAST, {
               item: item.item,
               slot: dropResult.slot + 1,
             });
-
             break;
 
           case TAKE_FROM_FAST:
@@ -159,7 +144,6 @@ const InventoryItem = ({
 
   const opacity = isDragging ? 0.4 : 1;
 
-  const { renderCount } = useRenderCount(item, inventoryType);
   const isKeyHouse = item.name.includes("keyhouse");
 
   return (
@@ -193,7 +177,7 @@ const InventoryItem = ({
       </div>
 
       <div
-        id={`${inventoryType === "main" ? "item" : "itemOther"}-${index}`}
+        id={`${itemInventory === "main" ? "item" : "itemOther"}-${index}`}
         data-item={JSON.stringify(item)}
         data-inventory={inventoryType}
       >
@@ -218,4 +202,4 @@ const InventoryItem = ({
 
 InventoryItem.propTypes = {};
 
-export default InventoryItem;
+export default React.memo(InventoryItem);

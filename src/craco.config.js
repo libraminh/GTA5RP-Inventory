@@ -10,6 +10,7 @@ const {
 const path = require("path");
 const CracoLessPlugin = require("craco-less");
 const { getThemeVariables } = require("antd/dist/theme");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   style: {
@@ -67,7 +68,7 @@ module.exports = {
           lessOptions: {
             // If you are using less-loader@5 please spread the lessOptions to options directly
             modifyVars: getThemeVariables({
-              dark: true,
+              dark: false,
               compact: false,
             }),
             javascriptEnabled: true,
@@ -75,5 +76,8 @@ module.exports = {
         },
       },
     },
+    // new CopyPlugin({
+    //   patterns: [{ from: "./src/assets/images", to: "./build/static/media" }],
+    // }),
   ],
 };

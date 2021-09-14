@@ -1,3 +1,4 @@
+import Notificacao from "@/components/Notificacao";
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 
 let initState = {
@@ -26,24 +27,27 @@ let initState = {
     weight: "",
     maxWeight: "",
   },
-  isShowBarWeight: true,
+  isShowBarWeight: false,
   otherInventory: [],
   fastItems: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
   quantity: 1,
-  notificationData: {
-    itemname: "bread",
-    itemlabel: "Bánh Mì",
-    itemcount: 3,
-    itemremove: true,
-  },
+  // notificationData: {
+  //   itemname: "bread",
+  //   itemlabel: "Bánh Mì",
+  //   itemcount: 3,
+  //   itemremove: true,
+  // },
+  notificationData: [],
 };
 
 const InventorySlice = createSlice({
   name: "inventory",
   initialState: initState,
   reducers: {
-    toggleBarWeight: (state, action) => {
-      state.isShowBarWeight = !state.isShowBarWeight;
+    removeNotification: (state, action) => {
+      state.notificationData = state.notificationData.filter(
+        (item) => item.id !== action.payload.id
+      );
     },
     setPlayerWeight: (state, action) => {
       state.playerWeight = action.payload;
@@ -51,7 +55,12 @@ const InventorySlice = createSlice({
     setTrunkWeight: (state, action) => {
       state.trunkWeight = action.payload;
     },
-
+    showBarWeight: (state, action) => {
+      state.isShowBarWeight = true;
+    },
+    hideBarWeight: (state, action) => {
+      state.isShowBarWeight = false;
+    },
     setType: (state, action) => {
       state.eventType = action.payload;
     },
@@ -99,14 +108,10 @@ const InventorySlice = createSlice({
     removeFastItems: (state, action) => {
       state.fastItems[action.payload.index] = {};
     },
-    setNotification: (state, action) => {
-      state.notificationData = action.payload;
-    },
     setDataItem: (state, action) => {
       state.dataItem = action.payload;
     },
     setNearPlayer: (state, action) => {
-      console.log("set nearplayer", action);
       state.nearPlayers = action.payload;
     },
     setInfoDivText: (state, action) => {
@@ -155,11 +160,13 @@ const InventorySlice = createSlice({
       // });
     },
     setInventoryItems: (state, action) => {
-      console.log("setInventoryItems", action);
       state.inventoryItems = action.payload;
     },
     setOtherInventoryItems: (state, action) => {
       state.otherInventoryItems = action.payload;
+    },
+    setNotification: (state, action) => {
+      state.notificationData.push(action.payload);
     },
   },
   extraReducers: {
@@ -181,12 +188,12 @@ export const {
   setInfoDivText,
   setNearPlayer,
   setDataItem,
-  setNotification,
   setOtherItems,
   setFastItems,
   setFastItemsBE,
   removeFastItems,
   toggleIsUIShow,
+  setNotification,
   toggleNearPlayers,
   openUI,
   hideUI,
@@ -194,7 +201,9 @@ export const {
   setType,
   setPlayerWeight,
   setTrunkWeight,
-  toggleBarWeight,
+  removeNotification,
+  showBarWeight,
+  hideBarWeight,
 } = InventorySlice.actions;
 
 export default InventorySlice.reducer;

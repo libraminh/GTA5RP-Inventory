@@ -1,8 +1,6 @@
-// #notificacao {
-//   position: absolute;
-//   bottom: 3%;
-//   left: 16.5%;
-// }
+* {
+  @apply text-white;
+}
 
 .ui {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -15,13 +13,16 @@
 }
 
 .app-wrapper {
-  .ant-notification-notice-close {
-    @apply hidden;
+  .ant-input-number-input {
+    @apply bg-black;
+    height: 52px;
+    border-radius: 7px;
   }
 
   .ant-tabs-tab {
     @apply rounded-none bg-transparent transition-all duration-100 ease-in-out #{!important};
     @apply border-0 border-b border-solid border-gta-blue-300 border-opacity-20 font-bold uppercase #{!important};
+    @apply text-white;
 
     &:not(:first-child) {
       margin-top: 5px !important;
@@ -159,4 +160,19 @@
   text-shadow: 0 0 2px #4dc3f7, 0 0 110px #4dc3f7, 0 0 1px #4dc3f7,
     0 0 22px #4dc3f7, 0 0 22px #4dc3f7, 0 0 2px #4dc3f7, 0 0 2px #4dc3f7,
     0 0 5px #4dc3f7;
+}
+
+.item-noti-enter {
+  opacity: 0;
+}
+.item-noti-enter-active {
+  opacity: 1;
+  transition: opacity 100ms ease-in;
+}
+.item-noti-exit {
+  opacity: 1;
+}
+.item-noti-exit-active {
+  opacity: 0;
+  transition: opacity 100ms ease-in;
 }

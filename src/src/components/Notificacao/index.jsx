@@ -1,63 +1,31 @@
-import keyhouseImg from "@/assets/images/KeyHouse.png";
-import React from "react";
-import { useSelector } from "react-redux";
+import { removeNotification } from "@/store/slices/InventorySlice";
+import { keyhouseImg } from "@/utils/constant";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import ItemLabel from "../ItemLabel";
 
-const itemImages = require.context("@/assets/images", true);
+const Notificacao = ({ noti }) => {
+  const dispatch = useDispatch();
+  const isKeyHouse = noti.itemname?.includes("keyhouse");
 
-// const notiData = {
-//   itemname: event.data.itemname,
-//   itemlabel: event.data.itemlabel,
-//   itemcount: event.data.itemcount,
-//   itemremove: event.data.itemremove,
-// };
-
-const Notificacao = () => {
-  const { notificationData } = useSelector((state) => state.inventorySlice);
-
-  const isKeyHouse = notificationData.itemname?.includes("keyhouse");
-
-  // set alert time
+  useEffect(() => {
+    let timeoutID = setTimeout(() => {
+      dispatch(removeNotification(noti));
+    }, 2000);
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [noti]);
 
   return (
-    <div id="notificacao" className="">
-      {/* <div
-        className="slot space-y-3"
-        style={{ backgroundColor: "rgba(255, 166, 0, 0)" }}
-        id="noti"
-      >
-        <div className="item2" style={{ backgroundImage: "url()" }}>
-          
-        </div>
-
-        <div className="item-count">
-          {notificationData.itemremove ? "-" : "+"}
-          {notificationData.itemcount}
-        </div>
-        <div className="item-name">{notificationData.itemlabel}</div>
-
-        {notificationData.itemname && (
-          <img
-            className="item w-14 object-contain object-center"
-            src={
-              isKeyHouse
-                ? keyhouseImg
-                : itemImages(`./${notificationData.itemname}.png`)
-            }
-            alt="image"
-          />
-        )}
-
-        <div className="item-name-bg"></div>
-      </div> */}
-
-      <div className="flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative w-28 h-36 space-y-2 rounded-lg  transition-all duration-100 ease-in-out mb-3">
+    <div className="notificacao">
+      <div className="bg-black bg-opacity-40 flex flex-col justify-between inventory_wrapper slot border border-solid border-gray-800 relative h-36 w-24 space-y-2 rounded-lg  transition-all duration-100 ease-in-out active-drop">
         <div className="item-information flex items-center justify-between text-xs px-2 pt-1">
           <div
             className={`item-count inline-flex items-center space-x-1 ml-auto`}
           >
-            {notificationData.itemremove ? "-" : "+"}{" "}
-            {notificationData.itemcount}
+            {noti.itemremove ? "-" : "+"}
+            {noti.itemcount}
           </div>
         </div>
 
@@ -67,13 +35,13 @@ const Notificacao = () => {
             src={
               isKeyHouse
                 ? keyhouseImg
-                : itemImages(`./${notificationData.itemname}.png`)
+                : `/build/static/media/${noti.itemname}.png`
             }
             alt="image"
           />
         </div>
 
-        <ItemLabel>{notificationData.itemlabel}</ItemLabel>
+        <ItemLabel>{noti.itemlabel}</ItemLabel>
       </div>
     </div>
   );

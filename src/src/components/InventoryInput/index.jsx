@@ -22,9 +22,6 @@ const InventoryInput = (props) => {
   };
 
   const handleClickPlayer = (player) => {
-    console.log("dataItem ne", dataItem);
-    console.log("player", player);
-
     const bodyHeader = {
       item: dataItem,
       number: parseInt(quantity),
@@ -60,7 +57,7 @@ const InventoryInput = (props) => {
           {nearPlayers?.map((player, index) => (
             <div
               key={player.idcard}
-              className="nearbyPlayerButton inline-flex items-center justify-center text-base border-2 border-solid border-gray-800 py-2 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 bg-opacity-50 hover:bg-opacity-100 cursor-pointer"
+              className="nearbyPlayerButton text-white inline-flex items-center justify-center text-base border-2 border-solid border-gray-800 py-3 rounded-lg transition-all duration-100 ease-in-out bg-gta-blue-400 bg-opacity-50 hover:bg-opacity-100 cursor-pointer"
               data-player={player.player}
               onClick={() => handleClickPlayer(player)}
             >

@@ -2,12 +2,10 @@ import React, { useCallback } from "react";
 import { formatMoney, setCost } from "@/utils";
 import { ITEM_ACCOUNT, ITEM_MONEY, ITEM_WEAPON } from "@/utils/constant";
 
-export const useRenderCount = (item, inventoryType) => {
-  console.log("useRenderCount/ inventoryType", inventoryType);
-
-  const renderCount = () => {
+export const useRenderCount = (item, itemInventory) => {
+  const renderCount = useCallback(() => {
     let cost = "";
-    if (inventoryType === "shop") {
+    if (itemInventory === "shop") {
       cost = setCost(item);
     }
     let count = item.count;
@@ -30,8 +28,8 @@ export const useRenderCount = (item, inventoryType) => {
         return <>{formatMoney(item.count)}$</>;
     }
 
-    return <>{inventoryType === "shop" ? cost : count}</>;
-  };
+    return <>{itemInventory === "shop" ? cost : count}</>;
+  }, [item?.count, itemInventory]);
 
   return {
     renderCount,

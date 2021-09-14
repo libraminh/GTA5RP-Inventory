@@ -15,12 +15,9 @@ const InventoryOther = (props) => {
     quantity,
     otherInventoryItems,
     trunkWeight,
-
     isShowBarWeight,
     eventType,
   } = useSelector((state) => state.inventorySlice);
-
-  console.log("InventoryOther/ eventType", eventType);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [PLAYER_ITEM],
@@ -60,7 +57,7 @@ const InventoryOther = (props) => {
           }`}
         >
           {isOtherInventoryEmpty ? (
-            <h2 className="text-xl">Chưa có vật phẩm!</h2>
+            <h2 className="text-xl text-white">Chưa có vật phẩm!</h2>
           ) : (
             otherInventoryItems?.map((item, index) => (
               <InventoryItem

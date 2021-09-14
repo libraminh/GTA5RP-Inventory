@@ -1,20 +1,22 @@
 // components
 import { Tabs } from "antd";
-import React, { useContext, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Inventory from "./components/Inventory";
-import { useInventoryClose } from "./hooks/useInventoryClose";
+import React, { useEffect } from "react";
+import { DndProvider } from "react-dnd";
 import MouseBackEnd from "react-dnd-mouse-backend";
 import { usePreview } from "react-dnd-preview";
-import { DndProvider } from "react-dnd";
-
+import { useDispatch, useSelector } from "react-redux";
+import uuid from "uuid/v4";
+import Inventory from "./components/Inventory";
+import InventoryItem from "./components/InventoryItem";
+import NoticacaoWrapper from "./components/NoticacaoWrapper";
+import { useInventoryClose } from "./hooks/useInventoryClose";
 import {
+  hideBarWeight,
   hideOtherInventory,
   hideUI,
   hideWeightDiv,
   openUI,
   setDataItem,
-  setFastItems,
   setFastItemsBE,
   setInfoDivText,
   setInventoryItems,
@@ -24,14 +26,11 @@ import {
   setPlayerWeight,
   setTrunkWeight,
   setType,
+  showBarWeight,
   showOtherInventory,
-  showPlayerInventory,
   showWeightDiv,
-  toggleBarWeight,
-  toggleIsUIShow,
 } from "./store/slices/InventorySlice";
 import "./style.scss";
-import InventoryItem from "./components/InventoryItem";
 import { PLAYER_ITEM } from "./utils/constant";
 
 const { TabPane } = Tabs;
@@ -43,13 +42,6 @@ window.Config.closeKeys = [27];
 
 const MyPreview = () => {
   const { display, itemType, item, style } = usePreview();
-
-  // console.log("{ display, itemType, item, style }", {
-  //   display,
-  //   itemType,
-  //   item,
-  //   style,
-  // });
 
   if (!display) {
     return null;
@@ -66,12 +58,10 @@ const MyPreview = () => {
 };
 
 const App = (props) => {
-  console.log("app render >>>>");
-  const { otherInventory, disabled, isInventoryShow, isUIShow } = useSelector(
+  const { isInventoryShow, isUIShow } = useSelector(
     (state) => state.inventorySlice
   );
   const dispatch = useDispatch();
-
   const { closeInventory } = useInventoryClose();
 
   const handleDisplay = (eventType) => {
@@ -82,12 +72,14 @@ const App = (props) => {
         break;
 
       case "trunk":
+        dispatch(showBarWeight());
         dispatch(showOtherInventory());
         dispatch(showWeightDiv());
         break;
 
       case "Society":
       case "property":
+        dispatch(hideBarWeight());
         dispatch(showOtherInventory());
         dispatch(hideWeightDiv());
         break;
@@ -98,6 +90,7 @@ const App = (props) => {
       case "motelsbed":
       case "glovebox":
       case "vault":
+        dispatch(hideBarWeight());
         dispatch(showWeightDiv());
         dispatch(showOtherInventory());
         break;
@@ -109,8 +102,6 @@ const App = (props) => {
   };
 
   const handleMessageEvent = (event) => {
-    console.log("handleMessageEvent", event);
-
     const eventAction = event.data.action;
 
     switch (eventAction) {
@@ -141,7 +132,6 @@ const App = (props) => {
         break;
 
       case "setShopInventoryItems":
-        dispatch(toggleBarWeight());
         dispatch(setOtherInventoryItems(event.data.itemList));
         break;
 
@@ -161,14 +151,13 @@ const App = (props) => {
         break;
 
       case "nearPlayers":
-        console.log("nearPlayers");
-        // doing nearPlayers
         dispatch(setDataItem(event.data.item));
         dispatch(setNearPlayer(event.data.players));
         break;
 
       case "notification":
         const notiData = {
+          id: uuid(),
           itemname: event.data.itemname,
           itemlabel: event.data.itemlabel,
           itemcount: event.data.itemcount,
@@ -207,7 +196,11 @@ const App = (props) => {
 
   return (
     <DndProvider backend={MouseBackEnd}>
-      {/* } */}
+      {/* ${
+          isUIShow
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        } */}
       <div
         className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
           isUIShow
@@ -224,16 +217,19 @@ const App = (props) => {
             <TabPane tab="Kho Đồ" key="1">
               <Inventory />
             </TabPane>
-            <TabPane tab="Chế Tạo" key="2">
+            {/* <TabPane tab="Chế Tạo" key="2">
               Content of Tab 2
             </TabPane>
             <TabPane tab="Shop" key="3">
               Content of Tab 3
-            </TabPane>
+            </TabPane> */}
           </Tabs>
         </div>
       </div>
+
       <MyPreview />
+
+      <NoticacaoWrapper />
     </DndProvider>
   );
 };
