@@ -12,6 +12,7 @@
 ## Special Hotkey
 - Alt + Right click = Put/Take items /to/from vehicles
 - Alt + Ctrl + Right click = Quick drop items
+- Right click = Put items to hotbar
 
 ## Descriptions
 
