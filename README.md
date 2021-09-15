@@ -1,4 +1,5 @@
-# conde-b1g_inventory 1.0.0 (new UI) - Developed by Slomint
+# conde-b1g_inventory 1.0.0 (new UI)
+### Developed by Slomint, written in ReactJS
 
 Inventory HUD for ESX based on TSRAK esx_inventoryhud made by me and B1G https://github.com/CarlosVergikosk.
 
