@@ -7,6 +7,7 @@
 - React Transition Group
 - Ant Design
 - React DnD
+- Tailwindcss
 
 Inventory HUD for ESX based on TSRAK esx_inventoryhud made by me and B1G https://github.com/CarlosVergikosk.
 
