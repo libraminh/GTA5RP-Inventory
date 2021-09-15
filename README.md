@@ -1,4 +1,20 @@
-# conde-b1g_inventory 1.0.0 (new UI) - Developed by Slomint
+# conde-b1g_inventory 1.0.0 (new UI)
+## Developed by Slomint
+
+## Tech Stack
+- ReactJS
+- Redux Toolkit
+- React Transition Group
+- Ant Design
+- React DnD
+- Tailwindcss
+
+## Special Hotkey
+- Alt + Right click = Put/Take items /to/from vehicles
+- Alt + Ctrl + Right click = Quick drop items
+- Right click = Put items to hotbar
+
+## Descriptions
 
 Inventory HUD for ESX based on TSRAK esx_inventoryhud made by me and B1G https://github.com/CarlosVergikosk.
 
