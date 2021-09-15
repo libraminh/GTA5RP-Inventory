@@ -1,4 +1,4 @@
-# conde-b1g_inventory 1.0.0
+# conde-b1g_inventory 1.0.0 (new UI) - Developed by Slomint
 
 Inventory HUD for ESX based on TSRAK esx_inventoryhud made by me and B1G https://github.com/CarlosVergikosk.
 
@@ -16,15 +16,14 @@ I may give some support, but won't 100% guarantee.
 
 That's pretty much it, this is like the ultimate inventory hud that you can have on your ESX server without breaking or leaving your server unplayable, I'll list the features down below.
 
-
 ## Requirements
-* [es_extended]
-* [mythic_notify]
-* [disc_ammo](https://github.com/DiscworldZA/gta-resources/tree/master/disc-ammo)
 
-
+- [es_extended]
+- [mythic_notify]
+- [disc_ammo](https://github.com/DiscworldZA/gta-resources/tree/master/disc-ammo)
 
 ## Features
+
 - Drag and drop
 - Using items
 - Dropping items
@@ -33,7 +32,7 @@ That's pretty much it, this is like the ultimate inventory hud that you can have
 - Accounts support (bank, black money, ...)
 - Weight Supported
 - Weapons as items
-- 5 Usable Fast Items hotbar:  1, 2 ,3 ,4 ,5 keys
+- 9 Usable Fast Items hotbar: 1, 2 ,3 ,4 ,5, ...9 keys
 - Blocked Weapon Wheel
 - Inventory items notification (anytime you receive or lose an item, check installation for more info)
 - Fast items Hotbar , ALT is the default key.
@@ -44,80 +43,7 @@ That's pretty much it, this is like the ultimate inventory hud that you can have
 - Optimized
 - Some other stuff, I'll probably remember later :)
 
-
-
 ## Screens
-<img src="https://cdn.discordapp.com/attachments/696693383782989824/741460412863610960/unknown.png">
-<img src="https://cdn.discordapp.com/attachments/696693383782989824/741460894084497438/unknown.png">
-<img src="https://cdn.discordapp.com/attachments/696693383782989824/741460932835672096/unknown.png">
-<img src="https://cdn.discordapp.com/attachments/696693383782989824/741461007020589066/unknown.png">
 
-
-## Commands
-* **/steal** - Steals nearby player's inventory
-* **/closeinventory** - Closes the inventory if needed
-
-## Installation
-- Download the code and change the folder name to conde-b1g_inventory
-- This should be pretty much drag and drop, change the essentialmode on the sql file to whatever is your database name, and run it.
-- To add the notifications, just trigger this event on your es_extended classes/player functions. Ex: addInventoryItem, removeInventoryItem, addMoney, removeMoney:
-
-```			
-	self.addMoney = function(money)
-		money = ESX.Math.Round(money)
-
-		if money >= 0 then
-			self.player.addMoney(GetCurrentResourceName(), money)
-			TriggerClientEvent('conde-inventoryhud:notification',self.source, "cash", "Money", money, false)
-		end
-	end
-
-	self.removeMoney = function(money)
-		money = ESX.Math.Round(money)
-
-		if money > 0 then
-			self.player.removeMoney(GetCurrentResourceName(), money)
-			TriggerClientEvent('conde-inventoryhud:notification',self.source, "cash", "Money", money, true)
-		end
-	end
-	
-	
-		self.addInventoryItem = function(name, count)
-		local item = self.getInventoryItem(name)
-
-		if item then
-			count = ESX.Math.Round(count)
-
-			local newCount = item.count + count
-			item.count = newCount
-
-			TriggerEvent('esx:onAddInventoryItem', self.source, item.name, item.count)
-			self.triggerEvent('esx:addInventoryItem', item.name, item.count)
-			TriggerClientEvent('conde-inventoryhud:notification', self.source, item.name, item.label, count, false)
-		end
-	end
-
-	self.removeInventoryItem = function(name, count)
-		local item = self.getInventoryItem(name)
-
-		if item then
-			count = ESX.Math.Round(count)
-			local newCount = item.count - count
-
-			if newCount >= 0 then
-				item.count = newCount
-
-				TriggerEvent('esx:onRemoveInventoryItem', self.source, item.name, item.count)
-				self.triggerEvent('esx:removeInventoryItem', item.name, item.count)
-				TriggerClientEvent('conde-inventoryhud:notification',self.source, item.name, item.label, count, true)
-			end
-		end
-	end
-```
-- To make the status to work just change the events on line 250 client/main of the inventory, to your basic needs or stress events.
-
-
-
-
-
-
+<img src="https://cdn.discordapp.com/attachments/880479729256398938/887566311180345344/unknown.png">
+<img src="https://cdn.discordapp.com/attachments/880479729256398938/887566499429109801/unknown.png">
