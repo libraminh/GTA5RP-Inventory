@@ -9,6 +9,10 @@
 - React DnD
 - Tailwindcss
 
+## Special Hotkey
+- Alt + Right click = Put/Take items /to/from vehicles
+- Alt + Ctrl + Right click = Quick drop items
+
 Inventory HUD for ESX based on TSRAK esx_inventoryhud made by me and B1G https://github.com/CarlosVergikosk.
 
 Most of the code of the shops was taken from SUKU's suku shops for esx_inventoryhud, although some features were added, like ilegal shop, police shop, price easily changeable on the config, and some other spicy stuff :)
