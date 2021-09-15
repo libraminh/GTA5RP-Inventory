@@ -10,6 +10,21 @@ import { useDispatch, useSelector } from "react-redux";
 import InventoryButton from "../InventoryButton";
 import "./style.scss";
 
+const inventoryButtons = [
+  {
+    dropName: USE_ITEM,
+    label: "Dùng",
+  },
+  {
+    dropName: GIVE_ITEM,
+    label: "Gửi",
+  },
+  {
+    dropName: DROP_ITEM,
+    label: "Vứt",
+  },
+];
+
 const InventoryInput = (props) => {
   const { quantity, dataItem, nearPlayers, isNearPlayersShow } = useSelector(
     (state) => state.inventorySlice
@@ -75,9 +90,11 @@ const InventoryInput = (props) => {
           />
 
           <div className="flex flex-col space-y-5">
-            <InventoryButton dropName={USE_ITEM}>Dùng</InventoryButton>
-            <InventoryButton dropName={GIVE_ITEM}>Gửi</InventoryButton>
-            <InventoryButton dropName={DROP_ITEM}>Vứt</InventoryButton>
+            {inventoryButtons?.map((button, index) => (
+              <InventoryButton key={index} dropName={button.dropName}>
+                {button.label}
+              </InventoryButton>
+            ))}
           </div>
         </div>
       )}

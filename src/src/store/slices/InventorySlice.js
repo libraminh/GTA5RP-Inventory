@@ -1,4 +1,3 @@
-import Notificacao from "@/components/Notificacao";
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 
 let initState = {
