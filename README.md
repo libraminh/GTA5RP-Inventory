@@ -1,5 +1,12 @@
 # conde-b1g_inventory 1.0.0 (new UI)
-### Developed by Slomint, written in ReactJS
+## Developed by Slomint
+
+## Tech Stack:
+- ReactJS
+- Redux Toolkit
+- React Transition Group
+- Ant Design
+- React DnD
 
 Inventory HUD for ESX based on TSRAK esx_inventoryhud made by me and B1G https://github.com/CarlosVergikosk.
 
