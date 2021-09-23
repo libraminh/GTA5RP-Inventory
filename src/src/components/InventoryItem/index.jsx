@@ -1,7 +1,11 @@
 import { useInventoryContextMenu } from "@/hooks/useInventoryContextMenu";
 import { useInventoryDbClick } from "@/hooks/useInventoryDbClick";
 import { useRenderCount } from "@/hooks/useRenderCount";
-import { toggleNearPlayers } from "@/store/slices/InventorySlice";
+import {
+  setItemBeingDragged,
+  toggleInventoryConfirm,
+  toggleNearPlayers,
+} from "@/store/slices/InventorySlice";
 import { convertToKg, fetchAPI } from "@/utils";
 import {
   DROP_ITEM,
@@ -22,6 +26,7 @@ import {
   TAKE_FROM_TRUNK,
   USE_ITEM,
   PUT_INTO_PROPERTY,
+  ITEM_WEAPON,
 } from "@/utils/constant";
 import React from "react";
 import { useDrag } from "react-dnd";
@@ -119,6 +124,11 @@ const InventoryItem = ({
             break;
 
           case DROP_ITEM:
+            if (item.item.type === ITEM_WEAPON) {
+              dispatch(setItemBeingDragged(item.item));
+              dispatch(toggleInventoryConfirm());
+              return;
+            }
             handleItemApi(DROP_ITEM);
             break;
 

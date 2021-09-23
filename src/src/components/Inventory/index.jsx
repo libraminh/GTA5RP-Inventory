@@ -6,13 +6,11 @@ import InventoryHeading from "../InventoryHeading";
 import InventoryInput from "../InventoryInput";
 import InventoryOther from "../InventoryOther";
 import InventoryPlayer from "../InventoryPlayer";
-
-const { TabPane } = Tabs;
+import InventoryConfirm from "../InventoryConfirm";
 
 const InventoryPlayerWrapper = () => {
-  const { isOtherInventoryShow, infoDivText, eventType } = useSelector(
-    (state) => state.inventorySlice
-  );
+  const { isOtherInventoryShow, infoDivText, eventType, isInventoryConfirm } =
+    useSelector((state) => state.inventorySlice);
 
   return (
     <div className="flex">
@@ -22,7 +20,7 @@ const InventoryPlayerWrapper = () => {
       </figure>
 
       <figure className="flex items-center justify-center w-60">
-        <InventoryInput />
+        {isInventoryConfirm ? <InventoryConfirm /> : <InventoryInput />}
       </figure>
 
       {isOtherInventoryShow && (

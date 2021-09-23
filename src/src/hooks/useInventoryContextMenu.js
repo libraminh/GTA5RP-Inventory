@@ -13,10 +13,16 @@ import {
   TAKE_FROM_PROPERTY,
   TAKE_FROM_SOCIETY,
   TAKE_FROM_TRUNK,
+  ITEM_WEAPON,
 } from "@/utils/constant";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  toggleInventoryConfirm,
+  setItemBeingDragged,
+} from "@/store/slices/InventorySlice";
 
 export const useInventoryContextMenu = () => {
+  const dispatch = useDispatch();
   const { fastItems, quantity, eventType } = useSelector(
     (state) => state.inventorySlice
   );
@@ -30,6 +36,11 @@ export const useInventoryContextMenu = () => {
 
     // handle alt + ctrl key + right click
     if (e.altKey && e.ctrlKey) {
+      if (item.type === ITEM_WEAPON) {
+        dispatch(setItemBeingDragged(item));
+        dispatch(toggleInventoryConfirm());
+        return;
+      }
       fetchAPI(DROP_ITEM, {
         item,
         number: parseInt(quantity),

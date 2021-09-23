@@ -37,12 +37,20 @@ let initState = {
   //   itemremove: true,
   // },
   notificationData: [],
+  isInventoryConfirm: false,
+  itemBeingDragged: {},
 };
 
 const InventorySlice = createSlice({
   name: "inventory",
   initialState: initState,
   reducers: {
+    setItemBeingDragged: (state, action) => {
+      state.itemBeingDragged = action.payload;
+    },
+    toggleInventoryConfirm: (state, action) => {
+      state.isInventoryConfirm = !state.isInventoryConfirm;
+    },
     removeNotification: (state, action) => {
       state.notificationData = state.notificationData.filter(
         (item) => item.id !== action.payload.id
@@ -203,6 +211,8 @@ export const {
   removeNotification,
   showBarWeight,
   hideBarWeight,
+  toggleInventoryConfirm,
+  setItemBeingDragged,
 } = InventorySlice.actions;
 
 export default InventorySlice.reducer;
