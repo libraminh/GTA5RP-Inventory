@@ -1,6 +1,6 @@
 // components
-import { Tabs } from "antd";
-import React, { useEffect } from "react";
+import { Spin, Tabs } from "antd";
+import React, { Suspense, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import MouseBackEnd from "react-dnd-mouse-backend";
 import { usePreview } from "react-dnd-preview";
@@ -9,6 +9,7 @@ import uuid from "uuid/v4";
 import Inventory from "./components/Inventory";
 import InventoryItem from "./components/InventoryItem";
 import NoticacaoWrapper from "./components/NoticacaoWrapper";
+
 import { useInventoryClose } from "./hooks/useInventoryClose";
 import {
   hideBarWeight,
@@ -34,6 +35,8 @@ import "./style.scss";
 import { PLAYER_ITEM } from "./utils/constant";
 
 const { TabPane } = Tabs;
+
+const EventWrapper = React.lazy(() => import("./components/EventWrapper"));
 
 window.Config = new Object();
 window.Config.closeKeys = [27];
@@ -196,40 +199,42 @@ const App = (props) => {
 
   return (
     <DndProvider backend={MouseBackEnd}>
-      {/* ${
+      <Suspense fallback={<Spin size="large" />}>
+        {/* ${
           isUIShow
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         } */}
-      <div
-        className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
-          isUIShow
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      >
         <div
-          className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
-            isInventoryShow ? "block" : "hidden"
+          className={`ui app-wrapper z-10 transition-all duration-100 ease-in-out ${
+            isUIShow
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
           }`}
         >
-          <Tabs className="left-tabs" tabPosition={"left"} type="card">
-            <TabPane tab="Kho Đồ" key="1">
-              <Inventory />
-            </TabPane>
-            {/* <TabPane tab="Chế Tạo" key="2">
-              Content of Tab 2
-            </TabPane>
-            <TabPane tab="Shop" key="3">
+          <div
+            className={`tabs-wrapper p-5 min-h-screen min-w-screen transition-all duration-100 ease-in-out ${
+              isInventoryShow ? "block" : "hidden"
+            }`}
+          >
+            <Tabs className="left-tabs" tabPosition={"left"} type="card">
+              <TabPane tab="Kho Đồ" key="1">
+                <Inventory />
+              </TabPane>
+              <TabPane active={true} tab="Sự Kiện" key="2">
+                <EventWrapper />
+              </TabPane>
+              {/* <TabPane tab="Shop" key="3">
               Content of Tab 3
             </TabPane> */}
-          </Tabs>
+            </Tabs>
+          </div>
         </div>
-      </div>
 
-      <MyPreview />
+        <MyPreview />
 
-      <NoticacaoWrapper />
+        <NoticacaoWrapper />
+      </Suspense>
     </DndProvider>
   );
 };

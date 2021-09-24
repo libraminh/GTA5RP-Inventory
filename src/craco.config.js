@@ -47,7 +47,10 @@ module.exports = {
             test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
             loader: "file-loader",
             options: {
-              name: "static/media/[name].[ext]",
+              name:
+                process.env.NODE_ENV === "development"
+                  ? "[name].[ext]"
+                  : "static/media/[name].[ext]",
             },
           },
         ],
