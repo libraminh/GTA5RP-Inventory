@@ -14,9 +14,8 @@
 
 .app-wrapper {
   .ant-input-number-input {
-    @apply bg-black;
+    @apply bg-black rounded-full;
     height: 52px;
-    border-radius: 7px;
   }
 
   .ant-tabs-tab {

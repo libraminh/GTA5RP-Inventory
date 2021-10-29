@@ -83,7 +83,7 @@ const InventoryInput = (props) => {
       ) : (
         <div className="space-y-5">
           <InputNumber
-            className="w-full text-center border-gta-blue-400 rounded-lg"
+            className="w-full text-center border-gta-blue-400 rounded-full"
             min={1}
             defaultValue={quantity}
             onChange={handleOnChange}

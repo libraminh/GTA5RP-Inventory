@@ -221,9 +221,9 @@ const App = (props) => {
               <TabPane tab="Kho Đồ" key="1">
                 <Inventory />
               </TabPane>
-              <TabPane active={true} tab="Sự Kiện" key="2">
+              {/* <TabPane active={true} tab="Sự Kiện" key="2">
                 <EventWrapper />
-              </TabPane>
+              </TabPane> */}
               {/* <TabPane tab="Shop" key="3">
               Content of Tab 3
             </TabPane> */}

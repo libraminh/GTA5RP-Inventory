@@ -1,6 +1,6 @@
 .weight-progress {
   @apply flex items-center justify-center mb-5;
-  @apply rounded-lg relative border border-solid border-gray-800;
+  @apply rounded-full relative border border-solid border-gray-800;
   @apply overflow-hidden;
 
   width: 150px;
