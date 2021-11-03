@@ -3,7 +3,7 @@ import { formatMoney, setCost } from "@/utils";
 import { ITEM_ACCOUNT, ITEM_MONEY, ITEM_WEAPON } from "@/utils/constant";
 
 export const useRenderCount = (item, itemInventory) => {
-  const renderCount = useCallback(() => {
+  const renderCount = () => {
     let cost = "";
     if (itemInventory === "shop") {
       cost = setCost(item);
@@ -29,7 +29,7 @@ export const useRenderCount = (item, itemInventory) => {
     }
 
     return <>{itemInventory === "shop" ? cost : count}</>;
-  }, [item?.count, itemInventory]);
+  };
 
   return {
     renderCount,
